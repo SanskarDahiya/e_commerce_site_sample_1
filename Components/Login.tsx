@@ -1,20 +1,39 @@
 import tw from "twin.macro";
 import Link from "next/link";
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import FormInput from "../Helpers/FormInput";
 import useAxios from "axios-hooks";
+import Cookies from "js-cookie";
+import Router from "next/router";
 
 const Login = () => {
-  const [{ result, isLoading, error }, refetch] = useAxios(
-    {
-      url: "/api/user/login",
-      method: "post",
-    },
-    {
-      manual: true,
-    }
-  );
+  const [{ data: result, loading: isLoading, error, response }, refetch] =
+    useAxios(
+      {
+        url: "/api/user/login",
+        method: "post",
+      },
+      {
+        manual: true,
+      }
+    );
 
+  useEffect(() => {
+    if (result?.success) {
+      const headers = response?.headers || {};
+      const AccessToken = headers["x-access-token"];
+      const RefreshToken = headers["x-refresh-token"];
+      if (AccessToken) {
+        Cookies.set("token", AccessToken, {
+          expires: 0.041667, // 1 Hr; 1m = 0.0006
+        });
+      }
+      if (RefreshToken) {
+        // Cookies.set("r-token", RefreshToken);
+      }
+      Router.push("/");
+    }
+  }, [result, response?.headers]);
   const [data, setData] = useState({ email: "", password: "" });
   const { email, password } = data;
 
