@@ -4,7 +4,7 @@ import { check } from "express-validator";
 import ValidateData from "../../../Server/ExpressValidate";
 import bcrypt from "bcryptjs";
 import PostRequest from "../../../Server/PostRequest";
-import { generateToken } from "../../../jwt";
+import { generateToken } from "../../../Auth/jwt";
 
 /* Users collection sample */
 const USERS = [

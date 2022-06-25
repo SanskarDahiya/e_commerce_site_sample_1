@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { generateToken, verifyToken } from "../../../jwt";
+import { generateToken, verifyToken } from "../../../Auth/jwt";
 
 export default async function refreshToken(
   req: NextApiRequest,

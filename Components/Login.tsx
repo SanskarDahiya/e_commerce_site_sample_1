@@ -5,8 +5,10 @@ import FormInput from "../Helpers/FormInput";
 import useAxios from "axios-hooks";
 import Cookies from "js-cookie";
 import Router from "next/router";
+import { useAuthStore } from "../Store/auth";
 
 const Login = () => {
+  const authStore = useAuthStore();
   const [{ data: result, loading: isLoading, error, response }, refetch] =
     useAxios(
       {
@@ -24,11 +26,13 @@ const Login = () => {
       const AccessToken = headers["x-access-token"];
       const RefreshToken = headers["x-refresh-token"];
       if (AccessToken) {
+        authStore.setAccessToken(AccessToken);
         Cookies.set("token", AccessToken, {
-          expires: 0.041667, // 1 Hr; 1m = 0.0006
+          expires: 0.041667, // 1 Hr:041667; 1m = 0.000695
         });
       }
       if (RefreshToken) {
+        authStore.setRefreshToken(RefreshToken);
         // Cookies.set("r-token", RefreshToken);
       }
       Router.push("/");
