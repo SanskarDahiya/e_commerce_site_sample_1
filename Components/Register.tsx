@@ -2,9 +2,18 @@ import tw from "twin.macro";
 import Link from "next/link";
 import React, { ChangeEvent, FormEvent, useState } from "react";
 import FormInput from "../Helpers/FormInput";
+import useAxios from "axios-hooks";
 
 const Register = () => {
-  const [isLoading, setLoading] = useState<boolean>();
+  const [{ result, isLoading, error }, refetch] = useAxios(
+    {
+      url: "/api/user/register",
+      method: "post",
+    },
+    {
+      manual: true,
+    }
+  );
 
   const [data, setData] = useState({
     name: "",
@@ -23,8 +32,7 @@ const Register = () => {
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // login({ email, password });
-    setLoading(true);
+    refetch({ data });
   };
 
   return (
