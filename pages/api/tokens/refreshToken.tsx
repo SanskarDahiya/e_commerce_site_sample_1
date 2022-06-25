@@ -1,8 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import jwt from "jsonwebtoken";
+import { generateToken, verifyToken } from "../../../jwt";
 
-/* JWT secret key */
-const KEY = "THIS IS CUSTOM KEY";
 export default async function refreshToken(
   req: NextApiRequest,
   res: NextApiResponse
@@ -11,7 +9,7 @@ export default async function refreshToken(
   try {
     let Rtoken = cookies["r-token"];
     Rtoken = Rtoken.split(" ")[1];
-    const payload = jwt.verify(Rtoken, KEY);
+    const payload = verifyToken(Rtoken);
     const {
       id: userId,
       email: userEmail,
@@ -24,7 +22,7 @@ export default async function refreshToken(
       createdAt: userCreated,
     };
     /* Sign token */
-    const token = jwt.sign(newPayload, KEY, {
+    const token = generateToken(newPayload, {
       expiresIn: 60, // in seconds
     });
 

@@ -3,10 +3,9 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { check } from "express-validator";
 import ValidateData from "../../../Server/ExpressValidate";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import PostRequest from "../../../Server/PostRequest";
+import { generateToken } from "../../../jwt";
 
-/* JWT secret key */
-const KEY = "THIS IS CUSTOM KEY";
 /* Users collection sample */
 const USERS = [
   {
@@ -51,7 +50,9 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
+  await PostRequest(req, res);
   await validate(req, res);
+  console.log("After Validate");
   /* Get Post Data */
   const { email, password } = req.body;
   /* Check user email in database */
@@ -80,7 +81,6 @@ export default async function handler(
     return;
   }
 
-  /* Create JWT Payload */
   const payload = {
     id: userId,
     email: userEmail,
@@ -88,20 +88,19 @@ export default async function handler(
   };
 
   /* Sign token */
-  const Rtoken = jwt.sign({ ...payload, isRefreshToken: true }, KEY, {
-    expiresIn: "5m",
-  });
+  const Rtoken = generateToken(
+    { ...payload, isRefreshToken: true },
+    {
+      expiresIn: "5m",
+    }
+  );
 
   res.setHeader("x-refresh-token", "Bearer " + Rtoken);
   /* Sign token */
-  const token = jwt.sign(payload, KEY, {
+  const token = generateToken(payload, {
     expiresIn: "1m",
   });
   res.setHeader("x-access-token", "Bearer " + token);
   /* Send succes with token */
   res.status(200).json({ success: true });
-
-  // const verify = await jwt.verify(token, KEY);
-
-  // res.status(200).json({ name: "John Doe" });
 }

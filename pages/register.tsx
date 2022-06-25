@@ -1,8 +1,8 @@
 import "twin.macro";
-import React, { Fragment, useEffect, useState } from "react";
-import Login from "../Components/Login";
+import React, { Fragment } from "react";
 import RegisterComponent from "../Components/Register";
-// import { useRouter } from "next/router";
+import { GetServerSidePropsContext, NextApiRequest } from "next";
+import { getAccessToken, verifyToken } from "../jwt";
 
 function Register() {
   return (
@@ -10,5 +10,20 @@ function Register() {
       <RegisterComponent />
     </Fragment>
   );
+}
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const result = {};
+  const { req } = context;
+  const token = getAccessToken(req as NextApiRequest);
+  const { result: profile } = verifyToken(token);
+  if (profile?.email) {
+    result.redirect = {
+      destination: "/",
+    };
+  } else {
+    result.props = {};
+  }
+  return result;
 }
 export default Register;
