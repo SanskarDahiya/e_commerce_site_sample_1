@@ -71,7 +71,7 @@ function Header() {
         </div>
 
         <div tw="order-2 md:order-3 flex items-center" id="nav-content">
-          <Link href={"#"} passHref>
+          <Link href={"/user"} passHref>
             <a tw="inline-block no-underline hover:text-black">
               <svg
                 tw="fill-current hover:text-black"
@@ -85,7 +85,7 @@ function Header() {
               </svg>
             </a>
           </Link>
-          <Link href={"#"} passHref>
+          <Link href={"/cart"} passHref>
             <a tw="pl-3 inline-block no-underline hover:text-black">
               <svg
                 tw="fill-current hover:text-black"
