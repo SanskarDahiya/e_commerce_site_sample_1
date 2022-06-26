@@ -56,7 +56,7 @@ function Header() {
           </nav>
         </div>
 
-        <div tw="order-1 md:order-2">
+        <div tw="order-1 md:order-2 cursor-pointer">
           <Link href="/">
             <div tw="flex items-center tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl">
               <svg
@@ -88,6 +88,7 @@ const UserHeaderSection = memo(function UserHeaderSection() {
 
   const handleProfileClick = (status: boolean | null) => {
     if (!user) {
+      setShowUser(false);
       return;
     }
     if (status === null) {
@@ -97,34 +98,18 @@ const UserHeaderSection = memo(function UserHeaderSection() {
     }
   };
   const handleLogout = () => {
+    handleProfileClick(false);
     setRefreshToken(null);
     setAccessToken(null);
     setUser(undefined);
     Cookies.remove("token");
     Router.push("/");
-    setShowUser(false);
   };
   return (
     <Fragment>
-      {showUser && (
-        <div
-          tw="absolute z-10 top-[100%] right-[50%] p-2 bg-[#f5f5f5]"
-          onMouseLeave={() => {
-            handleProfileClick(false);
-          }}
-        >
-          <ul tw="md:flex cursor-pointer items-center justify-between text-base text-gray-700 md:pt-0 ">
-            <li onClick={handleLogout}>
-              <div tw="inline-block no-underline hover:text-black hover:underline py-2 px-4">
-                Logout
-              </div>
-            </li>
-          </ul>
-        </div>
-      )}
       <Link href={"/user"} passHref>
         <a
-          tw="inline-block no-underline hover:text-black"
+          tw="inline-block no-underline hover:text-black relative"
           className="peer"
           onMouseEnter={() => {
             handleProfileClick(true);
@@ -133,6 +118,25 @@ const UserHeaderSection = memo(function UserHeaderSection() {
             handleProfileClick(null);
           }}
         >
+          {showUser && (
+            <div
+              tw="absolute z-10 top-[100%] right-0 p-2 bg-[#f5f5f5]"
+              onClick={() => {
+                handleProfileClick(false);
+              }}
+              onMouseLeave={() => {
+                handleProfileClick(false);
+              }}
+            >
+              <ul tw="md:flex cursor-pointer items-center justify-between text-base text-gray-700 md:pt-0 ">
+                <li onClick={handleLogout}>
+                  <div tw="inline-block no-underline hover:text-black hover:underline py-2 px-4">
+                    Logout
+                  </div>
+                </li>
+              </ul>
+            </div>
+          )}
           <svg
             tw="fill-current hover:text-black"
             xmlns="http://www.w3.org/2000/svg"
