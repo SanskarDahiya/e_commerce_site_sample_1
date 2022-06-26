@@ -4,7 +4,7 @@ import React from "react";
 function StoreSection() {
   return (
     <nav id="store" tw="w-full z-30 top-0 px-6 py-1">
-      <div tw="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 px-2 py-3">
+      <div tw="w-full mx-auto flex flex-wrap items-center justify-between mt-0 px-2 py-3">
         <a
           tw="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl "
           href="#"
