@@ -3,41 +3,31 @@ import Link from "next/link";
 import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import FormInput from "../Helpers/FormInput";
 import useAxios from "axios-hooks";
-import Cookies from "js-cookie";
 import Router from "next/router";
 import { useAuthStore } from "../Store/auth";
 
 const Login = () => {
-  const authStore = useAuthStore();
+  const { setRefreshToken, setAccessToken } = useAuthStore((state) => ({
+    setRefreshToken: state.setRefreshToken,
+    setAccessToken: state.setAccessToken,
+  }));
+
   const [{ data: result, loading: isLoading, error, response }, refetch] =
-    useAxios(
-      {
-        url: "/api/user/login",
-        method: "post",
-      },
-      {
-        manual: true,
-      }
-    );
+    useAxios({ url: "/api/user/login", method: "post" }, { manual: true });
 
   useEffect(() => {
     if (result?.success) {
       const headers = response?.headers || {};
       const AccessToken = headers["x-access-token"];
       const RefreshToken = headers["x-refresh-token"];
-      if (AccessToken) {
-        authStore.setAccessToken(AccessToken);
-        Cookies.set("token", AccessToken, {
-          expires: 0.041667, // 1 Hr:041667; 1m = 0.000695
-        });
-      }
-      if (RefreshToken) {
-        authStore.setRefreshToken(RefreshToken);
-        // Cookies.set("r-token", RefreshToken);
-      }
+
+      setAccessToken(AccessToken);
+      setRefreshToken(RefreshToken);
+
       Router.push("/");
     }
-  }, [result, response?.headers]);
+  }, [result?.success, response?.headers]);
+
   const [data, setData] = useState({ email: "", password: "" });
   const { email, password } = data;
 
@@ -88,6 +78,8 @@ const Login = () => {
             Sign In
           </button>
         )}
+
+        {error && <div>{JSON.stringify(error)}</div>}
 
         <div tw="flex justify-end w-full">
           <Link href={"/register"} passHref>

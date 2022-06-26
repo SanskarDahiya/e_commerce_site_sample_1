@@ -1,43 +1,74 @@
 import axios from "axios";
+import { configure } from "axios-hooks";
+import { useEffect, useState } from "react";
+import { useAuthStore } from "../Store/auth";
 
-const _getToken = () => {};
-const saveToken = () => {};
-const destroyToken = () => {};
-let interceptor;
-export function createAxiosResponseInterceptor() {
-  interceptor && axios.interceptors.response.eject(interceptor);
-  interceptor = axios.interceptors.response.use(
-    (response) => response,
-    (error) => {
-      // Reject promise if usual error
-      if (error.response.status !== 401) {
-        return Promise.reject(error);
-      }
+configure({ axios: axios });
 
-      /*
-       * When response code is 401, try to refresh the token.
-       * Eject the interceptor so it doesn't loop in case
-       * token refresh causes the 401 response
-       */
+export const useAxiosInterceptior = () => {
+  const [interceptor, setInterceptor] = useState();
+  const { setRefreshToken, setAccessToken, accessToken, refreshToken } =
+    useAuthStore();
+
+  useEffect(() => {
+    if (refreshToken) {
+      createAxiosResponseInterceptor({ refreshToken });
+      return () => {
+        axios.interceptors.response.eject(interceptor);
+      };
+    } else if (interceptor) {
       axios.interceptors.response.eject(interceptor);
+      setInterceptor(null);
+    }
+  }, [refreshToken]);
 
-      return axios
-        .post("/api/tokens/refreshToken", {
-          refresh_token: _getToken("refresh_token"),
-        })
-        .then((response) => {
-          saveToken();
-          error.response.config.headers["Authorization"] =
-            "Bearer " + response.data.access_token;
+  useEffect(() => {
+    setAccessToken(localStorage.getItem("access-token"));
+    setRefreshToken(localStorage.getItem("refresh-token"));
+  }, []);
+
+  const destroyToken = () => {
+    setAccessToken(null);
+    setRefreshToken(null);
+  };
+
+  const createAxiosResponseInterceptor = ({ refreshToken }) => {
+    const _interceptor = axios.interceptors.response.use(
+      (response) => response,
+      async (error) => {
+        // Reject promise if usual error
+        if (error.response.status !== 401) {
+          return Promise.reject(error);
+        }
+
+        /*
+         * When response code is 401, try to refresh the token.
+         * Eject the interceptor so it doesn't loop in case
+         * token refresh causes the 401 response
+         */
+        axios.interceptors.response.eject(_interceptor);
+        try {
+          const response = await axios({
+            url: "/api/tokens/refreshToken",
+            method: "POST",
+            headers: {
+              "x-refresh-token": refreshToken,
+            },
+          });
+          const headers = response?.headers || {};
+          const AccessToken = headers["x-access-token"];
+          setAccessToken(AccessToken);
           return axios(error.response.config);
-        })
-        .catch((error) => {
+        } catch (error) {
           destroyToken();
           return Promise.reject(error);
-        })
-        .finally(createAxiosResponseInterceptor);
-    }
-  );
-}
-// createAxiosResponseInterceptor();
+        } finally {
+          console.log("Finally");
+          createAxiosResponseInterceptor({ refreshToken });
+        }
+      }
+    );
+    setInterceptor(_interceptor);
+  };
+};
 export default axios;

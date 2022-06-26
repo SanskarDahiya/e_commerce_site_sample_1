@@ -5,34 +5,7 @@ import ValidateData from "../../../Server/ExpressValidate";
 import bcrypt from "bcryptjs";
 import PostRequest from "../../../Server/PostRequest";
 import { generateToken } from "../../../Auth/jwt";
-
-/* Users collection sample */
-const USERS = [
-  {
-    id: 1,
-    email: "a@aaa.aaa",
-    password: "$2y$10$mj1OMFvVmGAR4gEEXZGtA.R5wYWBZTis72hSXzpxEs.QoXT3ifKSq", // password
-    createdAt: "2020-06-14 18:23:45",
-  },
-  {
-    id: 2,
-    email: "example2@example.com",
-    password: "$2y$10$mj1OMFvVmGAR4gEEXZGtA.R5wYWBZTis72hSXzpxEs.QoXT3ifKSq", // password
-    createdAt: "2020-06-14 18:23:45",
-  },
-  {
-    id: 3,
-    email: "example3@example.com",
-    password: "$2y$10$mj1OMFvVmGAR4gEEXZGtA.R5wYWBZTis72hSXzpxEs.QoXT3ifKSq", // password
-    createdAt: "2020-06-14 18:23:45",
-  },
-  {
-    id: 4,
-    email: "example4@example.com",
-    password: "$2y$10$mj1OMFvVmGAR4gEEXZGtA.R5wYWBZTis72hSXzpxEs.QoXT3ifKSq", // password
-    createdAt: "2020-06-14 18:23:45",
-  },
-];
+import { getUserDataByEmail } from "../../../Constants/user";
 
 type Data = {
   name?: string;
@@ -56,9 +29,7 @@ export default async function handler(
   /* Get Post Data */
   const { email, password } = req.body;
   /* Check user email in database */
-  const user = USERS.find((user) => {
-    return user.email === email;
-  });
+  const user = getUserDataByEmail(email);
 
   /* Check if exists */
   if (!user) {

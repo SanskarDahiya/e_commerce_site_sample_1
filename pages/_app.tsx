@@ -4,37 +4,41 @@ import { GlobalStyles } from "twin.macro";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
 import { useEffect } from "react";
-import { getUserFromCookie } from "../Auth/cookie";
 import { useAuthStore } from "../Store/auth";
-import axios from "../Helpers/Axios";
+import axios, { useAxiosInterceptior } from "../Helpers/Axios";
 
 const validateUser = async (cb) => {
   try {
-    cb();
-    // const result = await axios({ url: "/api/tokens/validate", method: "POST" });
+    const result = await axios({ url: "/api/user", method: "POST" });
+    cb(result);
   } catch (err) {
     console.log("🚀 ~ file: _app.tsx ~ line 12 ~ validateUser ~ err", err);
   }
 };
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const { setUser, accessToken } = useAuthStore((state) => ({
+  useAxiosInterceptior();
+
+  const { setUser, accessToken, refreshToken } = useAuthStore((state) => ({
     setUser: state.setUser,
     accessToken: state.accessToken,
+    refreshToken: state.refreshToken,
   }));
+
   useEffect(() => {
     let mount = true;
-    validateUser(() => {
-      if (!mount) return;
-      const user = getUserFromCookie();
-      if (user?.result) {
-        setUser(user?.result);
-      }
-    });
+    if (refreshToken || accessToken) {
+      validateUser((user: any) => {
+        if (!mount) return;
+        if (user) {
+          setUser(user);
+        }
+      });
+    }
     return () => {
       mount = false;
     };
-  }, [accessToken]);
+  }, [accessToken, refreshToken]);
   return (
     <>
       <GlobalStyles />
