@@ -6,6 +6,7 @@ import { getAccessTokenSSR } from "../../../Auth/cookie";
 
 type Data = {
   success: boolean;
+  result?: any;
 };
 
 export default async function handler(
@@ -14,10 +15,10 @@ export default async function handler(
 ) {
   await PostRequest(req, res);
   const token = getAccessTokenSSR(req);
-  const { error } = verifyToken(token);
+  const { result, error } = verifyToken(token);
   if (error) {
     res.status(401).json({ success: false });
     return;
   }
-  res.status(200).json({ success: true });
+  res.status(200).json({ success: true, result });
 }

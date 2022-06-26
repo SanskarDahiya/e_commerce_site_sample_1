@@ -1,9 +1,9 @@
 import "twin.macro";
 import React, { memo } from "react";
 import Link from "next/link";
-
 import UserHeaderSection from "../Helpers/UserHeaderSection";
 import CartHeaderSection from "../Helpers/CartHeaderSection";
+import AdminHeaderSection from "../Helpers/AdminHeaderSection";
 
 const HEADER_DATA = {
   header: {
@@ -74,6 +74,7 @@ function Header() {
         </div>
 
         <div tw="order-2 md:order-3 flex items-center" id="nav-content">
+          <AdminHeaderSection />
           <UserHeaderSection />
           <CartHeaderSection />
         </div>

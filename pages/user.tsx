@@ -13,10 +13,10 @@ function User() {
   );
 }
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const result = {};
+  const result = {} as any;
   const { req } = context;
   const token = getAccessTokenSSR(req as NextApiRequest);
-  const { result: profile } = verifyToken(token);
+  const { result: profile } = verifyToken(token) as { result: any };
   if (profile?.id) {
     result.redirect = {
       destination: "/",

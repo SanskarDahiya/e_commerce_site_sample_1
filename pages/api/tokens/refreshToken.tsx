@@ -15,12 +15,12 @@ export default async function handler(
 ) {
   let token = req.headers["x-refresh-token"];
   token = (token + "").split(" ").pop() || "";
-  const { result, error } = verifyToken(token);
+  const { result, error } = verifyToken(token) as any;
   if (error || !result?.isRefreshToken) {
     res.status(518).json({ success: false, error: "Invalid Token" });
     return;
   }
-  const user = getUserDataById(result.id);
+  const user = getUserDataById(result.id) as any;
   const userId = user.id,
     userEmail = user.email,
     userCreated = user.createdAt;
@@ -28,6 +28,7 @@ export default async function handler(
   const payload = {
     id: userId,
     email: userEmail,
+    isAdmin: user?.isAdmin,
     createdAt: userCreated,
   };
 

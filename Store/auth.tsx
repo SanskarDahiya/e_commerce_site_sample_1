@@ -5,6 +5,8 @@ import { verifyToken } from "../Auth/jwt";
 type IAuth = {
   user: any;
   setUser: (value: any) => void;
+  isEditEnable: boolean;
+  toogleEdit: () => void;
   accessToken: string | null;
   setAccessToken: (value: string | null) => void;
   refreshToken: string | null;
@@ -12,6 +14,10 @@ type IAuth = {
 };
 
 const authStore = (set: SetState<IAuth>): IAuth => ({
+  isEditEnable: false,
+  toogleEdit: () => {
+    set(({ isEditEnable }) => ({ isEditEnable: !isEditEnable }));
+  },
   user: null,
   setUser: (value) => set(() => ({ user: value })),
   accessToken: null,
@@ -20,7 +26,7 @@ const authStore = (set: SetState<IAuth>): IAuth => ({
       localStorage.removeItem("access-token");
     } else {
       localStorage.setItem("access-token", token);
-      const { result, error } = verifyToken(token);
+      const { result, error } = verifyToken(token) as any;
       if (!error && result?.exp) {
         Cookies.set("token", token, {
           expires: new Date(result.exp * 1000),

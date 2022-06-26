@@ -7,9 +7,13 @@ import { useEffect } from "react";
 import { useAuthStore } from "../Store/auth";
 import axios, { useAxiosInterceptior } from "../Helpers/Axios";
 
-const validateUser = async (cb) => {
+const validateUser = async (cb: (user: any) => any) => {
   try {
-    const result = await axios({ url: "/api/user", method: "POST" });
+    const { data: { result } = {} } = await axios({
+      url: "/api/user",
+      method: "POST",
+    });
+
     cb(result);
   } catch (err) {
     console.log("🚀 ~ file: _app.tsx ~ line 12 ~ validateUser ~ err", err);

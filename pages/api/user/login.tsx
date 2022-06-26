@@ -54,6 +54,7 @@ export default async function handler(
 
   const payload = {
     id: userId,
+    isAdmin: user.isAdmin,
     email: userEmail,
     createdAt: userCreated,
   };
