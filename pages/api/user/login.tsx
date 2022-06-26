@@ -63,14 +63,14 @@ export default async function handler(
   const Rtoken = generateToken(
     { ...payload, isRefreshToken: true },
     {
-      expiresIn: "5m",
+      expiresIn: "1h",
     }
   );
 
   res.setHeader("x-refresh-token", "Bearer " + Rtoken);
   /* Sign token */
   const token = generateToken(payload, {
-    expiresIn: "1m",
+    expiresIn: "5m",
   });
   res.setHeader("x-access-token", "Bearer " + token);
   /* Send succes with token */

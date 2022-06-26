@@ -16,7 +16,7 @@ const HEADER_DATA = {
       title: "Shop",
     },
     {
-      link: "/",
+      link: "/about",
       title: "About",
     },
   ],
