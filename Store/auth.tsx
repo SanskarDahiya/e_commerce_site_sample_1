@@ -6,9 +6,9 @@ type IAuth = {
   user: any;
   setUser: (value: any) => void;
   accessToken: string | null;
-  setAccessToken: (value: string) => void;
+  setAccessToken: (value: string | null) => void;
   refreshToken: string | null;
-  setRefreshToken: (value: string) => void;
+  setRefreshToken: (value: string | null) => void;
 };
 
 const authStore = (set: SetState<IAuth>): IAuth => ({
