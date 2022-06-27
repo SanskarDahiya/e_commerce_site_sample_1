@@ -1,12 +1,18 @@
 import "twin.macro";
 import React, { Fragment, memo } from "react";
 import Link from "next/link";
+import { useShoppingCart } from "../Store/shoppingCart";
 
 function CartHeaderSection() {
+  const cartItems = useShoppingCart((s) => s.cartItems);
+  const totalItems = cartItems.length;
   return (
     <Fragment>
       <Link href={"/cart"} passHref>
-        <a tw="pl-3 inline-block no-underline hover:text-black">
+        <a tw="pl-3 inline-block no-underline hover:text-black relative">
+          <div tw="absolute bottom-[60%] left-[80%] font-size[small]">
+            {totalItems}
+          </div>
           <svg
             tw="fill-current hover:text-black"
             xmlns="http://www.w3.org/2000/svg"
