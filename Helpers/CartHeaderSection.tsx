@@ -10,9 +10,11 @@ function CartHeaderSection() {
     <Fragment>
       <Link href={"/cart"} passHref>
         <a tw="pl-3 inline-block no-underline hover:text-black relative">
-          <div tw="absolute bottom-[60%] left-[80%] font-size[small]">
-            {totalItems}
-          </div>
+          {totalItems > 0 && (
+            <div tw="absolute bottom-[60%] left-[80%] font-size[small]">
+              {totalItems}
+            </div>
+          )}
           <svg
             tw="fill-current hover:text-black"
             xmlns="http://www.w3.org/2000/svg"
