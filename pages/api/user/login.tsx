@@ -5,7 +5,7 @@ import ValidateData from "../../../Server/ExpressValidate";
 import bcrypt from "bcryptjs";
 import PostRequest from "../../../Server/PostRequest";
 import { generateToken } from "../../../Auth/jwt";
-import { getUserDataByEmail } from "../../../Constants/user";
+import mongo from "../../../Database/mongo";
 
 type Data = {
   name?: string;
@@ -23,56 +23,50 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  await PostRequest(req, res);
-  await validate(req, res);
-  console.log("After Validate");
-  /* Get Post Data */
-  const { email, password } = req.body;
-  /* Check user email in database */
-  const user = getUserDataByEmail(email);
+  try {
+    await PostRequest(req, res);
+    await validate(req, res);
+    const { email, password } = req.body;
+    /* Check user email in database */
+    const db = await mongo().getDatabase();
+    const user = await db?.collection("user").findOne({ email });
 
-  /* Check if exists */
-  if (!user) {
-    /* Send error with message */
-    res.status(400).json({ status: "error", error: "User Not Found" });
-    return;
-  }
-
-  const userId = user.id,
-    userEmail = user.email,
-    userPassword = user.password,
-    userCreated = user.createdAt;
-
-  /* Check and compare password */
-  const isMatch = await bcrypt.compare(password, userPassword);
-
-  if (!isMatch) {
-    /* Send error with message */
-    res.status(400).json({ status: "error", error: "Password incorrect" });
-    return;
-  }
-
-  const payload = {
-    id: userId,
-    isAdmin: user.isAdmin,
-    email: userEmail,
-    createdAt: userCreated,
-  };
-
-  /* Sign token */
-  const Rtoken = generateToken(
-    { ...payload, isRefreshToken: true },
-    {
-      expiresIn: "1h",
+    /* Check if exists */
+    if (!user) {
+      throw new Error("Invalid Email or Password");
     }
-  );
 
-  res.setHeader("x-refresh-token", "Bearer " + Rtoken);
-  /* Sign token */
-  const token = generateToken(payload, {
-    expiresIn: "5m",
-  });
-  res.setHeader("x-access-token", "Bearer " + token);
-  /* Send succes with token */
-  res.status(200).json({ success: true });
+    /* Check and compare password */
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      throw new Error("Invalid Password");
+    }
+
+    const payload = {
+      id: user._id,
+      isAdmin: user.isAdmin,
+      email: user.email,
+      createdAt: new Date(),
+    };
+
+    /* Sign token */
+    const Rtoken = generateToken(
+      { ...payload, isRefreshToken: true },
+      {
+        expiresIn: "1h",
+      }
+    );
+
+    res.setHeader("x-refresh-token", "Bearer " + Rtoken);
+    /* Sign token */
+    const token = generateToken(payload, {
+      expiresIn: "5m",
+    });
+    res.setHeader("x-access-token", "Bearer " + token);
+    /* Send succes with token */
+    res.status(200).json({ success: true });
+  } catch (err: any) {
+    res.status(501).json({ success: false, error: err?.message });
+  }
 }

@@ -2,9 +2,12 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { check } from "express-validator";
 import ValidateData from "../../../Server/ExpressValidate";
+import mongo from "../../../Database/mongo";
+import bcrypt from "bcryptjs";
 
 type Data = {
-  name: string;
+  success: boolean;
+  error?: string;
 };
 
 const validate = ValidateData([
@@ -19,7 +22,28 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  console.log("🚀 ~ file: login.tsx ~ line 20 ~ req", req.query, req.body);
-  await validate(req, res);
-  res.status(200).json({ name: "John Doe" });
+  try {
+    await validate(req, res);
+    const { name, email, password } = req.body;
+
+    const db = await mongo().getDatabase();
+    const isExists = await db?.collection("user").findOne({ email });
+    if (isExists) {
+      throw new Error("Email Already Exists");
+    }
+
+    const password_hash = await bcrypt.hash(password, 1);
+    await db?.collection("user").insertOne({
+      name,
+      email,
+      password: password_hash,
+      _createdOn: new Date(),
+      _updatedOn: new Date(),
+      isAdmin: false,
+    });
+
+    res.status(200).json({ success: true });
+  } catch (err: any) {
+    res.status(501).json({ success: false, error: err?.message });
+  }
 }

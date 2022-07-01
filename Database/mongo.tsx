@@ -1,7 +1,7 @@
-import { MongoClient } from "mongodb";
+import { MongoClient, Db as DbInstance } from "mongodb";
 class MongoWrapper {
   client: MongoClient | undefined;
-  db: any;
+  db: DbInstance | undefined;
   isConnected: boolean = false;
   MONGODB_URI: string;
   MONGODB_DB: string;
@@ -36,7 +36,7 @@ class MongoWrapper {
     }
   };
 
-  getDatabase = async () => {
+  getDatabase = async (): Promise<DbInstance | undefined> => {
     await this.connect();
     if (!this.db && this.client) {
       this.db = this.client.db(this.MONGODB_DB);
