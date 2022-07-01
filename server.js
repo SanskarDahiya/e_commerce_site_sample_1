@@ -37,10 +37,10 @@ const adminBro = new AdminBro({
 const router = AdminBroExpressjs.buildRouter(adminBro);
 server.use(adminBro.options.rootPath, router);
 
-const handle = app.getRequestHandler();
-server.all("*", (req, res) => {
-  return handle(req, res);
-});
+// const handle = app.getRequestHandler();
+// server.all("*", (req, res) => {
+//   return handle(req, res);
+// });
 
 // Running the server
 const run = async () => {
