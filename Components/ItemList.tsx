@@ -1,13 +1,18 @@
 import "twin.macro";
 import React, { useEffect } from "react";
-import Image from "next/image";
-import Link from "next/link";
 import { items as ALL_ITEMS } from "../Constants/items";
 import { useItemStore } from "../Store/itemlist";
 import StoreSection from "./StoreSection";
 import SingleItemSmall from "./SingleItemSmall";
+import AdminAddItem from "../Helpers/AdminAddItem";
+import { useAuthStore } from "../Store/auth";
 
 function ItemList() {
+  const { isEditEnable } = useAuthStore((state) => ({
+    user: state.user || {},
+    isEditEnable: state.isEditEnable,
+  }));
+
   const { items, replaceAll } = useItemStore((state) => ({
     items: state.items,
     replaceAll: state.replaceAll,
@@ -19,9 +24,14 @@ function ItemList() {
     <section tw="bg-white py-8">
       <div tw="container mx-auto flex items-center flex-wrap pt-4 pb-12">
         <StoreSection />
-        {items.map((data, index) => (
-          <SingleItemSmall data={data} key={data.id + index} />
-        ))}
+        {items.map((data, index) =>
+          isEditEnable ? (
+            <AdminAddItem data={data} key={data.id + index} />
+          ) : (
+            <SingleItemSmall data={data} key={data.id + index} />
+          )
+        )}
+
         <hr tw="w-full" />
         <div
           className="itemList1212"

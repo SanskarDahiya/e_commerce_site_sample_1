@@ -1,5 +1,5 @@
 import Cookies from "js-cookie";
-import create, { SetState } from "zustand";
+import create, { SetState, GetState } from "zustand";
 import { verifyToken } from "../Auth/jwt";
 
 type IAuth = {
@@ -13,10 +13,18 @@ type IAuth = {
   setRefreshToken: (value: string | null) => void;
 };
 
-const authStore = (set: SetState<IAuth>): IAuth => ({
+const authStore = (set: SetState<IAuth>, get: GetState<IAuth>): IAuth => ({
   isEditEnable: false,
   toogleEdit: () => {
-    set(({ isEditEnable }) => ({ isEditEnable: !isEditEnable }));
+    set(({ isEditEnable }) => {
+      const { isAdmin } = get().user || {};
+      if (isAdmin) {
+        isEditEnable = !isEditEnable;
+      } else {
+        isEditEnable = false;
+      }
+      return { isEditEnable: isEditEnable };
+    });
   },
   user: null,
   setUser: (value) => set(() => ({ user: value })),

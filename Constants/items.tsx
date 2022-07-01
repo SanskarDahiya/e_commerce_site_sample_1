@@ -1,15 +1,3 @@
-/**
- * items = a.map((b)=>{
-let d={}
-    b=b.childNodes[0]
-d.link = b.href
-    d.imageUrl=b.childNodes[0].src
-    d.price = b.childNodes[2].innerHTML
-    b = b.childNodes[1]
-    d.title = b.childNodes[0].innerHTML
-return d
-})
- */
 export const items = [
   {
     id: "12121",
