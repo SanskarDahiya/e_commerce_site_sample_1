@@ -1,11 +1,14 @@
 import { MongoClient } from "mongodb";
 class MongoWrapper {
-  client: MongoClient;
-  dbName: string;
+  client: MongoClient | undefined;
   db: any;
   isConnected: boolean = false;
-  constructor(params: any) {
-    const { uri: MONGODB_URI, db: MONGODB_DB, options } = params || {};
+  MONGODB_URI: string;
+  MONGODB_DB: string;
+  constructor() {
+    const MONGODB_URI = process.env.MONGO_URI;
+    const MONGODB_DB = process.env.MONGO_DB;
+
     // check the MongoDB URI
     if (!MONGODB_URI) {
       throw new Error("Define the MONGODB_URI environmental variable");
@@ -14,32 +17,39 @@ class MongoWrapper {
     if (!MONGODB_DB) {
       throw new Error("Define the MONGODB_DB environmental variable");
     }
-    this.client = new MongoClient(MONGODB_URI, options);
-    this.dbName = MONGODB_DB;
+    this.MONGODB_URI = MONGODB_URI;
+    this.MONGODB_DB = MONGODB_DB;
   }
 
   disconnect = async () => {
-    await this.client.close();
-    this.isConnected = false;
+    if (this.client) {
+      await this.client.close();
+      this.isConnected = false;
+    }
   };
+
   connect = async () => {
     if (!this.isConnected) {
+      this.client = new MongoClient(this.MONGODB_URI);
       await this.client.connect();
       this.isConnected = true;
     }
   };
-  getDatabase = () => {
-    if (!this.db) {
-      this.db = this.client.db(this.dbName);
+
+  getDatabase = async () => {
+    await this.connect();
+    if (!this.db && this.client) {
+      this.db = this.client.db(this.MONGODB_DB);
     }
     return this.db;
   };
 }
+
 const InitializeDatabase = () => {
   let dbIns: MongoWrapper;
-  return (params: any) => {
+  return () => {
     if (!dbIns) {
-      dbIns = new MongoWrapper(params);
+      dbIns = new MongoWrapper();
     }
     return dbIns;
   };
