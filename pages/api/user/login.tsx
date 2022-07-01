@@ -29,7 +29,7 @@ export default async function handler(
     const { email, password } = req.body;
     /* Check user email in database */
     const db = await mongo().getDatabase();
-    const user = await db?.collection("user").findOne({ email });
+    const user = await db?.collection("users").findOne({ email });
 
     /* Check if exists */
     if (!user) {

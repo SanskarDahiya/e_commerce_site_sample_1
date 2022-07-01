@@ -5,7 +5,7 @@ import FormInput from "../Helpers/FormInput";
 import useAxios from "axios-hooks";
 
 const Register = () => {
-  const [{ result, isLoading, error }, refetch] = useAxios(
+  const [{ data: result, loading: isLoading, error }, refetch] = useAxios(
     {
       url: "/api/user/register",
       method: "post",

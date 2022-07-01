@@ -27,13 +27,13 @@ export default async function handler(
     const { name, email, password } = req.body;
 
     const db = await mongo().getDatabase();
-    const isExists = await db?.collection("user").findOne({ email });
+    const isExists = await db?.collection("users").findOne({ email });
     if (isExists) {
       throw new Error("Email Already Exists");
     }
 
     const password_hash = await bcrypt.hash(password, 1);
-    await db?.collection("user").insertOne({
+    await db?.collection("users").insertOne({
       name,
       email,
       password: password_hash,

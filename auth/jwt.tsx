@@ -17,7 +17,7 @@ export function verifyToken(jwtToken: string, isLogError?: boolean) {
     }
     const result = jwt.verify(jwtToken, SECRET_KEY);
     return { result };
-  } catch (e) {
+  } catch (e: any) {
     isLogError && console.log("e:", e.message);
     return { error: e };
   }

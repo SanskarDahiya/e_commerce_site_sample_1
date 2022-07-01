@@ -17,7 +17,7 @@ class MongoWrapper {
     if (!MONGODB_DB) {
       throw new Error("Define the MONGODB_DB environmental variable");
     }
-    this.MONGODB_URI = MONGODB_URI;
+    this.MONGODB_URI = MONGODB_URI + "?retryWrites=true&w=majority";
     this.MONGODB_DB = MONGODB_DB;
   }
 
