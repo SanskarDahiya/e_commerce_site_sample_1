@@ -88,7 +88,9 @@ const Register = () => {
             Sign Up
           </button>
         )}
-
+        {error?.response?.data && (
+          <div>{JSON.stringify(error?.response?.data)}</div>
+        )}
         <div tw="flex justify-end w-full">
           <Link href={"/user"} passHref>
             <a tw="font-bold rounded-md px-3 py-2 text-base cursor-pointer focus:outline-none text-gray-800">

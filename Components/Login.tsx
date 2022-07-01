@@ -79,7 +79,9 @@ const Login = () => {
           </button>
         )}
 
-        {error && <div>{JSON.stringify(error)}</div>}
+        {error?.response?.data && (
+          <div>{JSON.stringify(error?.response?.data)}</div>
+        )}
 
         <div tw="flex justify-end w-full">
           <Link href={"/register"} passHref>
