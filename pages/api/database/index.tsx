@@ -24,9 +24,13 @@ export default async function handler(
   try {
     await PostRequest(req, res);
     await validate(req, res);
+    const tableName = req.headers?.["x-custom-table"] as string;
+    if (!tableName || !["items"].includes(tableName)) {
+      throw new Error("Invalid Params");
+    }
 
     const token = getAccessTokenSSR(req);
-    const { result, error } = verifyToken(token) as any;
+    const { error } = verifyToken(token) as any;
     if (error) {
       const err = new Error() as any;
       err.code = 401;
@@ -35,18 +39,10 @@ export default async function handler(
     }
 
     const db = await mongo().getDatabase();
-    // const user = await db
-    //   ?.collection("users")
-    //   .findOne({ _id: ObjectId(result?.id) });
-
-    // /* Check if exists */
-    // if (!user) {
-    //   throw new Error("No User Found");
-    // }
 
     const { id, changes } = req.body;
     await db
-      ?.collection("items")
+      ?.collection(tableName)
       .findOneAndUpdate({ _id: ObjectId(id) }, changes);
 
     res.status(200).json({ success: true });

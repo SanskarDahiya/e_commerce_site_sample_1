@@ -27,6 +27,9 @@ function SingleItemSmall({ item, index }: any) {
     await axios({
       url: "/api/database",
       method: "POST",
+      headers: {
+        ["x-custom-table"]: "items",
+      },
       data: { id, changes },
     });
   };
