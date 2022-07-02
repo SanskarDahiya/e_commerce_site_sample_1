@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const express = require("express");
 const formidableMiddleware = require("express-formidable");
 require("dotenv").config({ path: require("find-config")(".env") });
-
+const { User, Posts } = require("./databaseSchema");
 // const handle = app.getRequestHandler();
 // server.all("*", (req, res) => {
 //   return handle(req, res);
@@ -31,19 +31,9 @@ const run = async () => {
     const server = express();
     server.use(formidableMiddleware());
 
-    // Resources definitions
-    const User = mongoose.model("users", {
-      name: String,
-      email: String,
-      password: String,
-      _createdOn: Date,
-      _updatedOn: Date,
-      isAdmin: Boolean,
-    });
-
     // Pass all configuration settings to AdminBro
     const adminBro = new AdminBro({
-      resources: [User],
+      resources: [User, Posts],
       rootPath: "/",
     });
 
