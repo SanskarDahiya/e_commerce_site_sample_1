@@ -1,13 +1,17 @@
 import React, { Fragment, useEffect, useState } from "react";
+import { SignleItemCartInterface } from "../Constants/Types";
 import { useItemStore } from "../Store/itemlist";
 
-function SingleCartItem({ data }: any) {
+interface MyProps {
+  data: SignleItemCartInterface;
+}
+function SingleCartItem({ data }: MyProps) {
   const fetchItemData = useItemStore((s) => s.getItem);
   const [item, setItem] = useState();
   useEffect(() => {
     let mount = true;
     const getItem = async () => {
-      const itemValue = (await fetchItemData(data._id)) as any;
+      const itemValue = await fetchItemData(data._id);
       if (mount) {
         setItem(itemValue);
       }

@@ -7,6 +7,16 @@ import { useEffect } from "react";
 import { useAuthStore } from "../Store/auth";
 import axios, { useAxiosInterceptior } from "../Helpers/Axios";
 import { useShoppingCart } from "../Store/shoppingCart";
+import {
+  CartInterface,
+  ResponseInterface,
+  UserInterface,
+} from "../Constants/Types";
+
+interface ResultInterface extends ResponseInterface {
+  user?: UserInterface;
+  cart?: CartInterface;
+}
 
 const validateUser = async (cb: (user: any) => any) => {
   try {
@@ -35,7 +45,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     let mount = true;
     if (refreshToken || accessToken) {
-      validateUser((result: any) => {
+      validateUser((result: ResultInterface) => {
         if (!mount) return;
         if (result?.user) {
           setUser(result.user);

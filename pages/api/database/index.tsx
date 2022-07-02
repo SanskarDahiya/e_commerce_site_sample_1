@@ -4,43 +4,47 @@ import { ObjectId } from "mongodb";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getAccessTokenSSR } from "../../../Auth/cookie";
 import { verifyToken } from "../../../Auth/jwt";
+import { ResponseInterface } from "../../../Constants/Types";
 import mongo from "../../../Database/mongo";
 import ValidateData from "../../../Server/ExpressValidate";
 import PostRequest from "../..//../Server/PostRequest";
 
-type Data = {
-  success: boolean;
-  error?: string;
-};
 const validate = ValidateData([
   check("id", "Id not present").exists(),
   check("changes", "Id not present").exists(),
 ]);
 
+const FRONTEND_DATABASE_ACCESS = ["items", "user_cart"];
+
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<ResponseInterface>
 ) {
   try {
     await PostRequest(req, res);
     await validate(req, res);
-    const tableName = req.headers?.["x-custom-table"] as string;
-    if (!tableName || !["items", "user_cart"].includes(tableName)) {
-      throw new Error("Invalid Params");
+    const { id, changes } = req.body;
+    const tableName = req.headers["x-custom-table"] as string;
+
+    if (
+      !tableName ||
+      !FRONTEND_DATABASE_ACCESS.includes(tableName) ||
+      !id ||
+      !changes
+    ) {
+      throw new Error("[Database] Invalid Parameters");
     }
 
     const token = getAccessTokenSSR(req);
-    const { error } = verifyToken(token) as any;
-    if (error) {
+    const { error, result } = verifyToken(token);
+    if (!result || error) {
       const err = new Error() as any;
       err.code = 401;
-      err.message = error.message;
+      err.message = "[Database] Invalid Token";
       throw err;
     }
 
     const db = await mongo().getDatabase();
-
-    const { id, changes } = req.body;
     await db
       ?.collection(tableName)
       .findOneAndUpdate({ _id: new ObjectId(id) }, changes, {

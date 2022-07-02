@@ -1,4 +1,3 @@
-import Cookies from "js-cookie";
 import jwt, { SignOptions } from "jsonwebtoken";
 import {
   AccessTokenInterface,
@@ -20,7 +19,7 @@ export function verifyToken(jwtToken: string, isLogError?: boolean) {
     if (jwtToken && jwtToken.startsWith("Bearer")) {
       jwtToken = jwtToken.split(" ").pop() || "";
     }
-    const result = jwt.verify(jwtToken, SECRET_KEY);
+    const result = jwt.verify(jwtToken, SECRET_KEY) as RefreshTokenInterface;
     return { result };
   } catch (e: any) {
     isLogError && console.log("e:", e.message);

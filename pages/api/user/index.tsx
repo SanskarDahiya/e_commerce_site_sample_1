@@ -5,49 +5,58 @@ import { verifyToken } from "../../../Auth/jwt";
 import { getAccessTokenSSR } from "../../../Auth/cookie";
 import mongo from "../../../Database/mongo";
 import { ObjectId } from "mongodb";
+import {
+  CartInterface,
+  ResponseInterface,
+  UserInterface,
+} from "../../../Constants/Types";
 
-type Data = {
-  success: boolean;
-  result?: any;
-  error?: string;
-};
+interface ResultInterface extends ResponseInterface {
+  result?: {
+    user: UserInterface;
+    cart: CartInterface;
+  };
+}
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<ResultInterface>
 ) {
   try {
     await PostRequest(req, res);
     const token = getAccessTokenSSR(req);
-    const { result, error } = verifyToken(token) as any;
-    if (error) {
+    const { result, error } = verifyToken(token);
+    if (!result || error) {
       const err = new Error() as any;
       err.code = 401;
-      err.message = error.message;
+      err.message = "[Validate] Invalid Token Present";
       throw err;
     }
 
-    const db = await mongo().getDatabase();
-    const user = await db
-      ?.collection("users")
-      .findOne({ _id: new ObjectId(result?.id) });
+    const userDB = await mongo().getUserDB();
+    const user = (await userDB?.findOne({
+      _id: new ObjectId(result._id),
+    })) as UserInterface;
+
     /* Check if exists */
     if (!user) {
-      throw new Error("No User Found");
+      throw new Error("[Validate] Invalid User");
     }
 
-    const cart = await db?.collection("user_cart").findOne({ _id: user._id });
+    const cartDB = await mongo().getCartDB();
+    const cart = (await cartDB?.findOne({ _id: user._id })) as CartInterface;
 
     try {
-      const lastUpdatedOn = new Date(result?.updatedOn)?.getTime();
-      const updatedOn = user?._updatedOn?.getTime();
+      const lastUpdatedOn = new Date(result._updatedOn).getTime();
+      const updatedOn = user._updatedOn.getTime();
       if (updatedOn > lastUpdatedOn) {
-        res.status(401).json({ success: false });
-        return;
+        const err = new Error() as any;
+        err.code = 401;
+        err.message = "[Validate] Invalid Token Present";
+        throw err;
       }
-    } catch (err) {
-      console.log("🚀 ~ file: index.tsx ~ line 46 ~ err", err);
-    }
+    } catch (err) {}
+
     res.status(200).json({ success: true, result: { user, cart } });
   } catch (err: any) {
     const statusCode = err?.code === 401 ? 401 : 501;

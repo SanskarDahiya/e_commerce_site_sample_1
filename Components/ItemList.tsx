@@ -3,8 +3,9 @@ import React, { memo, useEffect } from "react";
 import { useItemStore } from "../Store/itemlist";
 import StoreSection from "./StoreSection";
 import SingleItemSmall from "./SingleItemSmall";
+import { ItemInterface } from "../Constants/Types";
 
-function ItemList({ items: itemResult }: { items: any[] }) {
+function ItemList({ items: itemResult }: { items: ItemInterface[] }) {
   const { items, replaceAll } = useItemStore((state) => ({
     items: state.items,
     replaceAll: state.replaceAll,

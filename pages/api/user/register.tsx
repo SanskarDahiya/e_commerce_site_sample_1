@@ -4,11 +4,7 @@ import { check } from "express-validator";
 import ValidateData from "../../../Server/ExpressValidate";
 import mongo from "../../../Database/mongo";
 import bcrypt from "bcryptjs";
-
-type Data = {
-  success: boolean;
-  error?: string;
-};
+import { ResponseInterface, UserInterface } from "../../../Constants/Types";
 
 const validate = ValidateData([
   check("name", "Name is required").not().isEmpty(),
@@ -18,30 +14,34 @@ const validate = ValidateData([
   }),
 ]);
 
+const PASSWORD_HASH = "my-pass-word";
+
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<ResponseInterface>
 ) {
   try {
     await validate(req, res);
     const { name, email, password } = req.body;
 
-    const db = await mongo().getDatabase();
-    const isExists = await db?.collection("users").findOne({ email });
-    if (isExists) {
-      throw new Error("Email Already Exists");
+    const userDB = await mongo().getUserDB();
+    const isExists = await userDB?.count({ email });
+    if (isExists != 0) {
+      throw new Error("[Register] User Already Registered");
     }
 
-    const password_hash = await bcrypt.hash(password, 1);
-    await db?.collection("users").insertOne({
+    const password_hash = await bcrypt.hash(password, PASSWORD_HASH);
+
+    const UserInfo = {
+      isAdmin: false,
       name,
       email,
       password: password_hash,
       _createdOn: new Date(),
       _updatedOn: new Date(),
-      isAdmin: false,
-    });
+    } as UserInterface;
 
+    await userDB?.insertOne(UserInfo);
     res.status(200).json({ success: true });
   } catch (err: any) {
     res.status(501).json({ success: false, error: err?.message });

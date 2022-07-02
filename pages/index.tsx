@@ -2,30 +2,29 @@ import type { GetServerSidePropsContext, NextPage } from "next";
 import { Fragment } from "react";
 import Carousal from "../Components/Carousal";
 import ItemList from "../Components/ItemList";
+import { ItemInterface } from "../Constants/Types";
 import mongo from "../Database/mongo";
 
-const Home: NextPage = ({ itemResult }: any) => {
+interface MyProps {
+  items: ItemInterface[];
+}
+
+const Home: NextPage<MyProps> = ({ items }) => {
   return (
     <Fragment>
       <Carousal />
-      <ItemList items={itemResult} />
+      <ItemList items={items} />
     </Fragment>
   );
 };
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const db = await mongo().getDatabase();
-  const itemResult = (await db?.collection("items").find().toArray())?.map(
-    (item) => {
-      return { ...item, _id: item._id.toString() };
-    }
-  );
+export async function getServerSideProps() {
+  const itemDB = await mongo().getItemsDB();
+  const items = (await itemDB?.find().toArray())?.map((data) => {
+    return { ...data, _id: data._id.toString() };
+  });
 
-  return {
-    props: {
-      itemResult,
-    },
-  };
+  return { props: { items } };
 }
 
 export default Home;

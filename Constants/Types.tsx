@@ -45,5 +45,5 @@ interface SignleItemCartInterface extends Omit<MandatoryFields, "_id"> {
 
 export interface CartInterface extends MandatoryFields {
   items: string[];
-  [resourceId: string]: SignleItemCartInterface | ObjectId | string[] | Date;
+  [resourceId: string]: SignleItemCartInterface | any;
 }

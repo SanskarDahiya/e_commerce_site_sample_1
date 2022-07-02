@@ -28,14 +28,14 @@ export default async function handler(
 
     /* Check if exists */
     if (!user) {
-      throw new Error("Invalid Email or Password");
+      throw new Error("[Login] Invalid Credentials");
     }
 
     /* Check and compare password */
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      throw new Error("Invalid Password");
+      throw new Error("[Login] Invalid Credentials");
     }
 
     const access_token = generateAccessToken(user);

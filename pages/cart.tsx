@@ -4,12 +4,17 @@ import React from "react";
 import { getAccessTokenSSR } from "../Auth/cookie";
 import { verifyToken } from "../Auth/jwt";
 import SingleCartItem from "../Components/SingleCartItem";
+import { CartInterface } from "../Constants/Types";
 import mongo from "../Database/mongo";
 
-function Cart({ cartData }: any) {
+interface MyProps {
+  cartData: CartInterface;
+}
+
+function Cart({ cartData }: MyProps) {
   return (
     <div>
-      {cartData.items.map((resourceId: any, index: number) => {
+      {cartData.items.map((resourceId, index) => {
         return (
           <SingleCartItem
             key={index}
@@ -26,8 +31,7 @@ export default Cart;
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { req } = context;
   const token = getAccessTokenSSR(req as NextApiRequest);
-  const { result: { id: userId = null } = {} } = verifyToken(token) as any;
-
+  const { result: { _id: userId } = {} } = verifyToken(token);
   if (!userId) {
     return {
       redirect: {
@@ -35,12 +39,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     };
   }
-
-  const db = await mongo().getDatabase();
-  const cartData = await db
-    ?.collection("user_cart")
-    .findOne({ _id: new ObjectId(userId) });
-
+  const cartDB = await mongo().getCartDB();
+  const cartData = await cartDB?.findOne({ _id: new ObjectId(userId) });
   return {
     props: {
       cartData: {

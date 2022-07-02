@@ -6,8 +6,13 @@ import { useShoppingCart } from "../Store/shoppingCart";
 import { useAuthStore } from "../Store/auth";
 import axios from "../Helpers/Axios";
 import { useItemStore } from "../Store/itemlist";
+import { ItemInterface } from "../Constants/Types";
 
-function SingleItemSmall({ item, index }: any) {
+interface MyProps {
+  index: number;
+  item: ItemInterface;
+}
+function SingleItemSmall({ item, index }: MyProps) {
   const {
     _id: resourceId,
     imageUrl,
