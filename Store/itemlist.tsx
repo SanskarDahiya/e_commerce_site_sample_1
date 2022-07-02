@@ -1,12 +1,13 @@
 import create, { SetState, GetState } from "zustand";
+import { ItemInterface } from "../Constants/Types";
 
 type IAuth = {
-  items: any[];
-  replaceAll: (list: any) => void;
-  getItem: (resourceId: string) => Promise<any>;
-  addItem: (value: any, index?: number) => void;
-  removeItem: (value: any, index?: number) => void;
-  replaceItem: (value: any, index: number) => void;
+  items: ItemInterface[];
+  replaceAll: (list: ItemInterface[]) => void;
+  getItem: (resourceId: string) => Promise<ItemInterface>;
+  addItem: (value: ItemInterface, index?: number) => void;
+  removeItem: (value: ItemInterface, index?: number) => void;
+  replaceItem: (value: ItemInterface, index: number) => void;
 };
 
 const itemStore = (set: SetState<IAuth>, get: GetState<IAuth>): IAuth => ({
@@ -41,7 +42,7 @@ const itemStore = (set: SetState<IAuth>, get: GetState<IAuth>): IAuth => ({
       if (index) {
         items.splice(index, 1);
       } else {
-        items = items.filter((item) => item.id !== value.id);
+        items = items.filter((item) => item._id !== value._id);
       }
       return { items };
     });

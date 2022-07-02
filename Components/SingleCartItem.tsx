@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { SignleItemCartInterface } from "../Constants/Types";
+import { ItemInterface, SignleItemCartInterface } from "../Constants/Types";
 import { useItemStore } from "../Store/itemlist";
 
 interface MyProps {
@@ -7,7 +7,7 @@ interface MyProps {
 }
 function SingleCartItem({ data }: MyProps) {
   const fetchItemData = useItemStore((s) => s.getItem);
-  const [item, setItem] = useState();
+  const [item, setItem] = useState<ItemInterface>();
   useEffect(() => {
     let mount = true;
     const getItem = async () => {

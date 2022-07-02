@@ -40,7 +40,7 @@ function SingleItemSmall({ item, index }: MyProps) {
     }
   }, [currentUserId, userId]);
   const currentItemQuantity = getItemQuantity(resourceId);
-  const isFavoriteMark = favourates?.includes(userId);
+  const isFavoriteMark = userId ? favourates?.includes(userId) : false;
 
   const updateDb = async (id: string, changes: any) => {
     await axios({

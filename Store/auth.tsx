@@ -1,16 +1,17 @@
 import Cookies from "js-cookie";
 import create, { SetState, GetState } from "zustand";
 import { verifyToken } from "../Auth/jwt";
+import { UserInterface } from "../Constants/Types";
 
 type IAuth = {
-  user: any;
-  setUser: (value: any) => void;
+  user: UserInterface | null;
+  setUser: (user: any) => void;
   isEditEnable: boolean;
   toogleEdit: () => void;
   accessToken: string | null;
-  setAccessToken: (value: string | null) => void;
+  setAccessToken: (token: string | null) => void;
   refreshToken: string | null;
-  setRefreshToken: (value: string | null) => void;
+  setRefreshToken: (token: string | null) => void;
 };
 
 const authStore = (set: SetState<IAuth>, get: GetState<IAuth>): IAuth => ({

@@ -6,7 +6,7 @@ export interface ResponseInterface {
 }
 
 interface MandatoryFields {
-  readonly _id: ObjectId;
+  readonly _id: string;
   _updatedOn: Date;
   _createdOn: Date;
 }
@@ -38,7 +38,7 @@ export interface ItemInterface extends MandatoryFields {
   favourates?: string[];
 }
 
-interface SignleItemCartInterface extends Omit<MandatoryFields, "_id"> {
+export interface SignleItemCartInterface extends MandatoryFields {
   price: number;
   qty: number;
 }
