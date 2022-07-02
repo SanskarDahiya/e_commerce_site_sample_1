@@ -1,35 +1,48 @@
 import tw from "twin.macro";
-import React, { useState } from "react";
+import React, { memo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useShoppingCart } from "../Store/shoppingCart";
 import { useAuthStore } from "../Store/auth";
+import axios from "../Helpers/Axios";
+import { useItemStore } from "../Store/itemlist";
 
-function SingleItemSmall({ data }: any) {
+function SingleItemSmall({ item, index }: any) {
+  const { _id: resourceId, imageUrl, price, title, favourates } = item;
   const user = useAuthStore((s) => s.user);
   const userId = user?._id?.toString();
+  const replaceItem = useItemStore((state) => state.replaceItem);
+
   const {
     getItemQuantity,
     increaseCartQuantity,
     decreaseCartQuantity,
     removeFromCart,
   } = useShoppingCart();
-  const [item, setItem] = useState(data);
-  const { id, imageUrl, price, title, favourates } = item;
-  const currentItemQuantity = getItemQuantity(id);
+
+  const currentItemQuantity = getItemQuantity(resourceId);
   const isFavoriteMark = favourates?.includes(userId);
+
+  const updateDb = async (id: string, changes: any) => {
+    await axios({
+      url: "/api/database",
+      method: "POST",
+      data: { id, changes },
+    });
+  };
   const addQuantity = (e: any) => {
     e.preventDefault();
-    increaseCartQuantity(id);
+    increaseCartQuantity(resourceId);
   };
   const removeQuantity = (e: any) => {
     e.preventDefault();
-    decreaseCartQuantity(id);
+    decreaseCartQuantity(resourceId);
   };
   const removeItem = (e: any) => {
     e.preventDefault();
-    removeFromCart(id);
+    removeFromCart(resourceId);
   };
+
   const favCss = [tw`h-6 w-6 fill-current text-gray-500 hover:text-black`];
   if (isFavoriteMark) {
     favCss.push(tw`text-red-600 hover:text-red-400`);
@@ -39,7 +52,7 @@ function SingleItemSmall({ data }: any) {
       className="itemList1212"
       tw="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col"
     >
-      <Link href={"/items/" + id} passHref>
+      <Link href={"/items/" + resourceId} passHref>
         <a>
           <div tw="hover:flex-grow hover:shadow-lg">
             <Image
@@ -61,16 +74,27 @@ function SingleItemSmall({ data }: any) {
                     alert("Please Login");
                     return;
                   }
-                  setItem((item: any) => {
-                    if (isFavoriteMark) {
-                      item.favourates = item.favourates.filter(
-                        (id: String) => id !== userId
-                      );
-                    } else {
-                      item.favourates?.push(userId);
-                      return { ...item };
+                  if (isFavoriteMark) {
+                    item.favourates = item.favourates.filter(
+                      (id: String) => id !== userId
+                    );
+                    updateDb(resourceId, {
+                      $pull: {
+                        favourates: userId,
+                      },
+                    });
+                  } else {
+                    if (!Array.isArray(item.favourates)) {
+                      item.favourates = [];
                     }
-                  });
+                    item.favourates.push(userId);
+                    updateDb(resourceId, {
+                      $addToSet: {
+                        favourates: userId,
+                      },
+                    });
+                  }
+                  replaceItem(item, index);
                 }}
                 // @ts-ignore
                 css={favCss}
@@ -113,4 +137,4 @@ function SingleItemSmall({ data }: any) {
   );
 }
 
-export default SingleItemSmall;
+export default memo(SingleItemSmall);

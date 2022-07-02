@@ -21,7 +21,10 @@ export default async function handler(
     const token = getAccessTokenSSR(req);
     const { result, error } = verifyToken(token) as any;
     if (error) {
-      throw error;
+      const err = new Error() as any;
+      err.code = 401;
+      err.message = error.message;
+      throw err;
     }
 
     const db = await mongo().getDatabase();
@@ -46,6 +49,7 @@ export default async function handler(
     }
     res.status(200).json({ success: true, result: user });
   } catch (err: any) {
-    res.status(501).json({ success: false, error: err?.message });
+    const statusCode = err?.code === 401 ? 401 : 501;
+    res.status(statusCode).json({ success: false, error: err?.message });
   }
 }

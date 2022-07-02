@@ -5,12 +5,19 @@ type IAuth = {
   replaceAll: (list: any) => void;
   addItem: (value: any, index?: number) => void;
   removeItem: (value: any, index?: number) => void;
+  replaceItem: (value: any, index: number) => void;
 };
 
 const itemStore = (set: SetState<IAuth>): IAuth => ({
   items: [],
   replaceAll: (list) => {
     set(() => ({ items: [...list] }));
+  },
+  replaceItem: (value, index) => {
+    set(({ items }) => {
+      items[index] = { ...items[index], ...value };
+      return { items };
+    });
   },
   addItem: (value, index) => {
     set(({ items }) => {
