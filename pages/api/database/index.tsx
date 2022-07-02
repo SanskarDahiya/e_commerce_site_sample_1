@@ -47,6 +47,7 @@ export default async function handler(
 
     res.status(200).json({ success: true });
   } catch (err: any) {
-    res.status(501).json({ success: false, error: err?.message });
+    const statusCode = err?.code === 401 ? 401 : 501;
+    res.status(statusCode).json({ success: false, error: err?.message });
   }
 }
