@@ -36,6 +36,21 @@ class MongoWrapper {
     }
   };
 
+  getUserDB = async () => {
+    await this.getDatabase();
+    return this.db?.collection("users");
+  };
+
+  getCartDB = async () => {
+    await this.getDatabase();
+    return this.db?.collection("user_cart");
+  };
+
+  getItemsDB = async () => {
+    await this.getDatabase();
+    return this.db?.collection("items");
+  };
+
   getDatabase = async (): Promise<DbInstance | undefined> => {
     await this.connect();
     if (!this.db && this.client) {

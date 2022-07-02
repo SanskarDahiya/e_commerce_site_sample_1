@@ -1,5 +1,5 @@
 /* Users collection sample */
-const USERS = [
+export const USERS = [
   {
     id: 1,
     email: "a@aaa.aaa",
@@ -26,9 +26,3 @@ const USERS = [
     createdAt: "2020-06-14 18:23:45",
   },
 ];
-
-const getUser = (key: string, value: string) =>
-  USERS.find((user: { [key: string]: any }) => user[key] === value);
-
-export const getUserDataById = (id: string) => getUser("id", id);
-export const getUserDataByEmail = (email: string) => getUser("email", email);

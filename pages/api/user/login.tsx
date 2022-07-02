@@ -4,15 +4,9 @@ import { check } from "express-validator";
 import ValidateData from "../../../Server/ExpressValidate";
 import bcrypt from "bcryptjs";
 import PostRequest from "../../../Server/PostRequest";
-import { generateToken } from "../../../Auth/jwt";
+import { generateAccessToken, generateRefreshToken } from "../../../Auth/jwt";
 import mongo from "../../../Database/mongo";
-
-type Data = {
-  name?: string;
-  status?: string;
-  error?: string;
-  success?: boolean;
-};
+import { ResponseInterface, UserInterface } from "../../../Constants/Types";
 
 const validate = ValidateData([
   check("email", "please include a valid email").isEmail(),
@@ -21,15 +15,16 @@ const validate = ValidateData([
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<ResponseInterface>
 ) {
   try {
     await PostRequest(req, res);
     await validate(req, res);
     const { email, password } = req.body;
+
     /* Check user email in database */
-    const db = await mongo().getDatabase();
-    const user = await db?.collection("users").findOne({ email });
+    const UserDB = await mongo().getUserDB();
+    const user = (await UserDB?.findOne({ email })) as UserInterface;
 
     /* Check if exists */
     if (!user) {
@@ -43,28 +38,12 @@ export default async function handler(
       throw new Error("Invalid Password");
     }
 
-    const payload = {
-      id: user._id.toString(),
-      isAdmin: user.isAdmin,
-      email: user.email,
-      createdAt: new Date(),
-      updatedOn: user._updatedOn,
-    };
+    const access_token = generateAccessToken(user);
+    const refresh_token = generateRefreshToken(user);
 
-    /* Sign token */
-    const Rtoken = generateToken(
-      { ...payload, isRefreshToken: true },
-      {
-        expiresIn: "1h",
-      }
-    );
+    res.setHeader("x-access-token", `Bearer ${access_token}`);
+    res.setHeader("x-refresh-token", `Bearer ${refresh_token}`);
 
-    res.setHeader("x-refresh-token", "Bearer " + Rtoken);
-    /* Sign token */
-    const token = generateToken(payload, {
-      expiresIn: "5m",
-    });
-    res.setHeader("x-access-token", "Bearer " + token);
     /* Send succes with token */
     res.status(200).json({ success: true });
   } catch (err: any) {

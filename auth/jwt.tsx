@@ -1,5 +1,10 @@
 import Cookies from "js-cookie";
 import jwt, { SignOptions } from "jsonwebtoken";
+import {
+  AccessTokenInterface,
+  RefreshTokenInterface,
+  UserInterface,
+} from "../Constants/Types";
 
 const SECRET_KEY = "MY CUSTOM KEY PASS PAIR";
 
@@ -22,3 +27,28 @@ export function verifyToken(jwtToken: string, isLogError?: boolean) {
     return { error: e };
   }
 }
+
+export const generateAccessToken = (user: UserInterface) => {
+  const options = { expiresIn: "5m" };
+  const accessTokenPayload: AccessTokenInterface = {
+    _id: user._id.toString(),
+    isAdmin: user.isAdmin,
+    email: user.email,
+    _createdOn: new Date(),
+    _updatedOn: user._updatedOn,
+  };
+  return generateToken(accessTokenPayload, options);
+};
+
+export const generateRefreshToken = (user: UserInterface) => {
+  const options = { expiresIn: "1m" };
+  const accessTokenPayload: RefreshTokenInterface = {
+    _id: user._id.toString(),
+    isAdmin: user.isAdmin,
+    email: user.email,
+    _createdOn: new Date(),
+    _updatedOn: user._updatedOn,
+    isRefreshToken: true,
+  };
+  return generateToken(accessTokenPayload, options);
+};
