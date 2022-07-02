@@ -4,8 +4,8 @@ import Link from "next/link";
 import { useShoppingCart } from "../Store/shoppingCart";
 
 function CartHeaderSection() {
-  const cartItems = useShoppingCart((s) => s.cartItems);
-  const totalItems = cartItems.length;
+  const cartItem = useShoppingCart((s) => s.cartItem);
+  const totalItems = cartItem?.items?.length;
   return (
     <Fragment>
       <Link href={"/cart"} passHref>

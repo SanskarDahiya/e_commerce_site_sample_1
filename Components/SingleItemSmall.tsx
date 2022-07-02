@@ -38,6 +38,7 @@ function SingleItemSmall({ item, index }: MyProps) {
     if (userId && userId !== currentUserId) {
       setUserId(userId);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUserId, userId]);
   const currentItemQuantity = getItemQuantity(resourceId);
   const isFavoriteMark = userId ? favourates?.includes(userId) : false;
@@ -96,9 +97,12 @@ function SingleItemSmall({ item, index }: MyProps) {
                     alert("Please Login");
                     return;
                   }
+                  if (!Array.isArray(item.favourates)) {
+                    item.favourates = [];
+                  }
                   if (isFavoriteMark) {
                     item.favourates = item.favourates.filter(
-                      (id: String) => id !== userId
+                      (id) => id !== userId
                     );
                     updateDb(resourceId, {
                       $pull: {
@@ -106,9 +110,6 @@ function SingleItemSmall({ item, index }: MyProps) {
                       },
                     });
                   } else {
-                    if (!Array.isArray(item.favourates)) {
-                      item.favourates = [];
-                    }
                     item.favourates.push(userId);
                     updateDb(resourceId, {
                       $addToSet: {

@@ -39,7 +39,7 @@ export default async function handler(
       password: password_hash,
       _createdOn: new Date(),
       _updatedOn: new Date(),
-    } as UserInterface;
+    };
 
     await userDB?.insertOne(UserInfo);
     res.status(200).json({ success: true });

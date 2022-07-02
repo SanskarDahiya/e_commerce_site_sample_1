@@ -58,6 +58,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     return () => {
       mount = false;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken, refreshToken]);
   return (
     <>

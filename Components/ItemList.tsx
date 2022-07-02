@@ -12,6 +12,7 @@ function ItemList({ items: itemResult }: { items: ItemInterface[] }) {
   }));
   useEffect(() => {
     replaceAll(itemResult);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [itemResult]);
   return (
     <section tw="bg-white py-8">

@@ -36,7 +36,7 @@ export default async function handler(
     const userDB = await mongo().getUserDB();
     const user = (await userDB?.findOne({
       _id: new ObjectId(result._id),
-    })) as UserInterface;
+    })) as unknown as UserInterface;
 
     /* Check if exists */
     if (!user) {
@@ -44,7 +44,9 @@ export default async function handler(
     }
 
     const cartDB = await mongo().getCartDB();
-    const cart = (await cartDB?.findOne({ _id: user._id })) as CartInterface;
+    const cart = (await cartDB?.findOne({
+      _id: user._id,
+    })) as unknown as CartInterface;
 
     try {
       const lastUpdatedOn = new Date(result._updatedOn).getTime();

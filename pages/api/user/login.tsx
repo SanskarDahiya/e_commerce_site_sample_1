@@ -24,7 +24,7 @@ export default async function handler(
 
     /* Check user email in database */
     const UserDB = await mongo().getUserDB();
-    const user = (await UserDB?.findOne({ email })) as UserInterface;
+    const user = (await UserDB?.findOne({ email })) as unknown as UserInterface;
 
     /* Check if exists */
     if (!user) {

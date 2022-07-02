@@ -20,7 +20,7 @@ export default async function handler(
     const userDB = await mongo().getUserDB();
     const user = (await userDB?.findOne({
       _id: new ObjectId(result._id),
-    })) as UserInterface;
+    })) as unknown as UserInterface;
 
     /* Check if exists */
     if (!user) {

@@ -26,6 +26,7 @@ const Login = () => {
 
       Router.push("/");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [result?.success, response?.headers]);
 
   const [data, setData] = useState({ email: "", password: "" });

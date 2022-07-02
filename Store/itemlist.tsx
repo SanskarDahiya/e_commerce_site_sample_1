@@ -14,7 +14,7 @@ const itemStore = (set: SetState<IAuth>, get: GetState<IAuth>): IAuth => ({
   items: [],
   getItem: async (resourceId) => {
     let itemValue = get().items.filter(({ _id }) => _id === resourceId);
-    return itemValue;
+    return itemValue[0];
   },
   replaceAll: (list) => {
     set(() => ({ items: [...list] }));

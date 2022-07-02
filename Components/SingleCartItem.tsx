@@ -20,6 +20,7 @@ function SingleCartItem({ data }: MyProps) {
     return () => {
       mount = false;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data._id]);
   return (
     <Fragment>
