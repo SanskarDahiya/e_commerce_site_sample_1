@@ -17,7 +17,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { req } = context;
   const token = getAccessTokenSSR(req as NextApiRequest);
   const { result: { _id: userId } = {} } = verifyToken(token);
-  if (!userId) {
+  if (userId) {
     return { redirect: { destination: "/" } };
   }
   return {
