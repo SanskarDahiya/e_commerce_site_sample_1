@@ -1,5 +1,5 @@
 import tw from "twin.macro";
-import React, { memo } from "react";
+import React, { memo, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useShoppingCart } from "../Store/shoppingCart";
@@ -8,7 +8,14 @@ import axios from "../Helpers/Axios";
 import { useItemStore } from "../Store/itemlist";
 
 function SingleItemSmall({ item, index }: any) {
-  const { _id: resourceId, imageUrl, price, title, favourates } = item;
+  const {
+    _id: resourceId,
+    imageUrl,
+    price,
+    actualPrice,
+    title,
+    favourates,
+  } = item;
   const user = useAuthStore((s) => s.user);
   const userId = user?._id?.toString();
   const replaceItem = useItemStore((state) => state.replaceItem);
@@ -18,8 +25,15 @@ function SingleItemSmall({ item, index }: any) {
     increaseCartQuantity,
     decreaseCartQuantity,
     removeFromCart,
+    setUserId,
+    userId: currentUserId,
   } = useShoppingCart();
 
+  useEffect(() => {
+    if (userId && userId !== currentUserId) {
+      setUserId(userId);
+    }
+  }, [currentUserId, userId]);
   const currentItemQuantity = getItemQuantity(resourceId);
   const isFavoriteMark = favourates?.includes(userId);
 
@@ -35,7 +49,7 @@ function SingleItemSmall({ item, index }: any) {
   };
   const addQuantity = (e: any) => {
     e.preventDefault();
-    increaseCartQuantity(resourceId);
+    increaseCartQuantity(resourceId, actualPrice);
   };
   const removeQuantity = (e: any) => {
     e.preventDefault();

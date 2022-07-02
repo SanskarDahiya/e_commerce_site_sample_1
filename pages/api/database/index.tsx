@@ -25,7 +25,7 @@ export default async function handler(
     await PostRequest(req, res);
     await validate(req, res);
     const tableName = req.headers?.["x-custom-table"] as string;
-    if (!tableName || !["items"].includes(tableName)) {
+    if (!tableName || !["items", "user_cart"].includes(tableName)) {
       throw new Error("Invalid Params");
     }
 
@@ -43,7 +43,9 @@ export default async function handler(
     const { id, changes } = req.body;
     await db
       ?.collection(tableName)
-      .findOneAndUpdate({ _id: ObjectId(id) }, changes);
+      .findOneAndUpdate({ _id: new ObjectId(id) }, changes, {
+        upsert: true,
+      });
 
     res.status(200).json({ success: true });
   } catch (err: any) {

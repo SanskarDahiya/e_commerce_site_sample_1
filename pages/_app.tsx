@@ -6,6 +6,7 @@ import Footer from "../Components/Footer";
 import { useEffect } from "react";
 import { useAuthStore } from "../Store/auth";
 import axios, { useAxiosInterceptior } from "../Helpers/Axios";
+import { useShoppingCart } from "../Store/shoppingCart";
 
 const validateUser = async (cb: (user: any) => any) => {
   try {
@@ -29,13 +30,18 @@ function MyApp({ Component, pageProps }: AppProps) {
     refreshToken: state.refreshToken,
   }));
 
+  const setCartItems = useShoppingCart((s) => s.setCartItems);
+
   useEffect(() => {
     let mount = true;
     if (refreshToken || accessToken) {
-      validateUser((user: any) => {
+      validateUser((result: any) => {
         if (!mount) return;
-        if (user) {
-          setUser(user);
+        if (result?.user) {
+          setUser(result.user);
+        }
+        if (result?.cart) {
+          setCartItems(result.cart);
         }
       });
     }

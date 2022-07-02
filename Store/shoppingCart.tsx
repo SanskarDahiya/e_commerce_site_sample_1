@@ -1,4 +1,19 @@
+import axios from "axios";
 import create, { SetState, GetState } from "zustand";
+
+const updateDb_cart = async (id: string | null, changes: any) => {
+  if (!id || !changes) {
+    return;
+  }
+  await axios({
+    url: "/api/database",
+    method: "POST",
+    headers: {
+      ["x-custom-table"]: "user_cart",
+    },
+    data: { id, changes },
+  });
+};
 
 type CartItem = {
   id: number;
@@ -6,12 +21,15 @@ type CartItem = {
 };
 
 type IAuth = {
+  userId: string | null;
+  setUserId: (id: string | null) => void;
   cartStatus: boolean;
   openCart: () => void;
   closeCart: () => void;
   toogleCart: () => void;
   cartItems: CartItem[];
-  increaseCartQuantity: (id: number) => void;
+  setCartItems: (items: any) => void;
+  increaseCartQuantity: (id: number, price: number) => void;
   decreaseCartQuantity: (id: number) => void;
   removeFromCart: (id: number) => void;
 
@@ -20,19 +38,52 @@ type IAuth = {
 };
 
 const shoppingCart = (set: SetState<IAuth>, get: GetState<IAuth>): IAuth => ({
+  userId: null,
+  setUserId: (id) => set(() => ({ userId: id })),
   cartStatus: false,
   openCart: () => set(() => ({ cartStatus: true })),
   closeCart: () => set(() => ({ cartStatus: false })),
   toogleCart: () => set(({ cartStatus }) => ({ cartStatus: !cartStatus })),
   cartItems: [],
-  increaseCartQuantity: (id) =>
+  setCartItems: (items) => {
+    const cartItems =
+      items?.items?.map((id: string) => {
+        return {
+          id,
+          quantity: items?.[id]?.qty,
+        };
+      }) || [];
+    set(() => ({ cartItems }));
+  },
+  increaseCartQuantity: (resourceId, price) =>
     set(({ cartItems }) => {
-      if (cartItems.find((item) => item.id === id) == null) {
-        return { cartItems: [...cartItems, { id, quantity: 1 }] };
+      if (cartItems.find((item) => item.id === resourceId) == null) {
+        updateDb_cart(get().userId, {
+          $set: {
+            [resourceId]: {
+              price: price,
+              qty: 1,
+              _updatedOn: new Date(),
+              _createdOn: new Date(),
+            },
+          },
+          $push: {
+            items: resourceId,
+          },
+        });
+        return { cartItems: [...cartItems, { id: resourceId, quantity: 1 }] };
       } else {
+        updateDb_cart(get().userId, {
+          $inc: {
+            [`${resourceId}.qty`]: 1,
+          },
+          $set: {
+            [`${resourceId}._updatedOn`]: new Date(),
+          },
+        });
         return {
           cartItems: cartItems.map((item) => {
-            if (item.id === id) {
+            if (item.id === resourceId) {
               return { ...item, quantity: item.quantity + 1 };
             } else {
               return item;
@@ -41,14 +92,32 @@ const shoppingCart = (set: SetState<IAuth>, get: GetState<IAuth>): IAuth => ({
         };
       }
     }),
-  decreaseCartQuantity: (id) =>
+  decreaseCartQuantity: (resourceId) =>
     set(({ cartItems }) => {
-      if (cartItems.find((item) => item.id === id)?.quantity === 1) {
-        return { cartItems: cartItems.filter((item) => item.id !== id) };
+      if (cartItems.find((item) => item.id === resourceId)?.quantity === 1) {
+        updateDb_cart(get().userId, {
+          $pull: {
+            items: resourceId,
+          },
+          $unset: {
+            [resourceId]: 1,
+          },
+        });
+        return {
+          cartItems: cartItems.filter((item) => item.id !== resourceId),
+        };
       } else {
+        updateDb_cart(get().userId, {
+          $inc: {
+            [`${resourceId}.qty`]: -1,
+          },
+          $set: {
+            [`${resourceId}._updatedOn`]: new Date(),
+          },
+        });
         return {
           cartItems: cartItems.map((item) => {
-            if (item.id === id) {
+            if (item.id === resourceId) {
               return { ...item, quantity: item.quantity - 1 };
             } else {
               return item;
@@ -57,9 +126,19 @@ const shoppingCart = (set: SetState<IAuth>, get: GetState<IAuth>): IAuth => ({
         };
       }
     }),
-  removeFromCart: (id) =>
+  removeFromCart: (resourceId) =>
     set(({ cartItems }) => {
-      return { cartItems: cartItems.filter(({ id: itemId }) => itemId !== id) };
+      updateDb_cart(get().userId, {
+        $pull: {
+          items: resourceId,
+        },
+        $unset: {
+          [resourceId]: 1,
+        },
+      });
+      return {
+        cartItems: cartItems.filter(({ id: itemId }) => itemId !== resourceId),
+      };
     }),
 
   getItemQuantity: (id) =>

@@ -25,7 +25,7 @@ export default async function handler(
   const db = await mongo().getDatabase();
   const user = await db
     ?.collection("users")
-    .findOne({ _id: ObjectId(result?.id) });
+    .findOne({ _id: new ObjectId(result?.id) });
 
   /* Check if exists */
   if (!user) {

@@ -30,12 +30,13 @@ export default async function handler(
     const db = await mongo().getDatabase();
     const user = await db
       ?.collection("users")
-      .findOne({ _id: ObjectId(result?.id) });
-
+      .findOne({ _id: new ObjectId(result?.id) });
     /* Check if exists */
     if (!user) {
       throw new Error("No User Found");
     }
+
+    const cart = await db?.collection("user_cart").findOne({ _id: user._id });
 
     try {
       const lastUpdatedOn = new Date(result?.updatedOn)?.getTime();
@@ -47,7 +48,7 @@ export default async function handler(
     } catch (err) {
       console.log("🚀 ~ file: index.tsx ~ line 46 ~ err", err);
     }
-    res.status(200).json({ success: true, result: user });
+    res.status(200).json({ success: true, result: { user, cart } });
   } catch (err: any) {
     const statusCode = err?.code === 401 ? 401 : 501;
     res.status(statusCode).json({ success: false, error: err?.message });
