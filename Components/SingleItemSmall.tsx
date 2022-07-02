@@ -3,8 +3,11 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useShoppingCart } from "../Store/shoppingCart";
+import { useAuthStore } from "../Store/auth";
 
 function SingleItemSmall({ data }: any) {
+  const user = useAuthStore((s) => s.user);
+  const userId = user?._id?.toString();
   const {
     getItemQuantity,
     increaseCartQuantity,
@@ -12,9 +15,9 @@ function SingleItemSmall({ data }: any) {
     removeFromCart,
   } = useShoppingCart();
   const [item, setItem] = useState(data);
-  const { id, imageUrl, price, title, favourate } = item;
+  const { id, imageUrl, price, title, favourates } = item;
   const currentItemQuantity = getItemQuantity(id);
-
+  const isFavoriteMark = favourates?.includes(userId);
   const addQuantity = (e: any) => {
     e.preventDefault();
     increaseCartQuantity(id);
@@ -28,7 +31,7 @@ function SingleItemSmall({ data }: any) {
     removeFromCart(id);
   };
   const favCss = [tw`h-6 w-6 fill-current text-gray-500 hover:text-black`];
-  if (favourate) {
+  if (isFavoriteMark) {
     favCss.push(tw`text-red-600 hover:text-red-400`);
   }
   return (
@@ -54,8 +57,19 @@ function SingleItemSmall({ data }: any) {
               <svg
                 onClick={(e) => {
                   e.preventDefault();
+                  if (!userId) {
+                    alert("Please Login");
+                    return;
+                  }
                   setItem((item: any) => {
-                    return { ...item, favourate: !item.favourate };
+                    if (isFavoriteMark) {
+                      item.favourates = item.favourates.filter(
+                        (id: String) => id !== userId
+                      );
+                    } else {
+                      item.favourates?.push(userId);
+                      return { ...item };
+                    }
                   });
                 }}
                 // @ts-ignore

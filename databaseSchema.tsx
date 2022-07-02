@@ -10,10 +10,11 @@ export const Users = mongoose.model("users", {
 });
 
 export const Posts = mongoose.model("items", {
-  link: String,
   title: String,
   imageUrl: String,
   price: String,
+  favourates: [String],
+  description: String,
   actualPrice: Number,
   _createdOn: Date,
   _updatedOn: Date,

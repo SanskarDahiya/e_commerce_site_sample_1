@@ -44,10 +44,11 @@ export default async function handler(
     }
 
     const payload = {
-      id: user._id,
+      id: user._id.toString(),
       isAdmin: user.isAdmin,
       email: user.email,
       createdAt: new Date(),
+      updatedOn: user._updatedOn,
     };
 
     /* Sign token */
