@@ -28,7 +28,7 @@ export function verifyToken(jwtToken: string, isLogError?: boolean) {
 }
 
 export const generateAccessToken = (user: UserInterface) => {
-  const options = { expiresIn: "5m" };
+  const options = { expiresIn: "1d" };
   const accessTokenPayload: AccessTokenInterface = {
     _id: user._id.toString(),
     isAdmin: user.isAdmin,
@@ -40,7 +40,7 @@ export const generateAccessToken = (user: UserInterface) => {
 };
 
 export const generateRefreshToken = (user: UserInterface) => {
-  const options = { expiresIn: "1m" };
+  const options = { expiresIn: "5m" };
   const accessTokenPayload: RefreshTokenInterface = {
     _id: user._id.toString(),
     isAdmin: user.isAdmin,

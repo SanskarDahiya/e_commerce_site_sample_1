@@ -1,7 +1,8 @@
-import type { GetServerSidePropsContext, NextPage } from "next";
-import { Fragment } from "react";
+import "twin.macro";
+import type { NextPage } from "next";
 import Carousal from "../Components/Carousal";
 import ItemList from "../Components/ItemList";
+import SideMenuCart from "../Components/SideMenuCart";
 import { ItemInterface } from "../Constants/Types";
 import mongo from "../Database/mongo";
 
@@ -11,10 +12,11 @@ interface MyProps {
 
 const Home: NextPage<MyProps> = ({ items }) => {
   return (
-    <Fragment>
+    <div tw="relative">
       <Carousal />
       <ItemList items={items} />
-    </Fragment>
+      <SideMenuCart />
+    </div>
   );
 };
 
