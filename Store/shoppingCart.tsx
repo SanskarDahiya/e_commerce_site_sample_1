@@ -10,7 +10,7 @@ const updateDb_cart = async (id: string, changes: any) => {
     url: "/api/database",
     method: "POST",
     headers: {
-      ["x-custom-table"]: "user_cart",
+      ["x-custom-table"]: "user_carts",
     },
     data: { id, changes },
   });

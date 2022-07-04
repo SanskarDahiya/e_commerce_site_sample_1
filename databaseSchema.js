@@ -32,7 +32,7 @@ const PostSchema = new Schema({
 const Users = model("users", UserSchema);
 
 const Posts = model("items", PostSchema);
-// const Carts = model("user_cart", CartSchema);
+// const Carts = model("user_carts", CartSchema);
 
 const DataBases = [Users, Posts];
 

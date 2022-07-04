@@ -43,7 +43,7 @@ class MongoWrapper {
 
   getCartDB = async () => {
     await this.getDatabase();
-    return this.db?.collection("user_cart");
+    return this.db?.collection("user_carts");
   };
 
   getItemsDB = async () => {

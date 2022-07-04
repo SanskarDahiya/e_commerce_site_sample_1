@@ -14,7 +14,7 @@ const validate = ValidateData([
   check("changes", "Id not present").exists(),
 ]);
 
-const FRONTEND_DATABASE_ACCESS = ["items", "user_cart"];
+const FRONTEND_DATABASE_ACCESS = ["items", "user_carts"];
 
 export default async function handler(
   req: NextApiRequest,
