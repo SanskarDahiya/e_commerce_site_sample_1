@@ -4,7 +4,8 @@ const mongoose = require("mongoose");
 const express = require("express");
 const formidableMiddleware = require("express-formidable");
 require("dotenv").config({ path: require("find-config")(".env") });
-const { User, Posts } = require("./databaseSchema");
+const DataBases = require("./databaseSchema");
+// const DataBases = DatabaseHOC(mongoose);
 // const handle = app.getRequestHandler();
 // server.all("*", (req, res) => {
 //   return handle(req, res);
@@ -32,10 +33,7 @@ const run = async () => {
     server.use(formidableMiddleware());
 
     // Pass all configuration settings to AdminBro
-    const adminBro = new AdminBro({
-      resources: [User, Posts],
-      rootPath: "/",
-    });
+    const adminBro = new AdminBro({ resources: DataBases, rootPath: "/" });
 
     // Build and use a router which will handle all AdminBro routes
     const router = AdminBroExpressjs.buildRouter(adminBro);
