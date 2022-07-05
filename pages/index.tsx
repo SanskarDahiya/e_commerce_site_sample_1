@@ -2,7 +2,7 @@ import "twin.macro";
 import type { NextPage } from "next";
 import Carousal from "../Components/Carousal";
 import ItemList from "../Components/ItemList";
-import SideMenuCart from "../Components/SideMenuCart";
+import SideMenuCart from "../Components/SideCartSection/SideCart";
 import { ItemInterface } from "../Constants/Types";
 import mongo from "../Database/mongo";
 

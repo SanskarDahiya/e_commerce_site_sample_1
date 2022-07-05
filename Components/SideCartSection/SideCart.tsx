@@ -1,6 +1,7 @@
 import "twin.macro";
-import React from "react";
-import { useShoppingCart } from "../Store/shoppingCart";
+import React, { useEffect } from "react";
+import { useShoppingCart } from "../../Store/shoppingCart";
+import SingleCartitem from "./SingleCartitem";
 
 function SideMenuCart() {
   const { cartItem, cartStatus, closeCart } = useShoppingCart((s) => ({
@@ -27,6 +28,7 @@ function SideMenuCart() {
   const handleCloseMenu = () => {
     closeCart();
   };
+
   const handleCheckout = () => {};
   if (!cartStatus) return null;
   return (
@@ -72,11 +74,25 @@ function SideMenuCart() {
                       </button>
                     </div>
                   </div>
-                  <div tw="mt-8 flow-root">
-                    SingleItemLists
-                    {JSON.stringify(products)}
-                    {/* <CartItems products={products} /> */}
-                  </div>
+                  {products.length ? (
+                    <div tw="mt-8 flow-root">
+                      <div tw="-my-6 divide-y divide-gray-200">
+                        {products.map((resourceId: string, index: number) => (
+                          <SingleCartitem
+                            key={resourceId + index}
+                            data={{
+                              _id: resourceId,
+                              ...cartItem[resourceId],
+                            }}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <div tw="flex justify-between text-base font-medium text-gray-900 py-6 px-4 sm:px-6">
+                      Cart is empty
+                    </div>
+                  )}
                 </div>
                 <div tw="border-t border-gray-200 py-6 px-4 sm:px-6">
                   <div tw="flex justify-between text-base font-medium text-gray-900">

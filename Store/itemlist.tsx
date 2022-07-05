@@ -4,7 +4,7 @@ import { ItemInterface } from "../Constants/Types";
 type IAuth = {
   items: ItemInterface[];
   replaceAll: (list: ItemInterface[]) => void;
-  getItem: (resourceId: string) => Promise<ItemInterface>;
+  getItem: (resourceId: string) => ItemInterface;
   addItem: (value: ItemInterface, index?: number) => void;
   removeItem: (value: ItemInterface, index?: number) => void;
   replaceItem: (value: ItemInterface, index: number) => void;
@@ -12,7 +12,7 @@ type IAuth = {
 
 const itemStore = (set: SetState<IAuth>, get: GetState<IAuth>): IAuth => ({
   items: [],
-  getItem: async (resourceId) => {
+  getItem: (resourceId) => {
     let itemValue = get().items.filter(({ _id }) => _id === resourceId);
     return itemValue[0];
   },
