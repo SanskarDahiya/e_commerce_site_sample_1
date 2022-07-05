@@ -24,7 +24,7 @@ const HEADER_DATA = {
 function Header() {
   const { menuOption, header } = HEADER_DATA;
   return (
-    <nav id="header" tw="w-full z-30 top-0 py-1">
+    <nav id="header" tw="w-full top-0 py-1">
       <div tw="w-full mx-auto flex flex-wrap items-center justify-between mt-0 px-6 py-3 border-b border-gray-400">
         <label htmlFor="menu-toggle" tw="cursor-pointer md:hidden block">
           <svg

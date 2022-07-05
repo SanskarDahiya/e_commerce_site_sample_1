@@ -33,8 +33,8 @@ function SideMenuCart() {
   if (!cartStatus) return null;
   return (
     <div tw="">
-      <div tw="fixed inset-0 overflow-hidden z-[999] bg-black opacity-50" />
-      <div tw="fixed inset-0 overflow-hidden z-[999] ">
+      <div tw="fixed inset-0 overflow-hidden bg-black opacity-50" />
+      <div tw="fixed inset-0 overflow-hidden ">
         <div tw="absolute inset-0 overflow-hidden">
           {/* <Transition.Child
             as={Fragment}

@@ -47,14 +47,14 @@ function Carousal() {
           </div>
         </div>
         <label
-          tw="w-10 h-10 ml-2 md:ml-10 absolute cursor-pointer hidden text-3xl font-bold text-black hover:text-white rounded-full bg-white hover:bg-gray-900 leading-tight text-center z-10 inset-y-0 left-0 my-auto"
+          tw="w-10 h-10 ml-2 md:ml-10 absolute cursor-pointer hidden text-3xl font-bold text-black hover:text-white rounded-full bg-white hover:bg-gray-900 leading-tight text-center inset-y-0 left-0 my-auto"
           className="prev control-1"
           htmlFor="carousel-3"
         >
           ‹
         </label>
         <label
-          tw="w-10 h-10 mr-2 md:mr-10 absolute cursor-pointer hidden text-3xl font-bold text-black hover:text-white rounded-full bg-white hover:bg-gray-900 leading-tight text-center z-10 inset-y-0 right-0 my-auto"
+          tw="w-10 h-10 mr-2 md:mr-10 absolute cursor-pointer hidden text-3xl font-bold text-black hover:text-white rounded-full bg-white hover:bg-gray-900 leading-tight text-center inset-y-0 right-0 my-auto"
           className="next control-1"
           htmlFor="carousel-2"
         >
@@ -95,14 +95,14 @@ function Carousal() {
           </div>
         </div>
         <label
-          tw="w-10 h-10 ml-2 md:ml-10 absolute cursor-pointer hidden text-3xl font-bold text-black hover:text-white rounded-full bg-white hover:bg-gray-900  leading-tight text-center z-10 inset-y-0 left-0 my-auto"
+          tw="w-10 h-10 ml-2 md:ml-10 absolute cursor-pointer hidden text-3xl font-bold text-black hover:text-white rounded-full bg-white hover:bg-gray-900  leading-tight text-center inset-y-0 left-0 my-auto"
           className="prev control-2"
           htmlFor="carousel-1"
         >
           ‹
         </label>
         <label
-          tw="w-10 h-10 mr-2 md:mr-10 absolute cursor-pointer hidden text-3xl font-bold text-black hover:text-white rounded-full bg-white hover:bg-gray-900  leading-tight text-center z-10 inset-y-0 right-0 my-auto"
+          tw="w-10 h-10 mr-2 md:mr-10 absolute cursor-pointer hidden text-3xl font-bold text-black hover:text-white rounded-full bg-white hover:bg-gray-900  leading-tight text-center inset-y-0 right-0 my-auto"
           className="next control-2"
           htmlFor="carousel-3"
         >
@@ -145,14 +145,14 @@ function Carousal() {
           </div>
         </div>
         <label
-          tw="w-10 h-10 ml-2 md:ml-10 absolute cursor-pointer hidden text-3xl font-bold text-black hover:text-white rounded-full bg-white hover:bg-gray-900  leading-tight text-center z-10 inset-y-0 left-0 my-auto"
+          tw="w-10 h-10 ml-2 md:ml-10 absolute cursor-pointer hidden text-3xl font-bold text-black hover:text-white rounded-full bg-white hover:bg-gray-900  leading-tight text-center inset-y-0 left-0 my-auto"
           className="prev control-3"
           htmlFor="carousel-2"
         >
           ‹
         </label>
         <label
-          tw="w-10 h-10 mr-2 md:mr-10 absolute cursor-pointer hidden text-3xl font-bold text-black hover:text-white rounded-full bg-white hover:bg-gray-900  leading-tight text-center z-10 inset-y-0 right-0 my-auto"
+          tw="w-10 h-10 mr-2 md:mr-10 absolute cursor-pointer hidden text-3xl font-bold text-black hover:text-white rounded-full bg-white hover:bg-gray-900  leading-tight text-center inset-y-0 right-0 my-auto"
           className="next control-3"
           htmlFor="carousel-1"
         >
