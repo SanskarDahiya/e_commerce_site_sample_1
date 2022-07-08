@@ -12,6 +12,7 @@ import {
   ResponseInterface,
   UserInterface,
 } from "@constants/Types";
+import ToastModal from "@components/ToastModal";
 
 interface ResultInterface extends ResponseInterface {
   user?: UserInterface;
@@ -71,6 +72,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <GlobalStyles />
       <Header />
+      <ToastModal />
       <Component {...pageProps} />
       <Footer />
     </>
