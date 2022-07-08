@@ -5,7 +5,8 @@ import {
   UserInterface,
 } from "@constants/Types";
 
-const SECRET_KEY = process.env.JWT_SECRET_KEY as string;
+const SECRET_KEY =
+  (process.env.JWT_SECRET_KEY as string) || "MY CUSTOM KEY PASS PAIR";
 
 if (!SECRET_KEY) {
   console.error(`JWT_SECRET_KEY not found`);

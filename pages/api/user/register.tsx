@@ -14,7 +14,7 @@ const validate = ValidateData([
   }),
 ]);
 
-const PASSWORD_HASH = +(process.env.BCRYPT_SECRET_KEY as string);
+const PASSWORD_HASH = +(process.env.BCRYPT_SECRET_KEY as string) || 2;
 if (!PASSWORD_HASH || PASSWORD_HASH == NaN) {
   console.error(`BCRYPT_SECRET_KEY not found`);
   process.exit(0);
