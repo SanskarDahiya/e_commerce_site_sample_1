@@ -16,7 +16,7 @@ if [[ "$VERCEL_ENV" == "production" ]]; then
 else
   if
     [[ $VERCEL_GIT_COMMIT_MESSAGE == *"deploy"* ]] &&
-      [[$VERCEL_GIT_COMMIT_AUTHOR_NAME == "Sanskar"]] &&
+      [["$VERCEL_GIT_COMMIT_AUTHOR_NAME" == "Sanskar"]] &&
       [[ $VERCEL_GIT_COMMIT_MESSAGE == *"version"* ]]
   then
     # Proceed with the build
