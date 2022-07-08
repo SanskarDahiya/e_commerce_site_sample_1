@@ -1,25 +1,23 @@
 #!/bin/bash
 
-echo "VERCEL_GIT_COMMIT_MESSAGE: $VERCEL_GIT_COMMIT_MESSAGE <--"
+# echo "VERCEL_GIT_COMMIT_MESSAGE: $VERCEL_GIT_COMMIT_MESSAGE <--"
 echo "VERCEL_ENV: $VERCEL_ENV <--"
 
-if [[ $VERCEL_GIT_COMMIT_MESSAGE == *"deploy"* ]]; then
-echo "VERCEL_GIT_COMMIT_MESSAGE PASS: $CHECK_DEPLOY <--"
-else
-echo "VERCEL_GIT_COMMIT_MESSAGE FAIL: $CHECK_DEPLOY <--"
-fi
-
-if [[ "$VERCEL_ENV" == "production" ]] ; then
-  # Proceed with the build
-  echo "✅ - Build can proceed"
-  exit 1;
-
+if [[ "$VERCEL_ENV" == "production" ]]; then
+  if [[ $VERCEL_GIT_COMMIT_MESSAGE == *"deploy"* ]]; then
+    # Proceed with the build
+    echo "✅ - Build can proceed"
+    exit 1
+  else
+    # Don't build
+    echo "🛑 - Build Secret Not Found"
+    exit 0
+  fi
 else
   # Don't build
   echo "🛑 - Build cancelled"
-  exit 0;
+  exit 0
 fi
-
 
 # ------------ SAMPLES --------------------------------
 # VERCEL:->  1 <<--END-->>
@@ -79,4 +77,3 @@ fi
 # echo "NEXT_PUBLIC_VERCEL_GIT_COMMIT_MESSAGE:->  $NEXT_PUBLIC_VERCEL_GIT_COMMIT_MESSAGE <<--END-->>"
 # echo "NEXT_PUBLIC_VERCEL_GIT_COMMIT_AUTHOR_LOGIN:->  $NEXT_PUBLIC_VERCEL_GIT_COMMIT_AUTHOR_LOGIN <<--END-->>"
 # echo "NEXT_PUBLIC_VERCEL_GIT_COMMIT_AUTHOR_NAME:->  $NEXT_PUBLIC_VERCEL_GIT_COMMIT_AUTHOR_NAME <<--END-->>"
-
