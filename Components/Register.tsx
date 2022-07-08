@@ -1,11 +1,16 @@
 import tw from "twin.macro";
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import Router from "next/router";
 import useAxios from "axios-hooks";
 import FormInput from "@helpers/FormInput";
+import { useToastStore } from "@store/toast_store";
 
 const Register = () => {
+  const { setSuccess, setError } = useToastStore((state) => ({
+    setSuccess: state.setSuccess,
+    setError: state.setError,
+  }));
   const [{ data: result, loading: isLoading, error }, refetch] = useAxios(
     {
       url: "/api/user/register",
@@ -15,6 +20,11 @@ const Register = () => {
       manual: true,
     }
   );
+  useEffect(() => {
+    if (error?.response?.data?.error) {
+      setError(error?.response?.data?.error);
+    }
+  }, [error?.response?.data]);
 
   const [data, setData] = useState({
     name: "",
@@ -38,6 +48,7 @@ const Register = () => {
       const isSuccess = result.data.success;
       if (isSuccess) {
         Router.push("/user");
+        setSuccess("User Registered!. Please login to continue", 3000);
       }
     } catch (err) {}
   };
@@ -95,9 +106,9 @@ const Register = () => {
             Sign Up
           </button>
         )}
-        {error?.response?.data && (
+        {/* {error?.response?.data && (
           <div>{JSON.stringify(error?.response?.data)}</div>
-        )}
+        )} */}
         <div tw="flex justify-end w-full">
           <Link href={"/user"} passHref>
             <a tw="font-bold rounded-md px-3 py-2 text-base cursor-pointer focus:outline-none text-gray-800">

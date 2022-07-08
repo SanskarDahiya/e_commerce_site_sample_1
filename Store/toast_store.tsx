@@ -3,39 +3,42 @@ import create, { SetState, GetState } from "zustand";
 type ToastType = "INFO" | "SUCCESS" | "WARNING" | "ERROR";
 type IToast = {
   toasts: ToastMessage[];
-  addToast: (toast: Toast, type: ToastType, timeout?: number) => void;
-  setInfo: (toast: Toast, timeout?: number) => void;
-  setSuccess: (toast: Toast, timeout?: number) => void;
-  setWarning: (toast: Toast, timeout?: number) => void;
-  setError: (toast: Toast, timeout?: number) => void;
+  addToast: (toast: string | Toast, type: ToastType, timeout?: number) => void;
+  setInfo: (toast: string | Toast, timeout?: number) => void;
+  setSuccess: (toast: string | Toast, timeout?: number) => void;
+  setWarning: (toast: string | Toast, timeout?: number) => void;
+  setError: (toast: string | Toast, timeout?: number) => void;
   removeToast: (toastId?: string) => void;
 };
 
 const toastStore = (set: SetState<IToast>, get: GetState<IToast>): IToast => ({
   toasts: [],
 
-  setInfo: (toast: Toast, timeout?: number) => {
+  setInfo: (toast: string | Toast, timeout?: number) => {
     get().addToast(toast, "INFO", timeout);
   },
 
-  setSuccess: (toast: Toast, timeout?: number) => {
+  setSuccess: (toast: string | Toast, timeout?: number) => {
     get().addToast(toast, "SUCCESS", timeout);
   },
 
-  setWarning: (toast: Toast, timeout?: number) => {
+  setWarning: (toast: string | Toast, timeout?: number) => {
     get().addToast(toast, "WARNING", timeout);
   },
 
-  setError: (toast: Toast, timeout?: number) => {
+  setError: (toast: string | Toast, timeout?: number) => {
     get().addToast(toast, "ERROR", timeout);
   },
 
-  addToast: (toast: Toast, type: ToastType, timeout?: number) => {
+  addToast: (toast: string | Toast, type: ToastType, timeout?: number) => {
     set(({ toasts }) => {
       if (!timeout || !+timeout) {
         timeout = 2000;
       }
       timeout = timeout <= 100 ? 100 : timeout;
+      if (typeof toast === "string") {
+        toast = { message: toast };
+      }
       let newToast: ToastMessage;
       const d = new Date();
       newToast = {

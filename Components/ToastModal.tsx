@@ -1,4 +1,4 @@
-import "twin.macro";
+import tw from "twin.macro";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useToastStore } from "@store/toast_store";
 import { ToastMessage } from "@constants/Types";
@@ -76,6 +76,7 @@ const AlertIcon = (toast: ToastMessage) => {
 };
 
 interface SingleToastModalProps {
+  index?: number;
   toast: ToastMessage;
 }
 
@@ -83,7 +84,7 @@ const getPendingTime = ({ _createdOn, timeout }: ToastMessage) => {
   return _createdOn.getTime() + timeout - new Date().getTime();
 };
 
-const SingleToastModal = ({ toast }: SingleToastModalProps) => {
+const SingleToastModal = ({ toast, index }: SingleToastModalProps) => {
   const removeToast = useToastStore((s) => s.removeToast);
   const timerRef = useRef<NodeJS.Timeout>();
   const [transition_state, set_transition_state] = useState([
@@ -98,48 +99,33 @@ const SingleToastModal = ({ toast }: SingleToastModalProps) => {
   useEffect(() => {
     set_transition_state(["DISPLAY", "ENDS"]);
     const pendingTime = getPendingTime(toast);
-    // timerRef.current = setTimeout(startRemoveToastProcess, pendingTime);
+    timerRef.current = setTimeout(startRemoveToastProcess, pendingTime);
     return () => {
       clearTimeout(timerRef.current);
     };
   }, []);
 
-  const stylingCss = useMemo(() => {
-    if (transition_state[0] === "DISPLAY") {
-      if (transition_state[1] === "BEGAIN") {
-        return {
-          opacity: 0,
-          transform: "translateX(-100%)",
-        };
-        // set to hide
-      } else {
-        // set to visible
-        return {
-          opacity: 1,
-          transform: "translateX(0%)",
-        };
-      }
-    } else if (transition_state[0] === "REMOVE") {
-      if (transition_state[1] === "BEGAIN") {
-        // set to visible
-        return {
-          opacity: 1,
-          transform: "translateX(0%)",
-        };
-      } else {
-        // set to hide
-        return {
-          opacity: 0,
-          transform: "translateX(-100%)",
-        };
-      }
+  const ModalTransition = useMemo(() => {
+    if (
+      transition_state[1] === "BEGAIN"
+        ? transition_state[0] === "DISPLAY"
+        : transition_state[0] === "REMOVE"
+    ) {
+      return tw`opacity-0 translate-x-[-100%]`;
+    } else {
+      return tw`opacity-100 translate-x-0`;
     }
   }, [transition_state]);
 
   return (
     <div
-      tw="flex w-96 shadow-lg rounded-lg transition-all duration-500 ease-in"
-      style={{ ...stylingCss }}
+      //@ts-ignore
+      css={[
+        tw`flex w-96 shadow-lg rounded-lg transition-all duration-500 ease-in`,
+        index === 0 && tw`my-4`,
+        ModalTransition,
+      ]}
+      style={{ ...ModalTransition }}
       onTransitionEnd={() => {
         if (transition_state.join("_") === "REMOVE_ENDS") {
           removeToast(toast._id);
@@ -176,10 +162,10 @@ function ToastModal() {
     return null;
   }
   return (
-    <div tw="p-8 space-y-4 absolute z-[999]">
-      {toasts.map((toast) => {
+    <div tw="px-8 space-y-4 mb-4 absolute z-[999] py-0 ">
+      {toasts.map((toast, index) => {
         const key = `key__${toast._id}`;
-        return <SingleToastModal key={key} toast={toast} />;
+        return <SingleToastModal key={key} toast={toast} index={index} />;
       })}
     </div>
   );
