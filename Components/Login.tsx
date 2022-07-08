@@ -5,8 +5,14 @@ import useAxios from "axios-hooks";
 import Router from "next/router";
 import FormInput from "@helpers/FormInput";
 import { useAuthStore } from "@store/auth";
+import { useToastStore } from "@store/toast_store";
 
 const Login = () => {
+  const { setSuccess, setError } = useToastStore((state) => ({
+    setSuccess: state.setSuccess,
+    setError: state.setError,
+  }));
+
   const { setRefreshToken, setAccessToken } = useAuthStore((state) => ({
     setRefreshToken: state.setRefreshToken,
     setAccessToken: state.setAccessToken,
@@ -14,6 +20,12 @@ const Login = () => {
 
   const [{ data: result, loading: isLoading, error, response }, refetch] =
     useAxios({ url: "/api/user/login", method: "post" }, { manual: true });
+
+  useEffect(() => {
+    if (error?.response?.data?.error) {
+      setError(error?.response?.data?.error);
+    }
+  }, [error?.response?.data]);
 
   useEffect(() => {
     if (result?.success) {
@@ -25,6 +37,7 @@ const Login = () => {
       setRefreshToken(RefreshToken);
 
       Router.push("/");
+      setSuccess("Login successful!");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [result?.success, response?.headers]);
@@ -80,9 +93,9 @@ const Login = () => {
           </button>
         )}
 
-        {error?.response?.data && (
+        {/* {error?.response?.data && (
           <div>{JSON.stringify(error?.response?.data)}</div>
-        )}
+        )} */}
 
         <div tw="flex justify-end w-full">
           <Link href={"/register"} passHref>

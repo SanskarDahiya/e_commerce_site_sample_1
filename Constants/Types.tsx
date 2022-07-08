@@ -1,3 +1,14 @@
+export interface Toast {
+  title?: string;
+  message: string | React.ReactElement;
+}
+export interface ToastMessage extends Toast {
+  readonly _id: string;
+  type: "INFO" | "SUCCESS" | "WARNING" | "ERROR";
+  _createdOn: Date;
+  _expireOn: Date;
+  timeout: number;
+}
 export interface ResponseInterface {
   success: boolean;
   error?: string;

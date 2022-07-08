@@ -2,8 +2,10 @@ import "twin.macro";
 import React from "react";
 import { useShoppingCart } from "@store/shoppingCart";
 import SingleCartitem from "./SingleCartitem";
+import { useToastStore } from "@store/toast_store";
 
 function SideMenuCart() {
+  const setInfo = useToastStore((s) => s.setInfo);
   const { cartItem, cartStatus, closeCart } = useShoppingCart((s) => ({
     cartItem: s.cartItem,
     cartStatus: s.cartStatus,
@@ -29,7 +31,9 @@ function SideMenuCart() {
     closeCart();
   };
 
-  const handleCheckout = () => {};
+  const handleCheckout = () => {
+    setInfo("Updating Soon");
+  };
   if (!cartStatus) return null;
   return (
     <div tw="">

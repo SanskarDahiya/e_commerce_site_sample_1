@@ -1,5 +1,9 @@
 import "twin.macro";
-import type { NextPage } from "next";
+import type {
+  GetServerSidePropsContext,
+  GetServerSidePropsResult,
+  NextPage,
+} from "next";
 import Carousal from "@components/Carousal";
 import ItemList from "@components/ItemList";
 import SideMenuCart from "@components/SideCartSection/SideCart";
@@ -20,7 +24,9 @@ const Home: NextPage<MyProps> = ({ items }) => {
   );
 };
 
-export async function getServerSideProps() {
+export async function getServerSideProps(): Promise<
+  GetServerSidePropsResult<any>
+> {
   const itemDB = await mongo().getItemsDB();
   const items = (await itemDB?.find().toArray())?.map((data) => {
     return { ...data, _id: data._id.toString() };

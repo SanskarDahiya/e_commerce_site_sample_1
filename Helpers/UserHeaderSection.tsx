@@ -6,8 +6,12 @@ import Cookies from "js-cookie";
 import Router from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignOutAlt, faUser } from "@fortawesome/free-solid-svg-icons";
+import { useToastStore } from "@store/toast_store";
 
 function UserHeaderSection() {
+  const { setInfo } = useToastStore((state) => ({
+    setInfo: state.setInfo,
+  }));
   const [isOpen, setIsOpen] = useState(false);
   const { user, setRefreshToken, setAccessToken, setUser } = useAuthStore();
 
@@ -29,7 +33,9 @@ function UserHeaderSection() {
     setUser(undefined);
     Cookies.remove("token");
     Router.push("/");
+    setInfo("Logout successful");
   };
+
   if (!user?.name) {
     return (
       <Link href={"/user"} passHref>
