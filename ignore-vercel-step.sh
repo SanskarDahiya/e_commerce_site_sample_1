@@ -14,9 +14,20 @@ if [[ "$VERCEL_ENV" == "production" ]]; then
     exit 0
   fi
 else
-  # Don't build
-  echo "🛑 - Build cancelled"
-  exit 0
+  if
+    [[ $VERCEL_GIT_COMMIT_MESSAGE == *"deploy"* ]] &&
+      [[$VERCEL_GIT_COMMIT_AUTHOR_NAME == "Sanskar"]] &&
+      [[ $VERCEL_GIT_COMMIT_MESSAGE == *"version"* ]]
+  then
+    # Proceed with the build
+    echo "✅ - Build can proceed"
+    exit 1
+  else
+    # Don't build
+    echo "🛑 - Build cancelled"
+    exit 0
+  fi
+
 fi
 
 # ------------ SAMPLES --------------------------------
