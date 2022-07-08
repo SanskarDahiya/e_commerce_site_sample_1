@@ -1,18 +1,15 @@
 #!/bin/bash
 
-GIT_COMMIT_MESSAGE=${NEXT_PUBLIC_VERCEL_GIT_COMMIT_MESSAGE:-VERCEL_GIT_COMMIT_MESSAGE}
-ENV=${NEXT_PUBLIC_VERCEL_ENV:-VERCEL_ENV}
+echo "VERCEL_GIT_COMMIT_MESSAGE: $VERCEL_GIT_COMMIT_MESSAGE <--"
+echo "VERCEL_ENV: $VERCEL_ENV <--"
 
-echo "GIT_COMMIT_MESSAGE: $GIT_COMMIT_MESSAGE <--"
-echo "ENV: $ENV <--"
-
-if [[ $GIT_COMMIT_MESSAGE == *"deploy"* ]]; then
-echo "GIT_COMMIT_MESSAGE PASS: $CHECK_DEPLOY <--"
+if [[ $VERCEL_GIT_COMMIT_MESSAGE == *"deploy"* ]]; then
+echo "VERCEL_GIT_COMMIT_MESSAGE PASS: $CHECK_DEPLOY <--"
 else
-echo "GIT_COMMIT_MESSAGE FAIL: $CHECK_DEPLOY <--"
+echo "VERCEL_GIT_COMMIT_MESSAGE FAIL: $CHECK_DEPLOY <--"
 fi
 
-if [[ "$ENV" == "production" ]] ; then
+if [[ "$VERCEL_ENV" == "production" ]] ; then
   # Proceed with the build
   echo "✅ - Build can proceed"
   exit 1;
