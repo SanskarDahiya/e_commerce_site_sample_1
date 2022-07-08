@@ -1,6 +1,4 @@
 #!/bin/bash
-
-# echo "VERCEL_GIT_COMMIT_MESSAGE: $VERCEL_GIT_COMMIT_MESSAGE <--"
 echo "VERCEL_ENV: $VERCEL_ENV <--"
 
 if [[ "$VERCEL_ENV" == "production" ]]; then
