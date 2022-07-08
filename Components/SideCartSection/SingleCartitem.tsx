@@ -20,11 +20,8 @@ function SingleCartitem({ data }: MyProps) {
   const { _id: resourceId, price: bookedPrice, qty } = data || {};
   const fetchItemDetails = () => {
     const ItemData = getItem(resourceId);
-    ItemData.actualPrice += 1;
-    if (ItemData) {
-      return ItemData;
-    }
-    return {};
+    // ItemData.actualPrice += 1;
+    return ItemData;
   };
   const { title, actualPrice, imageUrl } = fetchItemDetails();
 
