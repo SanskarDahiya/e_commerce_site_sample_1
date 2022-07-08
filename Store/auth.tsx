@@ -6,6 +6,8 @@ import { UserInterface } from "@constants/Types";
 type IAuth = {
   user: UserInterface | null;
   setUser: (user: any) => void;
+  loading: boolean;
+  setLoading: (loading: boolean) => void;
   isEditEnable: boolean;
   toogleEdit: () => void;
   accessToken: string | null;
@@ -15,6 +17,10 @@ type IAuth = {
 };
 
 const authStore = (set: SetState<IAuth>, get: GetState<IAuth>): IAuth => ({
+  loading: true,
+  setLoading: (loading) => {
+    set(() => ({ loading: !!loading }));
+  },
   isEditEnable: false,
   toogleEdit: () => {
     set(({ isEditEnable }) => {
@@ -28,7 +34,7 @@ const authStore = (set: SetState<IAuth>, get: GetState<IAuth>): IAuth => ({
     });
   },
   user: null,
-  setUser: (value) => set(() => ({ user: value })),
+  setUser: (value) => set(() => ({ user: value, loading: !value })),
   accessToken: null,
   setAccessToken: (token) => {
     if (token == null) {

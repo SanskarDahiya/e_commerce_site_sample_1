@@ -4,6 +4,8 @@ import Link from "next/link";
 import UserHeaderSection from "@helpers/UserHeaderSection";
 import CartHeaderSection from "@helpers/CartHeaderSection";
 import AdminHeaderSection from "@helpers/AdminHeaderSection";
+import { useAuthStore } from "@store/auth";
+import Loading from "./Loading";
 
 const HEADER_DATA = {
   header: {
@@ -22,6 +24,7 @@ const HEADER_DATA = {
   ],
 };
 function Header() {
+  const { loading } = useAuthStore();
   const { menuOption, header } = HEADER_DATA;
   return (
     <nav id="header" tw="w-full top-0 py-1">
@@ -73,7 +76,11 @@ function Header() {
           </Link>
         </div>
 
-        <div tw="order-2 md:order-3 flex items-center" id="nav-content">
+        <div
+          tw="relative order-2 md:order-3 flex items-center"
+          id="nav-content"
+        >
+          {loading && <Loading />}
           <AdminHeaderSection />
           <UserHeaderSection />
           <CartHeaderSection />
