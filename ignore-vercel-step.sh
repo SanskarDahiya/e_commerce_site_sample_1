@@ -1,6 +1,4 @@
 #!/bin/bash
-
-# echo "VERCEL_GIT_COMMIT_MESSAGE: $VERCEL_GIT_COMMIT_MESSAGE <--"
 echo "VERCEL_ENV: $VERCEL_ENV <--"
 
 if [[ "$VERCEL_ENV" == "production" ]]; then
@@ -16,7 +14,7 @@ if [[ "$VERCEL_ENV" == "production" ]]; then
 else
   if
     [[ $VERCEL_GIT_COMMIT_MESSAGE == *"deploy"* ]] &&
-      [[$VERCEL_GIT_COMMIT_AUTHOR_NAME == "Sanskar"]] &&
+      [[ $VERCEL_GIT_COMMIT_AUTHOR_NAME == *"Sanskar"* ]] &&
       [[ $VERCEL_GIT_COMMIT_MESSAGE == *"version"* ]]
   then
     # Proceed with the build
@@ -30,7 +28,7 @@ else
 
 fi
 
-# ------------ SAMPLES --------------------------------
+# -------------- SAMPLES --------------------------------
 # VERCEL:->  1 <<--END-->>
 # CI:->  1 <<--END-->>
 # VERCEL_ENV:->  preview <<--END-->>
