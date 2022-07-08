@@ -24,6 +24,7 @@ const Register = () => {
     if (error?.response?.data?.error) {
       setError(error?.response?.data?.error);
     }
+    // eslint-disable-next-line
   }, [error?.response?.data]);
 
   const [data, setData] = useState({

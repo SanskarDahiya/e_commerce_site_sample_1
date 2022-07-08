@@ -103,7 +103,7 @@ const SingleToastModal = ({ toast, index }: SingleToastModalProps) => {
     return () => {
       clearTimeout(timerRef.current);
     };
-  }, []);
+  }, [toast]);
 
   const ModalTransition = useMemo(() => {
     if (

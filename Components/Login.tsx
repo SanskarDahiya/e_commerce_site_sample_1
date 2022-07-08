@@ -25,6 +25,7 @@ const Login = () => {
     if (error?.response?.data?.error) {
       setError(error?.response?.data?.error);
     }
+    // eslint-disable-next-line
   }, [error?.response?.data]);
 
   useEffect(() => {
@@ -39,7 +40,7 @@ const Login = () => {
       Router.push("/");
       setSuccess("Login successful!");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [result?.success, response?.headers]);
 
   const [data, setData] = useState({ email: "", password: "" });
