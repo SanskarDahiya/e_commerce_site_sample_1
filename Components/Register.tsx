@@ -1,8 +1,9 @@
 import tw from "twin.macro";
-import Link from "next/link";
 import React, { ChangeEvent, FormEvent, useState } from "react";
-import FormInput from "@helpers/FormInput";
+import Link from "next/link";
+import Router from "next/router";
 import useAxios from "axios-hooks";
+import FormInput from "@helpers/FormInput";
 
 const Register = () => {
   const [{ data: result, loading: isLoading, error }, refetch] = useAxios(
@@ -31,8 +32,14 @@ const Register = () => {
   };
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    refetch({ data });
+    try {
+      e.preventDefault();
+      const result = await refetch({ data });
+      const isSuccess = result.data.success;
+      if (isSuccess) {
+        Router.push("/user");
+      }
+    } catch (err) {}
   };
 
   return (
