@@ -14,7 +14,7 @@ const validate = ValidateData([
   }),
 ]);
 
-const PASSWORD_HASH = "my-pass-word";
+const PASSWORD_HASH = 2;
 
 export default async function handler(
   req: NextApiRequest,
