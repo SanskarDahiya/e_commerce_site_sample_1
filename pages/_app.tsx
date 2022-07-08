@@ -34,16 +34,20 @@ const validateUser = async (cb: (user: any) => any) => {
 function MyApp({ Component, pageProps }: AppProps) {
   useAxiosInterceptior();
 
-  const { setUser, accessToken, refreshToken } = useAuthStore((state) => ({
-    setUser: state.setUser,
-    accessToken: state.accessToken,
-    refreshToken: state.refreshToken,
-  }));
+  const { setUser, accessToken, refreshToken, setLoading } = useAuthStore(
+    (state) => ({
+      setUser: state.setUser,
+      accessToken: state.accessToken,
+      refreshToken: state.refreshToken,
+      setLoading: state.setLoading,
+    })
+  );
 
   const setCartItems = useShoppingCart((s) => s.setCartItems);
 
   useEffect(() => {
     let mount = true;
+    setLoading(true);
     if (refreshToken || accessToken) {
       validateUser((result: ResultInterface) => {
         if (!mount) return;
@@ -53,7 +57,10 @@ function MyApp({ Component, pageProps }: AppProps) {
         if (result?.cart) {
           setCartItems(result.cart);
         }
+        setLoading(false);
       });
+    } else {
+      setLoading(false);
     }
     return () => {
       mount = false;

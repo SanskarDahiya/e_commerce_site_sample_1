@@ -34,7 +34,7 @@ const authStore = (set: SetState<IAuth>, get: GetState<IAuth>): IAuth => ({
     });
   },
   user: null,
-  setUser: (value) => set(() => ({ user: value, loading: !value })),
+  setUser: (value) => set(() => ({ user: value })),
   accessToken: null,
   setAccessToken: (token) => {
     if (token == null) {
