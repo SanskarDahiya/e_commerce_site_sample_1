@@ -1,15 +1,15 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import PostRequest from "../../../Server/PostRequest";
-import { verifyToken } from "../../../Auth/jwt";
-import { getAccessTokenSSR } from "../../../Auth/cookie";
-import mongo from "../../../Database/mongo";
 import { ObjectId } from "mongodb";
+import PostRequest from "@server/PostRequest";
+import { verifyToken } from "@auth/jwt";
+import { getAccessTokenSSR } from "@auth/cookie";
+import mongo from "@database/mongo";
 import {
   CartInterface,
   ResponseInterface,
   UserInterface,
-} from "../../../Constants/Types";
+} from "@constants/Types";
 
 interface ResultInterface extends ResponseInterface {
   result?: {

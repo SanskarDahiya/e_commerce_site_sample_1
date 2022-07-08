@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@auth/*": ["Auth/*"],
+      "@components/*": ["Components/*"],
+      "@constants/*": ["Constants/*"],
+      "@database/*": ["Database/*"],
+      "@helpers/*": ["Helpers/*"],
+      "@server/*": ["Server/*"],
+      "@store/*": ["Store/*"]
+    }
+  }
+}

@@ -1,10 +1,10 @@
 import tw from "twin.macro";
 import Link from "next/link";
 import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
-import FormInput from "../Helpers/FormInput";
 import useAxios from "axios-hooks";
 import Router from "next/router";
-import { useAuthStore } from "../Store/auth";
+import FormInput from "@helpers/FormInput";
+import { useAuthStore } from "@store/auth";
 
 const Login = () => {
   const { setRefreshToken, setAccessToken } = useAuthStore((state) => ({

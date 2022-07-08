@@ -1,7 +1,7 @@
 import "twin.macro";
 import React, { memo, useState } from "react";
 import Link from "next/link";
-import { useAuthStore } from "../Store/auth";
+import { useAuthStore } from "@store/auth";
 import Cookies from "js-cookie";
 import Router from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

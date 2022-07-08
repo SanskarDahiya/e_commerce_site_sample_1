@@ -1,6 +1,6 @@
 import "twin.macro";
-import React, { useEffect } from "react";
-import { useShoppingCart } from "../../Store/shoppingCart";
+import React from "react";
+import { useShoppingCart } from "@store/shoppingCart";
 import SingleCartitem from "./SingleCartitem";
 
 function SideMenuCart() {

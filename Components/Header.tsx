@@ -1,9 +1,9 @@
 import "twin.macro";
 import React, { memo } from "react";
 import Link from "next/link";
-import UserHeaderSection from "../Helpers/UserHeaderSection";
-import CartHeaderSection from "../Helpers/CartHeaderSection";
-import AdminHeaderSection from "../Helpers/AdminHeaderSection";
+import UserHeaderSection from "@helpers/UserHeaderSection";
+import CartHeaderSection from "@helpers/CartHeaderSection";
+import AdminHeaderSection from "@helpers/AdminHeaderSection";
 
 const HEADER_DATA = {
   header: {

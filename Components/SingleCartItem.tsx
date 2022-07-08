@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { ItemInterface, SignleItemCartInterface } from "../Constants/Types";
-import { useItemStore } from "../Store/itemlist";
+import { ItemInterface, SignleItemCartInterface } from "@constants/Types";
+import { useItemStore } from "@store/itemlist";
 
 interface MyProps {
   data: SignleItemCartInterface;

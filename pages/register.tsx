@@ -1,9 +1,9 @@
 import "twin.macro";
 import React, { Fragment } from "react";
-import RegisterComponent from "../Components/Register";
+import RegisterComponent from "@components/Register";
 import { GetServerSidePropsContext, NextApiRequest, NextPage } from "next";
-import { verifyToken } from "../Auth/jwt";
-import { getAccessTokenSSR } from "../Auth/cookie";
+import { verifyToken } from "@auth/jwt";
+import { getAccessTokenSSR } from "@auth/cookie";
 
 const Register: NextPage = () => {
   return (

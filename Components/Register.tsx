@@ -1,7 +1,7 @@
 import tw from "twin.macro";
 import Link from "next/link";
 import React, { ChangeEvent, FormEvent, useState } from "react";
-import FormInput from "../Helpers/FormInput";
+import FormInput from "@helpers/FormInput";
 import useAxios from "axios-hooks";
 
 const Register = () => {

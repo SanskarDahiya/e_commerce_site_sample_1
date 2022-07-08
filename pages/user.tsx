@@ -1,9 +1,9 @@
 import "twin.macro";
 import React, { Fragment } from "react";
-import Login from "../Components/Login";
 import { GetServerSidePropsContext, NextApiRequest, NextPage } from "next";
-import { verifyToken } from "../Auth/jwt";
-import { getAccessTokenSSR } from "../Auth/cookie";
+import Login from "@components/Login";
+import { verifyToken } from "@auth/jwt";
+import { getAccessTokenSSR } from "@auth/cookie";
 
 const User: NextPage = () => {
   return (

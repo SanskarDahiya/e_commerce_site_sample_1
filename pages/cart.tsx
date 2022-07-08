@@ -1,11 +1,11 @@
 import { ObjectId } from "mongodb";
 import { GetServerSidePropsContext, NextApiRequest } from "next";
 import React from "react";
-import { getAccessTokenSSR } from "../Auth/cookie";
-import { verifyToken } from "../Auth/jwt";
-import SingleCartItem from "../Components/SingleCartItem";
-import { CartInterface } from "../Constants/Types";
-import mongo from "../Database/mongo";
+import { getAccessTokenSSR } from "@auth/cookie";
+import { verifyToken } from "@auth/jwt";
+import SingleCartItem from "@components/SingleCartItem";
+import { CartInterface } from "@constants/Types";
+import mongo from "@database/mongo";
 
 interface MyProps {
   cartData: CartInterface;

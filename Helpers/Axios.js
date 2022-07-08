@@ -1,7 +1,7 @@
 import axios from "axios";
 import { configure } from "axios-hooks";
 import { useEffect, useState } from "react";
-import { useAuthStore } from "../Store/auth";
+import { useAuthStore } from "@store/auth";
 
 configure({ axios: axios });
 

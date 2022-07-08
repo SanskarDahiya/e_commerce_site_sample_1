@@ -1,9 +1,9 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { ObjectId } from "mongodb";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { generateAccessToken, verifyToken } from "../../../Auth/jwt";
-import { ResponseInterface, UserInterface } from "../../../Constants/Types";
-import mongo from "../../../Database/mongo";
+import { generateAccessToken, verifyToken } from "@auth/jwt";
+import { ResponseInterface, UserInterface } from "@constants/Types";
+import mongo from "@database/mongo";
 
 export default async function handler(
   req: NextApiRequest,

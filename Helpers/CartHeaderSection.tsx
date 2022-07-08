@@ -1,7 +1,6 @@
 import "twin.macro";
 import React, { Fragment, memo } from "react";
-import Link from "next/link";
-import { useShoppingCart } from "../Store/shoppingCart";
+import { useShoppingCart } from "@store/shoppingCart";
 
 function CartHeaderSection() {
   const { cartItem, toogleCart } = useShoppingCart((s) => ({

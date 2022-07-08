@@ -1,6 +1,6 @@
 import "twin.macro";
 import React from "react";
-import { useAuthStore } from "../Store/auth";
+import { useAuthStore } from "@store/auth";
 
 function AdminHeaderSection() {
   const { user, isEditEnable, toogleEdit } = useAuthStore((state) => ({

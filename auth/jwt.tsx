@@ -3,7 +3,7 @@ import {
   AccessTokenInterface,
   RefreshTokenInterface,
   UserInterface,
-} from "../Constants/Types";
+} from "@constants/Types";
 
 const SECRET_KEY = "MY CUSTOM KEY PASS PAIR";
 

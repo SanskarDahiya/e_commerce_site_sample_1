@@ -1,10 +1,10 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import { check } from "express-validator";
-import ValidateData from "../../../Server/ExpressValidate";
-import mongo from "../../../Database/mongo";
+import ValidateData from "@server/ExpressValidate";
+import mongo from "@database/mongo";
 import bcrypt from "bcryptjs";
-import { ResponseInterface, UserInterface } from "../../../Constants/Types";
+import { ResponseInterface, UserInterface } from "@constants/Types";
 
 const validate = ValidateData([
   check("name", "Name is required").not().isEmpty(),

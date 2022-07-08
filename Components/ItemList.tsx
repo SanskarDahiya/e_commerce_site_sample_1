@@ -1,9 +1,9 @@
 import "twin.macro";
 import React, { memo, useEffect } from "react";
-import { useItemStore } from "../Store/itemlist";
 import StoreSection from "./StoreSection";
 import SingleItemSmall from "./SingleItemSmall";
-import { ItemInterface } from "../Constants/Types";
+import { useItemStore } from "@store/itemlist";
+import { ItemInterface } from "@constants/Types";
 
 function ItemList({ items: itemResult }: { items: ItemInterface[] }) {
   const { items, replaceAll } = useItemStore((state) => ({

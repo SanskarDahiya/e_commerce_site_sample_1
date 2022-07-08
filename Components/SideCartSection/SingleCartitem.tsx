@@ -1,7 +1,7 @@
 import "twin.macro";
 import React from "react";
-import { useShoppingCart } from "../../Store/shoppingCart";
-import { useItemStore } from "../../Store/itemlist";
+import { useShoppingCart } from "@store/shoppingCart";
+import { useItemStore } from "@store/itemlist";
 import Image from "next/image";
 
 interface MyProps {

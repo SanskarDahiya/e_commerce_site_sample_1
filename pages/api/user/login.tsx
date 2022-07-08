@@ -1,12 +1,12 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import { check } from "express-validator";
-import ValidateData from "../../../Server/ExpressValidate";
 import bcrypt from "bcryptjs";
-import PostRequest from "../../../Server/PostRequest";
-import { generateAccessToken, generateRefreshToken } from "../../../Auth/jwt";
-import mongo from "../../../Database/mongo";
-import { ResponseInterface, UserInterface } from "../../../Constants/Types";
+import ValidateData from "@server/ExpressValidate";
+import PostRequest from "@server/PostRequest";
+import { generateAccessToken, generateRefreshToken } from "@auth/jwt";
+import mongo from "@database/mongo";
+import { ResponseInterface, UserInterface } from "@constants/Types";
 
 const validate = ValidateData([
   check("email", "please include a valid email").isEmail(),

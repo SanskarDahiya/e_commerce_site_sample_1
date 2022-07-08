@@ -1,17 +1,17 @@
 import "../styles/globals.css";
+import { useEffect } from "react";
 import type { AppProps } from "next/app";
 import { GlobalStyles } from "twin.macro";
-import Header from "../Components/Header";
-import Footer from "../Components/Footer";
-import { useEffect } from "react";
-import { useAuthStore } from "../Store/auth";
-import axios, { useAxiosInterceptior } from "../Helpers/Axios";
-import { useShoppingCart } from "../Store/shoppingCart";
+import Header from "@components/Header";
+import Footer from "@components/Footer";
+import { useAuthStore } from "@store/auth";
+import axios, { useAxiosInterceptior } from "@helpers/Axios";
+import { useShoppingCart } from "@store/shoppingCart";
 import {
   CartInterface,
   ResponseInterface,
   UserInterface,
-} from "../Constants/Types";
+} from "@constants/Types";
 
 interface ResultInterface extends ResponseInterface {
   user?: UserInterface;
