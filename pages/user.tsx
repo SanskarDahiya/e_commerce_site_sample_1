@@ -1,4 +1,3 @@
-import "twin.macro";
 import React, { Fragment } from "react";
 import { GetServerSidePropsContext, NextApiRequest, NextPage } from "next";
 import Login from "@components/Login";

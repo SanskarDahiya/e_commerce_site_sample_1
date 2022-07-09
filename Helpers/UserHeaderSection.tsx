@@ -1,4 +1,3 @@
-import "twin.macro";
 import React, { memo, useState } from "react";
 import Link from "next/link";
 import { useAuthStore } from "@store/auth";
@@ -39,9 +38,9 @@ function UserHeaderSection() {
   if (!user?.name) {
     return (
       <Link href={"/user"} passHref>
-        <a tw="inline-block no-underline hover:text-black relative">
+        <a className="inline-block no-underline hover:text-black relative">
           <svg
-            tw="fill-current hover:text-black pl-1"
+            className="fill-current hover:text-black pl-1"
             xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
@@ -57,7 +56,7 @@ function UserHeaderSection() {
 
   return (
     <div
-      tw="relative inline-block text-left"
+      className="relative inline-block text-left"
       onMouseEnter={(e: any) => {
         e.preventDefault();
         // handleProfileClick(true);
@@ -70,12 +69,12 @@ function UserHeaderSection() {
             Router.push("/user");
             handleProfileClick(null);
           }}
-          tw="flex items-center justify-between w-full rounded-md px-2 py-1 dark:text-gray-50 hover:bg-gray-50 dark:hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-gray-500"
+          className="flex items-center justify-between w-full rounded-md px-2 py-1 dark:text-gray-50 hover:bg-gray-50 dark:hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-gray-500"
           id="options-menu"
         >
           {user.name}
           <svg
-            tw="fill-current hover:text-black pl-1"
+            className="fill-current hover:text-black pl-1"
             xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
@@ -89,7 +88,7 @@ function UserHeaderSection() {
 
       {isOpen && (
         <div
-          tw="origin-top-right absolute right-0 mt-2 w-56 rounded-md bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 z-10"
+          className="origin-top-right absolute right-0 mt-2 w-56 rounded-md bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 z-10"
           onMouseEnter={(e: any) => {
             e.preventDefault();
             handleProfileClick(true);
@@ -99,35 +98,35 @@ function UserHeaderSection() {
           }}
         >
           <div
-            tw="py-1 divide-y divide-gray-100"
+            className="py-1 divide-y divide-gray-100"
             role="menu"
             aria-orientation="vertical"
             aria-labelledby="options-menu"
           >
-            <div tw="cursor-pointer">
+            <div className="cursor-pointer">
               <Link href="/profile">
-                <div tw="flex items-center px-4 py-2  text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white dark:hover:bg-gray-600">
+                <div className="flex items-center px-4 py-2  text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white dark:hover:bg-gray-600">
                   <FontAwesomeIcon
                     icon={faUser}
                     style={{ marginRight: "10px" }}
                   />
 
-                  <span tw="flex flex-col">
+                  <span className="flex flex-col">
                     <span>Profile</span>
                   </span>
                 </div>
               </Link>
             </div>
 
-            <div tw="cursor-pointer">
-              <button onClick={handleLogout} tw="w-full">
-                <div tw="flex items-center px-4 py-2  text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white dark:hover:bg-gray-600">
+            <div className="cursor-pointer">
+              <button onClick={handleLogout} className="w-full">
+                <div className="flex items-center px-4 py-2  text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white dark:hover:bg-gray-600">
                   <FontAwesomeIcon
                     icon={faSignOutAlt}
                     style={{ marginRight: "10px" }}
                   />
 
-                  <span tw="flex flex-col">
+                  <span className="flex flex-col">
                     <span>LogOut</span>
                   </span>
                 </div>

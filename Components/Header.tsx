@@ -1,4 +1,3 @@
-import "twin.macro";
 import React, { memo } from "react";
 import Link from "next/link";
 import UserHeaderSection from "@helpers/UserHeaderSection";
@@ -27,11 +26,11 @@ function Header() {
   const { loading } = useAuthStore();
   const { menuOption, header } = HEADER_DATA;
   return (
-    <nav id="header" tw="w-full top-0 py-1">
-      <div tw="w-full mx-auto flex flex-wrap items-center justify-between mt-0 px-6 py-3 border-b border-gray-400">
-        <label htmlFor="menu-toggle" tw="cursor-pointer md:hidden block">
+    <nav id="header" className="w-full top-0 py-1">
+      <div className="w-full mx-auto flex flex-wrap items-center justify-between mt-0 px-6 py-3 border-b border-gray-400">
+        <label htmlFor="menu-toggle" className="cursor-pointer md:hidden block">
           <svg
-            tw="fill-current text-gray-900"
+            className="fill-current text-gray-900"
             xmlns="http://www.w3.org/2000/svg"
             width="20"
             height="20"
@@ -41,15 +40,15 @@ function Header() {
             <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
           </svg>
         </label>
-        <input tw="hidden" className="peer" type="checkbox" id="menu-toggle" />
+        <input className="hidden peer" type="checkbox" id="menu-toggle" />
 
-        <div tw="hidden md:flex md:items-center md:w-auto w-full order-3 md:order-1 peer-checked:block">
+        <div className="hidden md:flex md:items-center md:w-auto w-full order-3 md:order-1 peer-checked:block">
           <nav>
-            <ul tw="md:flex items-center justify-between text-base text-gray-700 pt-4 md:pt-0">
+            <ul className="md:flex items-center justify-between text-base text-gray-700 pt-4 md:pt-0">
               {menuOption.map(({ title, link }, key) => (
                 <li key={key}>
                   <Link href={link}>
-                    <div tw="inline-block no-underline hover:text-black hover:underline py-2 px-4">
+                    <div className="inline-block no-underline hover:text-black hover:underline py-2 px-4">
                       {title}
                     </div>
                   </Link>
@@ -59,11 +58,11 @@ function Header() {
           </nav>
         </div>
 
-        <div tw="order-1 md:order-2 cursor-pointer">
+        <div className="order-1 md:order-2 cursor-pointer">
           <Link href="/">
-            <div tw="flex items-center tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl">
+            <div className="flex items-center tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl">
               <svg
-                tw="fill-current text-gray-800 mr-2"
+                className="fill-current text-gray-800 mr-2"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
@@ -77,7 +76,7 @@ function Header() {
         </div>
 
         <div
-          tw="relative order-2 md:order-3 flex items-center"
+          className="relative order-2 md:order-3 flex items-center"
           id="nav-content"
         >
           {loading && <Loading />}

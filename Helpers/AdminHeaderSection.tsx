@@ -1,4 +1,3 @@
-import "twin.macro";
 import React from "react";
 import { useAuthStore } from "@store/auth";
 
@@ -11,7 +10,7 @@ function AdminHeaderSection() {
   const isAdmin = user?.isAdmin ? true : false;
 
   return isAdmin ? (
-    <div tw="cursor-pointer px-4" onClick={() => toogleEdit()}>
+    <div className="cursor-pointer px-4" onClick={() => toogleEdit()}>
       Admin : {"" + !!isEditEnable}
     </div>
   ) : (

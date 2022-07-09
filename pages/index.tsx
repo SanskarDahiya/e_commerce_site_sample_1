@@ -1,4 +1,3 @@
-import "twin.macro";
 import type {
   GetServerSidePropsContext,
   GetServerSidePropsResult,
@@ -16,7 +15,7 @@ interface MyProps {
 
 const Home: NextPage<MyProps> = ({ items }) => {
   return (
-    <div tw="relative">
+    <div className="relative">
       <Carousal />
       <ItemList items={items} />
       <SideMenuCart />

@@ -1,4 +1,3 @@
-import "twin.macro";
 import React from "react";
 import { useShoppingCart } from "@store/shoppingCart";
 import { useItemStore } from "@store/itemlist";
@@ -39,8 +38,8 @@ function SingleCartitem({ data }: MyProps) {
   };
 
   return (
-    <div tw="py-6 flex">
-      <div tw="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden">
+    <div className="py-6 flex">
+      <div className="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden">
         <Image
           src={imageUrl}
           quality={80}
@@ -55,43 +54,43 @@ function SingleCartitem({ data }: MyProps) {
           }}
         />
       </div>
-      <div tw="ml-4 flex-1 flex flex-col">
-        <div tw="flex justify-between text-base font-medium text-gray-900">
-          <div tw="flex flex-col">
+      <div className="ml-4 flex-1 flex flex-col">
+        <div className="flex justify-between text-base font-medium text-gray-900">
+          <div className="flex flex-col">
             <h3>{title}</h3>
-            <h3 tw="font-normal text-[0.8rem]">QTY-{qty}</h3>
+            <h3 className="font-normal text-[0.8rem]">QTY-{qty}</h3>
           </div>
           {bookedPrice === actualPrice ? (
-            <p tw="ml-4">{actualPrice}</p>
+            <p className="ml-4">{actualPrice}</p>
           ) : (
-            <div tw="flex flex-col">
-              <p tw="ml-4 line-through">{actualPrice}</p>
-              <p tw="ml-4 text-green-500">{bookedPrice}</p>
+            <div className="flex flex-col">
+              <p className="ml-4 line-through">{actualPrice}</p>
+              <p className="ml-4 text-green-500">{bookedPrice}</p>
             </div>
           )}
         </div>
-        <div tw="flex-1 flex items-end justify-between text-sm">
-          <div tw="flex justify-between w-full">
+        <div className="flex-1 flex items-end justify-between text-sm">
+          <div className="flex justify-between w-full">
             <button
               type="button"
               onClick={() => handleDelete()}
-              tw="font-medium text-indigo-600 hover:text-indigo-500"
+              className="font-medium text-indigo-600 hover:text-indigo-500"
             >
               Delete
             </button>
             <div>
-              <div tw="flex justify-center">
+              <div className="flex justify-center">
                 <svg
                   onClick={removeQuantity}
-                  tw="fill-current text-gray-600 w-3"
+                  className="fill-current text-gray-600 w-3"
                   viewBox="0 0 448 512"
                 >
                   <path d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
                 </svg>
-                <div tw="mx-2 text-center w-5">{qty}</div>
+                <div className="mx-2 text-center w-5">{qty}</div>
                 <svg
                   onClick={addQuantity}
-                  tw="fill-current text-gray-600 w-3"
+                  className="fill-current text-gray-600 w-3"
                   viewBox="0 0 448 512"
                 >
                   <path d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />

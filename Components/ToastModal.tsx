@@ -1,14 +1,13 @@
-import tw from "twin.macro";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useToastStore } from "@store/toast_store";
 import { ToastMessage } from "@constants/Types";
 
 const AlertIcons = {
   INFO: (
-    <div tw="bg-blue-500 py-4 px-6 rounded-l-lg flex items-center">
+    <div className="bg-blue-500 py-4 px-6 rounded-l-lg flex items-center">
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        tw="fill-current text-white"
+        className="fill-current text-white"
         viewBox="0 0 16 16"
         width="20"
         height="20"
@@ -21,11 +20,11 @@ const AlertIcons = {
     </div>
   ),
   ERROR: (
-    <div tw="bg-red-600 py-4 px-6 rounded-l-lg flex items-center">
+    <div className="bg-red-600 py-4 px-6 rounded-l-lg flex items-center">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 16 16"
-        tw="fill-current text-white"
+        className="fill-current text-white"
         width="20"
         height="20"
       >
@@ -37,10 +36,10 @@ const AlertIcons = {
     </div>
   ),
   SUCCESS: (
-    <div tw="bg-green-600 py-4 px-6 rounded-l-lg flex items-center">
+    <div className="bg-green-600 py-4 px-6 rounded-l-lg flex items-center">
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        tw="text-white fill-current"
+        className="text-white fill-current"
         viewBox="0 0 16 16"
         width="20"
         height="20"
@@ -53,11 +52,11 @@ const AlertIcons = {
     </div>
   ),
   WARNING: (
-    <div tw="bg-yellow-600 py-4 px-6 rounded-l-lg flex items-center">
+    <div className="bg-yellow-600 py-4 px-6 rounded-l-lg flex items-center">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 16 16"
-        tw="fill-current text-white"
+        className="fill-current text-white"
         width="20"
         height="20"
       >
@@ -133,14 +132,14 @@ const SingleToastModal = ({ toast, index }: SingleToastModalProps) => {
       }}
     >
       {AlertIcon(toast)}
-      <div tw="px-4 py-6 bg-white rounded-r-lg flex justify-between items-center w-full border border-l-transparent border-gray-200">
+      <div className="px-4 py-6 bg-white rounded-r-lg flex justify-between items-center w-full border border-l-transparent border-gray-200">
         <div>
           <div>{toast.message}</div>
         </div>
-        <button tw="self-start" onClick={startRemoveToastProcess}>
+        <button className="self-start" onClick={startRemoveToastProcess}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            tw="fill-current text-gray-700"
+            className="fill-current text-gray-700"
             viewBox="0 0 16 16"
             width="20"
             height="20"
@@ -162,7 +161,7 @@ function ToastModal() {
     return null;
   }
   return (
-    <div tw="px-8 space-y-4 mb-4 absolute z-[999] py-0 ">
+    <div className="px-8 space-y-4 mb-4 absolute z-[999] py-0 ">
       {toasts.map((toast, index) => {
         const key = `key__${toast._id}`;
         return <SingleToastModal key={key} toast={toast} index={index} />;
