@@ -1,3 +1,4 @@
+import Loading from "@Components/Loading";
 import axios from "@Helpers/Axios";
 import { useItemStore } from "@Store/itemlist";
 import { useRef, useState } from "react";
@@ -66,13 +67,8 @@ export const useFetchItems = (initialLength?: number) => {
 
   if (loading || scrollerRef.current.hasNext) {
     return (
-      <div
-        ref={ref}
-        style={{
-          border: "1px solid black",
-        }}
-      >
-        Loading
+      <div ref={ref} className="relative flex mx-auto w-1/3 h-2">
+        <Loading text="LOADING" />
       </div>
     );
   }

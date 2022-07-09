@@ -7,6 +7,7 @@ module.exports = {
     "./Database/**/*.{js,ts,jsx,tsx}",
     "./Helpers/**/*.{js,ts,jsx,tsx}",
     "./Server/**/*.{js,ts,jsx,tsx}",
+    "./Functions/**/*.{js,ts,jsx,tsx}",
     "./Store/**/*.{js,ts,jsx,tsx}",
     "./pages/**/*.{js,ts,jsx,tsx}",
   ],
