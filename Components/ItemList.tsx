@@ -1,18 +1,26 @@
-import React, { memo, useEffect } from "react";
+import React, { memo } from "react";
 import StoreSection from "./StoreSection";
 import SingleItemSmall from "./SingleItemSmall";
 import { useItemStore } from "@Store/itemlist";
 import { ItemInterface } from "@Constants/Types";
+import { useFetchItems } from "@Functions/fetchItems";
+import { useEffect } from "react";
 
-function ItemList({ items: itemResult }: { items: ItemInterface[] }) {
-  const { items, replaceAll } = useItemStore((state) => ({
-    items: state.items,
-    replaceAll: state.replaceAll,
-  }));
+function ItemList({ items: initialItems }: { items: ItemInterface[] }) {
+  const LoadMoreElement = useFetchItems(initialItems.length);
+  const { items, replaceAll } = useItemStore((state) => {
+    return {
+      items: state.items.length ? state.items : initialItems,
+      replaceAll: state.replaceAll,
+    };
+  });
+
   useEffect(() => {
-    replaceAll(itemResult);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [itemResult]);
+    if (!items.length || initialItems[0]._id !== items[0]._id) {
+      replaceAll(initialItems);
+    }
+  }, [initialItems, items, replaceAll]);
+
   return (
     <section className="bg-white py-8">
       <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12">
@@ -21,6 +29,7 @@ function ItemList({ items: itemResult }: { items: ItemInterface[] }) {
           <SingleItemSmall item={data} key={data._id + index} index={index} />
         ))}
       </div>
+      {LoadMoreElement}
     </section>
   );
 }

@@ -8,10 +8,10 @@ import Carousal from "@Components/Carousal";
 import ItemList from "@Components/ItemList";
 import SideMenuCart from "@Components/SideCartSection/SideCart";
 import { ItemInterface } from "@Constants/Types";
-import mongo from "@Database/mongo";
 import { getAccessTokenSSR } from "@Auth/cookie";
 import { useEffect } from "react";
 import { useAuthStore } from "@Store/auth";
+import { fetchitems } from "@Functions/fetchItems";
 
 interface MyProps {
   items: ItemInterface[];
@@ -44,12 +44,8 @@ export async function getServerSideProps(
 ): Promise<GetServerSidePropsResult<any>> {
   const { req } = context;
   const token = getAccessTokenSSR(req as NextApiRequest);
-  const itemDB = await mongo().getItemsDB();
-  const items = (await itemDB?.find().toArray())?.map((data) => {
-    return { ...data, _id: data._id.toString() };
-  });
-
-  return { props: { items, access_token: token } };
+  const { data = [] } = await fetchitems();
+  return { props: { items: data, access_token: token } };
 }
 
 export default Home;

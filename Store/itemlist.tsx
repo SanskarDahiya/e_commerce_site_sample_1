@@ -5,6 +5,7 @@ type IAuth = {
   items: ItemInterface[];
   replaceAll: (list: ItemInterface[]) => void;
   getItem: (resourceId: string) => ItemInterface;
+  addItems: (value: ItemInterface[]) => void;
   addItem: (value: ItemInterface, index?: number) => void;
   removeItem: (value: ItemInterface, index?: number) => void;
   replaceItem: (value: ItemInterface, index: number) => void;
@@ -24,6 +25,9 @@ const itemStore = (set: SetState<IAuth>, get: GetState<IAuth>): IAuth => ({
       items[index] = { ...items[index], ...value };
       return { items };
     });
+  },
+  addItems: (list) => {
+    set(({ items }) => ({ items: [...items, ...list] }));
   },
   addItem: (value, index) => {
     set(({ items }) => {

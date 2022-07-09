@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "@Helpers/Axios";
 import create, { SetState, GetState } from "zustand";
 import { CartInterface } from "@Constants/Types";
 

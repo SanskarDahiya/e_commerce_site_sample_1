@@ -12,6 +12,7 @@ export interface ToastMessage extends Toast {
 export interface ResponseInterface {
   success: boolean;
   error?: string;
+  result?: any;
 }
 
 interface MandatoryFields {
