@@ -19,8 +19,15 @@ function validateMiddleware(validations, validationResult) {
     if (errors.isEmpty()) {
       return next();
     }
+    const errorMessage =
+      errors?.errors
+        ?.map((value) => {
+          const { msg } = value || {};
+          return msg || "";
+        })
+        ?.join("\n") || "Something went wrong";
 
-    res.status(518).json({ errors: errors.array() });
+    next(new Error(errorMessage));
   };
 }
 

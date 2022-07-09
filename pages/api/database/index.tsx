@@ -7,7 +7,7 @@ import { verifyToken } from "@Auth/jwt";
 import { ResponseInterface } from "@Constants/Types";
 import mongo from "@Database/mongo";
 import ValidateData from "@Server/ExpressValidate";
-import PostRequest from "@Server/PostRequest";
+import PostRequest, { handleErrorCode } from "@Server/PostRequest";
 
 const validate = ValidateData([
   check("id", "Id not present").exists(),
@@ -53,7 +53,6 @@ export default async function handler(
 
     res.status(200).json({ success: true });
   } catch (err: any) {
-    const statusCode = err?.code === 401 ? 401 : 501;
-    res.status(statusCode).json({ success: false, error: err?.message });
+    handleErrorCode(err, res);
   }
 }

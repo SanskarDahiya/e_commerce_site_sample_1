@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import { ObjectId } from "mongodb";
-import PostRequest from "@Server/PostRequest";
+import PostRequest, { handleErrorCode } from "@Server/PostRequest";
 import { verifyToken } from "@Auth/jwt";
 import { getAccessTokenSSR } from "@Auth/cookie";
 import mongo from "@Database/mongo";
@@ -61,7 +61,6 @@ export default async function handler(
 
     res.status(200).json({ success: true, result: { user, cart } });
   } catch (err: any) {
-    const statusCode = err?.code === 401 ? 401 : 501;
-    res.status(statusCode).json({ success: false, error: err?.message });
+    handleErrorCode(err, res);
   }
 }
