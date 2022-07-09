@@ -1,11 +1,11 @@
 import React, { memo, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useShoppingCart } from "@store/shoppingCart";
-import { useAuthStore } from "@store/auth";
-import axios from "@helpers/Axios";
-import { useItemStore } from "@store/itemlist";
-import { ItemInterface } from "@constants/Types";
+import { useShoppingCart } from "@Store/shoppingCart";
+import { useAuthStore } from "@Store/auth";
+import axios from "@Helpers/Axios";
+import { useItemStore } from "@Store/itemlist";
+import { ItemInterface } from "@Constants/Types";
 
 interface MyProps {
   index: number;

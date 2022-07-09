@@ -1,5 +1,5 @@
 import React from "react";
-import { useAuthStore } from "@store/auth";
+import { useAuthStore } from "@Store/auth";
 
 function AdminHeaderSection() {
   const { user, isEditEnable, toogleEdit } = useAuthStore((state) => ({

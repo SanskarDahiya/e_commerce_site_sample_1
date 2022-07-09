@@ -1,11 +1,11 @@
 import React, { memo, useState } from "react";
 import Link from "next/link";
-import { useAuthStore } from "@store/auth";
+import { useAuthStore } from "@Store/auth";
 import Cookies from "js-cookie";
 import Router from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignOutAlt, faUser } from "@fortawesome/free-solid-svg-icons";
-import { useToastStore } from "@store/toast_store";
+import { useToastStore } from "@Store/toast_store";
 
 function UserHeaderSection() {
   const { setInfo } = useToastStore((state) => ({

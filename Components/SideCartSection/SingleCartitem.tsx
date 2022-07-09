@@ -1,6 +1,6 @@
 import React from "react";
-import { useShoppingCart } from "@store/shoppingCart";
-import { useItemStore } from "@store/itemlist";
+import { useShoppingCart } from "@Store/shoppingCart";
+import { useItemStore } from "@Store/itemlist";
 import Image from "next/image";
 
 interface MyProps {

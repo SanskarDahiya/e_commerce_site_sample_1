@@ -1,9 +1,9 @@
 import React, { memo } from "react";
 import Link from "next/link";
-import UserHeaderSection from "@helpers/UserHeaderSection";
-import CartHeaderSection from "@helpers/CartHeaderSection";
-import AdminHeaderSection from "@helpers/AdminHeaderSection";
-import { useAuthStore } from "@store/auth";
+import UserHeaderSection from "@Helpers/UserHeaderSection";
+import CartHeaderSection from "@Helpers/CartHeaderSection";
+import AdminHeaderSection from "@Helpers/AdminHeaderSection";
+import { useAuthStore } from "@Store/auth";
 import Loading from "./Loading";
 
 const HEADER_DATA = {

@@ -1,18 +1,18 @@
-import "../styles/globals.css";
+import "@Styles/globals.css";
 import { useEffect } from "react";
 import type { AppProps } from "next/app";
 
-import Header from "@components/Header";
-import Footer from "@components/Footer";
-import { useAuthStore } from "@store/auth";
-import axios, { useAxiosInterceptior } from "@helpers/Axios";
-import { useShoppingCart } from "@store/shoppingCart";
+import Header from "@Components/Header";
+import Footer from "@Components/Footer";
+import { useAuthStore } from "@Store/auth";
+import axios, { useAxiosInterceptior } from "@Helpers/Axios";
+import { useShoppingCart } from "@Store/shoppingCart";
 import {
   CartInterface,
   ResponseInterface,
   UserInterface,
-} from "@constants/Types";
-import ToastModal from "@components/ToastModal";
+} from "@Constants/Types";
+import ToastModal from "@Components/ToastModal";
 
 interface ResultInterface extends ResponseInterface {
   user?: UserInterface;

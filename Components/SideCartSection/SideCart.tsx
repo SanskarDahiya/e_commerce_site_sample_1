@@ -1,7 +1,7 @@
 import React from "react";
-import { useShoppingCart } from "@store/shoppingCart";
+import { useShoppingCart } from "@Store/shoppingCart";
 import SingleCartitem from "./SingleCartitem";
-import { useToastStore } from "@store/toast_store";
+import { useToastStore } from "@Store/toast_store";
 
 function SideMenuCart() {
   const setInfo = useToastStore((s) => s.setInfo);

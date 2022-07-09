@@ -1,5 +1,5 @@
 import React, { Fragment, memo } from "react";
-import { useShoppingCart } from "@store/shoppingCart";
+import { useShoppingCart } from "@Store/shoppingCart";
 
 function CartHeaderSection() {
   const { cartItem, toogleCart } = useShoppingCart((s) => ({

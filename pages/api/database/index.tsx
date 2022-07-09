@@ -2,12 +2,12 @@
 import { check } from "express-validator";
 import { ObjectId } from "mongodb";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getAccessTokenSSR } from "@auth/cookie";
-import { verifyToken } from "@auth/jwt";
-import { ResponseInterface } from "@constants/Types";
-import mongo from "@database/mongo";
-import ValidateData from "@server/ExpressValidate";
-import PostRequest from "@server/PostRequest";
+import { getAccessTokenSSR } from "@Auth/cookie";
+import { verifyToken } from "@Auth/jwt";
+import { ResponseInterface } from "@Constants/Types";
+import mongo from "@Database/mongo";
+import ValidateData from "@Server/ExpressValidate";
+import PostRequest from "@Server/PostRequest";
 
 const validate = ValidateData([
   check("id", "Id not present").exists(),

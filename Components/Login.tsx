@@ -2,9 +2,9 @@ import Link from "next/link";
 import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import useAxios from "axios-hooks";
 import Router from "next/router";
-import FormInput from "@helpers/FormInput";
-import { useAuthStore } from "@store/auth";
-import { useToastStore } from "@store/toast_store";
+import FormInput from "@Helpers/FormInput";
+import { useAuthStore } from "@Store/auth";
+import { useToastStore } from "@Store/toast_store";
 
 const Login = () => {
   const { setSuccess, setError } = useToastStore((state) => ({
@@ -66,7 +66,7 @@ const Login = () => {
           Login
         </h2>
         <FormInput
-          styles={email && [tw`bg-white`]}
+          className={email && "bg-white"}
           placeholder="Email"
           value={email}
           handleChange={handleChange("email")}
@@ -75,7 +75,7 @@ const Login = () => {
           required={true}
         />
         <FormInput
-          styles={password && [tw`bg-white`]}
+          styles={password && "bg-white"}
           placeholder="Password"
           value={password}
           handleChange={handleChange("password")}

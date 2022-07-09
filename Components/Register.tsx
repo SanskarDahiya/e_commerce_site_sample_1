@@ -2,8 +2,8 @@ import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import Router from "next/router";
 import useAxios from "axios-hooks";
-import FormInput from "@helpers/FormInput";
-import { useToastStore } from "@store/toast_store";
+import FormInput from "@Helpers/FormInput";
+import { useToastStore } from "@Store/toast_store";
 
 const Register = () => {
   const { setSuccess, setError } = useToastStore((state) => ({
@@ -67,7 +67,7 @@ const Register = () => {
           value={name}
           handleChange={handleChange("name")}
           type="text"
-          styles={name && [tw`bg-white`]}
+          styles={name && "bg-white"}
           required={true}
           disabled={isLoading}
         />
@@ -76,7 +76,7 @@ const Register = () => {
           value={email}
           handleChange={handleChange("email")}
           type="email"
-          styles={email && [tw`bg-white`]}
+          styles={email && "bg-white"}
           required={true}
           disabled={isLoading}
         />
@@ -85,7 +85,7 @@ const Register = () => {
           value={password}
           handleChange={handleChange("password")}
           type="password"
-          styles={password && [tw`bg-white`]}
+          styles={password && "bg-white"}
           required={true}
           disabled={isLoading}
         />
@@ -94,7 +94,7 @@ const Register = () => {
           value={confirmPasswrod}
           handleChange={handleChange("confirmPasswrod")}
           type="password"
-          styles={confirmPasswrod && [tw`bg-white`]}
+          styles={confirmPasswrod && "bg-white"}
           required={true}
           disabled={isLoading}
         /> */}

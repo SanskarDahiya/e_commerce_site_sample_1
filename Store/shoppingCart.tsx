@@ -1,6 +1,6 @@
 import axios from "axios";
 import create, { SetState, GetState } from "zustand";
-import { CartInterface } from "@constants/Types";
+import { CartInterface } from "@Constants/Types";
 
 const updateDb_cart = async (id: string, changes: any) => {
   if (!id || !changes) {

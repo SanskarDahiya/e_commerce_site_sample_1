@@ -1,8 +1,8 @@
 import React, { Fragment } from "react";
-import RegisterComponent from "@components/Register";
+import RegisterComponent from "@Components/Register";
 import { GetServerSidePropsContext, NextApiRequest, NextPage } from "next";
-import { verifyToken } from "@auth/jwt";
-import { getAccessTokenSSR } from "@auth/cookie";
+import { verifyToken } from "@Auth/jwt";
+import { getAccessTokenSSR } from "@Auth/cookie";
 
 const Register: NextPage = () => {
   return (

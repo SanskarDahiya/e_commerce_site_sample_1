@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useToastStore } from "@store/toast_store";
-import { ToastMessage } from "@constants/Types";
+import { useToastStore } from "@Store/toast_store";
+import { ToastMessage } from "@Constants/Types";
 
 const AlertIcons = {
   INFO: (
@@ -110,21 +110,19 @@ const SingleToastModal = ({ toast, index }: SingleToastModalProps) => {
         ? transition_state[0] === "DISPLAY"
         : transition_state[0] === "REMOVE"
     ) {
-      return tw`opacity-0 translate-x-[-100%]`;
+      return "opacity-0 translate-x-[-100%]";
     } else {
-      return tw`opacity-100 translate-x-0`;
+      return "opacity-100 translate-x-0";
     }
   }, [transition_state]);
 
   return (
     <div
-      //@ts-ignore
-      css={[
-        tw`flex w-96 shadow-lg rounded-lg transition-all duration-500 ease-in`,
-        index === 0 && tw`my-4`,
-        ModalTransition,
-      ]}
-      style={{ ...ModalTransition }}
+      className={
+        "flex w-96 shadow-lg rounded-lg transition-all duration-500 ease-in " +
+        ModalTransition +
+        (index === 0 && " my-4")
+      }
       onTransitionEnd={() => {
         if (transition_state.join("_") === "REMOVE_ENDS") {
           removeToast(toast._id);

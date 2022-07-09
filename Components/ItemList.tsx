@@ -1,8 +1,8 @@
 import React, { memo, useEffect } from "react";
 import StoreSection from "./StoreSection";
 import SingleItemSmall from "./SingleItemSmall";
-import { useItemStore } from "@store/itemlist";
-import { ItemInterface } from "@constants/Types";
+import { useItemStore } from "@Store/itemlist";
+import { ItemInterface } from "@Constants/Types";
 
 function ItemList({ items: itemResult }: { items: ItemInterface[] }) {
   const { items, replaceAll } = useItemStore((state) => ({
