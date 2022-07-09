@@ -1,22 +1,21 @@
-import "twin.macro";
 import React from "react";
 
 function About() {
   return (
-    <section tw="bg-white py-8">
-      <div tw="container py-8 px-6 mx-auto">
+    <section className="bg-white py-8">
+      <div className="container py-8 px-6 mx-auto">
         <a
-          tw="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl mb-8"
+          className="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl mb-8"
           href="#"
         >
           About
         </a>
 
-        <p tw="mt-8 mb-8">
+        <p className="mt-8 mb-8">
           This template is inspired by the stunning nordic minamalist design -
           in particular:
           <a
-            tw="text-gray-800 underline hover:text-gray-900"
+            className="text-gray-800 underline hover:text-gray-900"
             href="http://savoy.nordicmade.com/"
             target="_blank"
             rel="noreferrer"
@@ -26,7 +25,7 @@ function About() {
           </a>
           created by
           <a
-            tw="text-gray-800 underline hover:text-gray-900"
+            className="text-gray-800 underline hover:text-gray-900"
             href="https://nordicmade.com/"
           >
             {" "}
@@ -34,7 +33,7 @@ function About() {
           </a>{" "}
           and{" "}
           <a
-            tw="text-gray-800 underline hover:text-gray-900"
+            className="text-gray-800 underline hover:text-gray-900"
             href="https://www.metricdesign.no/"
             target="_blank"
             rel="noreferrer"
@@ -43,7 +42,7 @@ function About() {
           </a>
         </p>
 
-        <p tw="mb-8">
+        <p className="mb-8">
           Lorem ipsum dolor sit amet, consectetur <a href="#">random link</a>
           adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
           magna aliqua. Vel risus commodo viverra maecenas accumsan lacus vel

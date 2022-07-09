@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
 import create, { SetState, GetState } from "zustand";
-import { verifyToken } from "@auth/jwt";
-import { UserInterface } from "@constants/Types";
+import { verifyToken } from "@Auth/jwt";
+import { UserInterface } from "@Constants/Types";
 
 type IAuth = {
   user: UserInterface | null;

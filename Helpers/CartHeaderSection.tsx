@@ -1,6 +1,5 @@
-import "twin.macro";
 import React, { Fragment, memo } from "react";
-import { useShoppingCart } from "@store/shoppingCart";
+import { useShoppingCart } from "@Store/shoppingCart";
 
 function CartHeaderSection() {
   const { cartItem, toogleCart } = useShoppingCart((s) => ({
@@ -12,18 +11,18 @@ function CartHeaderSection() {
     <Fragment>
       {/* <Link href={"/cart"} passHref> */}
       <div
-        tw="pl-3 inline-block no-underline hover:text-black relative"
+        className="pl-3 inline-block no-underline hover:text-black relative"
         onClick={() => {
           toogleCart();
         }}
       >
         {totalItems > 0 && (
-          <div tw="absolute bottom-[60%] left-[80%] font-size[small]">
+          <div className="absolute bottom-[60%] left-[80%] font-size[small]">
             {totalItems}
           </div>
         )}
         <svg
-          tw="fill-current hover:text-black"
+          className="fill-current hover:text-black"
           xmlns="http://www.w3.org/2000/svg"
           width="24"
           height="24"

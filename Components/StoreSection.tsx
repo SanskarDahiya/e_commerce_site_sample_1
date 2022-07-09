@@ -1,20 +1,22 @@
-import "twin.macro";
 import React from "react";
 
 function StoreSection() {
   return (
-    <nav id="store" tw="w-full top-0 px-6 py-1">
-      <div tw="w-full mx-auto flex flex-wrap items-center justify-between mt-0 px-2 py-3">
+    <nav id="store" className="w-full top-0 px-6 py-1">
+      <div className="w-full mx-auto flex flex-wrap items-center justify-between mt-0 px-2 py-3">
         <a
-          tw="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl "
+          className="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl "
           href="#"
         >
           Store
         </a>
-        <div tw="flex items-center" id="store-nav-content">
-          <a tw="pl-3 inline-block no-underline hover:text-black" href="#">
+        <div className="flex items-center" id="store-nav-content">
+          <a
+            className="pl-3 inline-block no-underline hover:text-black"
+            href="#"
+          >
             <svg
-              tw="fill-current hover:text-black"
+              className="fill-current hover:text-black"
               xmlns="http://www.w3.org/2000/svg"
               width={24}
               height={24}
@@ -23,9 +25,12 @@ function StoreSection() {
               <path d="M7 11H17V13H7zM4 7H20V9H4zM10 15H14V17H10z" />
             </svg>
           </a>
-          <a tw="pl-3 inline-block no-underline hover:text-black" href="#">
+          <a
+            className="pl-3 inline-block no-underline hover:text-black"
+            href="#"
+          >
             <svg
-              tw="fill-current hover:text-black"
+              className="fill-current hover:text-black"
               xmlns="http://www.w3.org/2000/svg"
               width={24}
               height={24}

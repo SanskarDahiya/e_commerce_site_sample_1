@@ -1,4 +1,4 @@
-import { Toast, ToastMessage } from "@constants/Types";
+import { Toast, ToastMessage } from "@Constants/Types";
 import create, { SetState, GetState } from "zustand";
 type ToastType = "INFO" | "SUCCESS" | "WARNING" | "ERROR";
 type IToast = {

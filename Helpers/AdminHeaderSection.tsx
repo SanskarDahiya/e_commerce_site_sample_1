@@ -1,6 +1,5 @@
-import "twin.macro";
 import React from "react";
-import { useAuthStore } from "@store/auth";
+import { useAuthStore } from "@Store/auth";
 
 function AdminHeaderSection() {
   const { user, isEditEnable, toogleEdit } = useAuthStore((state) => ({
@@ -11,7 +10,7 @@ function AdminHeaderSection() {
   const isAdmin = user?.isAdmin ? true : false;
 
   return isAdmin ? (
-    <div tw="cursor-pointer px-4" onClick={() => toogleEdit()}>
+    <div className="cursor-pointer px-4" onClick={() => toogleEdit()}>
       Admin : {"" + !!isEditEnable}
     </div>
   ) : (

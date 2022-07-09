@@ -1,4 +1,3 @@
-import tw, { TwStyle } from "twin.macro";
 import {
   ChangeEvent,
   HTMLInputTypeAttribute,
@@ -6,7 +5,7 @@ import {
 } from "react";
 
 interface IProps {
-  styles?: string | TwStyle[];
+  styles?: string;
   type: string;
   placeholder: string;
   value: string;
@@ -21,19 +20,13 @@ const FormInput = ({
   handleChange,
   ...rest
 }: IProps & InputHTMLAttributes<HTMLInputTypeAttribute>) => {
-  const styles = Array.prototype.concat(
-    [
-      tw`focus:outline-none focus:bg-white`,
-      tw`appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-400 rounded py-3 px-4 mb-3 leading-tight`,
-    ],
-    newStyles
-  );
-
   return (
     <input
-      {...rest}
-      // @ts-ignore
-      css={styles}
+      // {...rest}
+      className={
+        "focus:outline-none focus:bg-white appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-400 rounded py-3 px-4 mb-3 leading-tight " +
+        newStyles
+      }
       type={type}
       placeholder={placeholder}
       onChange={handleChange}

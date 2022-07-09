@@ -1,14 +1,13 @@
-import "twin.macro";
 import type {
   GetServerSidePropsContext,
   GetServerSidePropsResult,
   NextPage,
 } from "next";
-import Carousal from "@components/Carousal";
-import ItemList from "@components/ItemList";
-import SideMenuCart from "@components/SideCartSection/SideCart";
-import { ItemInterface } from "@constants/Types";
-import mongo from "@database/mongo";
+import Carousal from "@Components/Carousal";
+import ItemList from "@Components/ItemList";
+import SideMenuCart from "@Components/SideCartSection/SideCart";
+import { ItemInterface } from "@Constants/Types";
+import mongo from "@Database/mongo";
 
 interface MyProps {
   items: ItemInterface[];
@@ -16,7 +15,7 @@ interface MyProps {
 
 const Home: NextPage<MyProps> = ({ items }) => {
   return (
-    <div tw="relative">
+    <div className="relative">
       <Carousal />
       <ItemList items={items} />
       <SideMenuCart />

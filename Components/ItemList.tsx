@@ -1,9 +1,8 @@
-import "twin.macro";
 import React, { memo, useEffect } from "react";
 import StoreSection from "./StoreSection";
 import SingleItemSmall from "./SingleItemSmall";
-import { useItemStore } from "@store/itemlist";
-import { ItemInterface } from "@constants/Types";
+import { useItemStore } from "@Store/itemlist";
+import { ItemInterface } from "@Constants/Types";
 
 function ItemList({ items: itemResult }: { items: ItemInterface[] }) {
   const { items, replaceAll } = useItemStore((state) => ({
@@ -15,8 +14,8 @@ function ItemList({ items: itemResult }: { items: ItemInterface[] }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [itemResult]);
   return (
-    <section tw="bg-white py-8">
-      <div tw="container mx-auto flex items-center flex-wrap pt-4 pb-12">
+    <section className="bg-white py-8">
+      <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12">
         <StoreSection />
         {items.map((data, index) => (
           <SingleItemSmall item={data} key={data._id + index} index={index} />

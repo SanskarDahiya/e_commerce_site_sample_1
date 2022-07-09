@@ -3,7 +3,7 @@ import {
   AccessTokenInterface,
   RefreshTokenInterface,
   UserInterface,
-} from "@constants/Types";
+} from "@Constants/Types";
 
 const SECRET_KEY =
   (process.env.JWT_SECRET_KEY as string) || "MY CUSTOM KEY PASS PAIR";
