@@ -26,7 +26,7 @@ function ItemList({ items: initialItems }: { items: ItemInterface[] }) {
       <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12">
         <StoreSection />
         {items.map((data, index) => (
-          <SingleItemSmall item={data} key={data._id + index} index={index} />
+          <SingleItemSmall key={data._id} item={data} index={index} />
         ))}
       </div>
       {LoadMoreElement}
