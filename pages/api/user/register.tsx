@@ -1,10 +1,10 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import { check } from "express-validator";
-import ValidateData from "@server/ExpressValidate";
-import mongo from "@database/mongo";
+import ValidateData from "@Server/ExpressValidate";
+import mongo from "@Database/mongo";
 import bcrypt from "bcryptjs";
-import { ResponseInterface, UserInterface } from "@constants/Types";
+import { ResponseInterface } from "@Constants/Types";
 
 const validate = ValidateData([
   check("name", "Name is required").not().isEmpty(),
@@ -14,8 +14,11 @@ const validate = ValidateData([
   }),
 ]);
 
-const PASSWORD_HASH = 2;
-
+const PASSWORD_HASH = +(process.env.BCRYPT_SECRET_KEY as string) || 2;
+if (!PASSWORD_HASH || PASSWORD_HASH == NaN) {
+  console.error(`BCRYPT_SECRET_KEY not found`);
+  process.exit(0);
+}
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseInterface>

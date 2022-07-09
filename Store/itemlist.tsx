@@ -1,5 +1,5 @@
 import create, { SetState, GetState } from "zustand";
-import { ItemInterface } from "@constants/Types";
+import { ItemInterface } from "@Constants/Types";
 
 type IAuth = {
   items: ItemInterface[];

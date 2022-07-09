@@ -2,12 +2,12 @@
 import { check } from "express-validator";
 import { ObjectId } from "mongodb";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getAccessTokenSSR } from "@auth/cookie";
-import { verifyToken } from "@auth/jwt";
-import { ResponseInterface } from "@constants/Types";
-import mongo from "@database/mongo";
-import ValidateData from "@server/ExpressValidate";
-import PostRequest from "@server/PostRequest";
+import { getAccessTokenSSR } from "@Auth/cookie";
+import { verifyToken } from "@Auth/jwt";
+import { ResponseInterface } from "@Constants/Types";
+import mongo from "@Database/mongo";
+import ValidateData from "@Server/ExpressValidate";
+import PostRequest, { handleErrorCode } from "@Server/PostRequest";
 
 const validate = ValidateData([
   check("id", "Id not present").exists(),
@@ -53,7 +53,6 @@ export default async function handler(
 
     res.status(200).json({ success: true });
   } catch (err: any) {
-    const statusCode = err?.code === 401 ? 401 : 501;
-    res.status(statusCode).json({ success: false, error: err?.message });
+    handleErrorCode(err, res);
   }
 }

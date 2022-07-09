@@ -2,11 +2,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { check } from "express-validator";
 import bcrypt from "bcryptjs";
-import ValidateData from "@server/ExpressValidate";
-import PostRequest from "@server/PostRequest";
-import { generateAccessToken, generateRefreshToken } from "@auth/jwt";
-import mongo from "@database/mongo";
-import { ResponseInterface, UserInterface } from "@constants/Types";
+import ValidateData from "@Server/ExpressValidate";
+import PostRequest, { handleErrorCode } from "@Server/PostRequest";
+import { generateAccessToken, generateRefreshToken } from "@Auth/jwt";
+import mongo from "@Database/mongo";
+import { ResponseInterface, UserInterface } from "@Constants/Types";
 
 const validate = ValidateData([
   check("email", "please include a valid email").isEmail(),
@@ -47,6 +47,6 @@ export default async function handler(
     /* Send succes with token */
     res.status(200).json({ success: true });
   } catch (err: any) {
-    res.status(501).json({ success: false, error: err?.message });
+    handleErrorCode(err, res);
   }
 }

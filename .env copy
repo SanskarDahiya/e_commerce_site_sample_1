@@ -1,0 +1,4 @@
+MONGO_URI=mongodb+srv://----MONGODB URI----.mongodb.net/
+MONGO_DB=Database_Name
+JWT_SECRET_KEY=
+BCRYPT_SECRET_KEY=

@@ -3,9 +3,15 @@ import {
   AccessTokenInterface,
   RefreshTokenInterface,
   UserInterface,
-} from "@constants/Types";
+} from "@Constants/Types";
 
-const SECRET_KEY = "MY CUSTOM KEY PASS PAIR";
+const SECRET_KEY =
+  (process.env.JWT_SECRET_KEY as string) || "MY CUSTOM KEY PASS PAIR";
+
+if (!SECRET_KEY) {
+  console.error(`JWT_SECRET_KEY not found`);
+  process.exit(0);
+}
 
 export function generateToken(
   payload: string | Buffer | object,

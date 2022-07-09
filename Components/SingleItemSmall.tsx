@@ -1,12 +1,11 @@
-import tw from "twin.macro";
 import React, { memo, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useShoppingCart } from "@store/shoppingCart";
-import { useAuthStore } from "@store/auth";
-import axios from "@helpers/Axios";
-import { useItemStore } from "@store/itemlist";
-import { ItemInterface } from "@constants/Types";
+import { useShoppingCart } from "@Store/shoppingCart";
+import { useAuthStore } from "@Store/auth";
+import axios from "@Helpers/Axios";
+import { useItemStore } from "@Store/itemlist";
+import { ItemInterface } from "@Constants/Types";
 
 interface MyProps {
   index: number;
@@ -66,18 +65,15 @@ function SingleItemSmall({ item, index }: MyProps) {
     removeFromCart(resourceId);
   };
 
-  const favCss = [tw`h-6 w-6 fill-current text-gray-500 hover:text-black`];
+  const favCss = ["h-6 w-6 fill-current text-gray-500 hover:text-black"];
   if (isFavoriteMark) {
-    favCss.push(tw`text-red-600 hover:text-red-400`);
+    favCss.push("text-red-600 hover:text-red-400");
   }
   return (
-    <div
-      className="itemList1212"
-      tw="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col"
-    >
+    <div className="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
       <Link href={"/items/" + resourceId} passHref>
         <a>
-          <div tw="hover:flex-grow hover:shadow-lg">
+          <div className="hover:flex-grow hover:shadow-lg">
             <Image
               src={imageUrl}
               alt="Image-Section"
@@ -87,7 +83,7 @@ function SingleItemSmall({ item, index }: MyProps) {
             />
           </div>
 
-          <div tw="pt-3 flex items-center justify-between">
+          <div className="pt-3 flex items-center justify-between">
             <p>{title}</p>
             {currentItemQuantity === 0 ? (
               <svg
@@ -119,8 +115,7 @@ function SingleItemSmall({ item, index }: MyProps) {
                   }
                   replaceItem(item, index);
                 }}
-                // @ts-ignore
-                css={favCss}
+                className={favCss.join(" ")}
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
               >
@@ -130,23 +125,25 @@ function SingleItemSmall({ item, index }: MyProps) {
               <div onClick={removeItem}>Delete</div>
             )}
           </div>
-          <div tw="flex items-center justify-between">
-            <p tw="pt-1 text-gray-900">{price}</p>
+          <div className="flex items-center justify-between">
+            <p className="pt-1 text-gray-900">{price}</p>
             {currentItemQuantity === 0 ? (
               <div onClick={addQuantity}>+ Add To Cart</div>
             ) : (
-              <div tw="flex justify-center">
+              <div className="flex justify-center">
                 <svg
                   onClick={removeQuantity}
-                  tw="fill-current text-gray-600 w-3"
+                  className="fill-current text-gray-600 w-3"
                   viewBox="0 0 448 512"
                 >
                   <path d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
                 </svg>
-                <div tw="mx-2 text-center w-5">{currentItemQuantity}</div>
+                <div className="mx-2 text-center w-5">
+                  {currentItemQuantity}
+                </div>
                 <svg
                   onClick={addQuantity}
-                  tw="fill-current text-gray-600 w-3"
+                  className="fill-current text-gray-600 w-3"
                   viewBox="0 0 448 512"
                 >
                   <path d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
