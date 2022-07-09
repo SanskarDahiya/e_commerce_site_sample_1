@@ -6,6 +6,7 @@ import Router from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignOutAlt, faUser } from "@fortawesome/free-solid-svg-icons";
 import { useToastStore } from "@Store/toast_store";
+import { useShoppingCart } from "@Store/shoppingCart";
 
 function UserHeaderSection() {
   const { setInfo } = useToastStore((state) => ({
@@ -13,6 +14,7 @@ function UserHeaderSection() {
   }));
   const [isOpen, setIsOpen] = useState(false);
   const { user, setRefreshToken, setAccessToken, setUser } = useAuthStore();
+  const emptyCart = useShoppingCart((s) => s.emptyCart);
 
   const handleProfileClick = (status: boolean | null) => {
     if (!user) {
@@ -30,6 +32,7 @@ function UserHeaderSection() {
     setRefreshToken(null);
     setAccessToken(null);
     setUser(undefined);
+    emptyCart();
     Cookies.remove("token");
     Router.push("/");
     setInfo("Logout successful");

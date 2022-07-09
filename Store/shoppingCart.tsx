@@ -28,6 +28,7 @@ type IAuth = {
   openCart: () => void;
   closeCart: () => void;
   toogleCart: () => void;
+  emptyCart: () => void;
   cartItem: CartInterface | any;
   setCartItems: (item: CartInterface) => void;
   increaseCartQuantity: (id: string, price: number) => void;
@@ -44,6 +45,7 @@ const shoppingCart = (set: SetState<IAuth>, get: GetState<IAuth>): IAuth => ({
   closeCart: () => set(() => ({ cartStatus: false })),
   toogleCart: () => set(({ cartStatus }) => ({ cartStatus: !cartStatus })),
   cartItem: { items: [] },
+  emptyCart: () => set(() => ({ cartItem: { items: [] } })),
   setCartItems: (item) => {
     set(() => ({ cartItem: item }));
   },
