@@ -52,8 +52,10 @@ const Login = () => {
   };
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    refetch({ data });
+    try {
+      e.preventDefault();
+      await refetch({ data });
+    } catch (er) {}
   };
 
   return (

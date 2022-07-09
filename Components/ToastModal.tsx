@@ -96,10 +96,13 @@ const SingleToastModal = ({ toast, index }: SingleToastModalProps) => {
   };
 
   useEffect(() => {
-    set_transition_state(["DISPLAY", "ENDS"]);
+    const timeOut = setTimeout(() => {
+      set_transition_state(["DISPLAY", "ENDS"]);
+    }, 10);
     const pendingTime = getPendingTime(toast);
     timerRef.current = setTimeout(startRemoveToastProcess, pendingTime);
     return () => {
+      clearTimeout(timeOut);
       clearTimeout(timerRef.current);
     };
   }, [toast]);
@@ -110,7 +113,7 @@ const SingleToastModal = ({ toast, index }: SingleToastModalProps) => {
         ? transition_state[0] === "DISPLAY"
         : transition_state[0] === "REMOVE"
     ) {
-      return "opacity-0 translate-x-[-100%]";
+      return "opacity-0 translate-x-[-24rem]";
     } else {
       return "opacity-100 translate-x-0";
     }
