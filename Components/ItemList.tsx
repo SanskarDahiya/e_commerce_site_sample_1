@@ -16,9 +16,11 @@ function ItemList({ items: initialItems }: { items: ItemInterface[] }) {
   });
 
   useEffect(() => {
-    if (!items.length || initialItems[0]._id !== items[0]._id) {
-      replaceAll(initialItems);
-    }
+    try {
+      if (!items.length || initialItems[0]._id !== items[0]._id) {
+        replaceAll(initialItems);
+      }
+    } catch (err) {}
   }, [initialItems, items, replaceAll]);
 
   return (
