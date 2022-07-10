@@ -2,17 +2,18 @@ import "@Styles/globals.css";
 import { useEffect } from "react";
 import type { AppProps } from "next/app";
 
+import axios, { useAxiosInterceptior } from "@Helpers/Axios";
+import ToastModal from "@Helpers/ToastModal";
+import SideMenuCart from "@Components/SideCartSection/SideCart";
 import Header from "@Components/Header";
 import Footer from "@Components/Footer";
 import { useAuthStore } from "@Store/auth";
-import axios, { useAxiosInterceptior } from "@Helpers/Axios";
 import { useShoppingCart } from "@Store/shoppingCart";
 import {
   CartInterface,
   ResponseInterface,
   UserInterface,
 } from "@Constants/Types";
-import ToastModal from "@Helpers/ToastModal";
 
 interface ResultInterface extends ResponseInterface {
   user?: UserInterface;
@@ -74,6 +75,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Header />
       <ToastModal />
       <Component {...pageProps} />
+      <SideMenuCart />
       <Footer />
     </>
   );

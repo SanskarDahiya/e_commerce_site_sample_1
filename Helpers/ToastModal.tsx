@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useToastStore } from "@Store/toast_store";
 import { ToastMessage } from "@Constants/Types";
+import SlideAnimation from "./SlideAnimation";
 
 const AlertIcons = {
   INFO: (
@@ -85,74 +86,43 @@ const getPendingTime = ({ _createdOn, timeout }: ToastMessage) => {
 
 const SingleToastModal = ({ toast, index }: SingleToastModalProps) => {
   const removeToast = useToastStore((s) => s.removeToast);
-  const timerRef = useRef<NodeJS.Timeout>();
-  const [transition_state, set_transition_state] = useState([
-    "DISPLAY",
-    "BEGAIN",
-  ]);
-
-  const startRemoveToastProcess = () => {
-    set_transition_state(["REMOVE", "ENDS"]);
-  };
-
-  useEffect(() => {
-    const timeOut = setTimeout(() => {
-      set_transition_state(["DISPLAY", "ENDS"]);
-    }, 10);
-    const pendingTime = getPendingTime(toast);
-    timerRef.current = setTimeout(startRemoveToastProcess, pendingTime);
-    return () => {
-      clearTimeout(timeOut);
-      clearTimeout(timerRef.current);
-    };
-  }, [toast]);
-
-  const ModalTransition = useMemo(() => {
-    if (
-      transition_state[1] === "BEGAIN"
-        ? transition_state[0] === "DISPLAY"
-        : transition_state[0] === "REMOVE"
-    ) {
-      return "opacity-0 translate-x-[-24rem]";
-    } else {
-      return "opacity-100 translate-x-0";
-    }
-  }, [transition_state]);
 
   return (
-    <div
-      className={
-        "flex w-96 shadow-lg rounded-lg transition-all duration-500 ease-in " +
-        ModalTransition +
-        (index === 0 && " my-4")
-      }
-      onTransitionEnd={() => {
-        if (transition_state.join("_") === "REMOVE_ENDS") {
-          removeToast(toast._id);
-        }
+    <SlideAnimation
+      timeout={getPendingTime(toast)}
+      onRemove={() => {
+        removeToast(toast._id);
       }}
     >
-      {AlertIcon(toast)}
-      <div className="px-4 py-6 bg-white rounded-r-lg flex justify-between items-center w-full border border-l-transparent border-gray-200">
-        <div>
-          <div>{toast.message}</div>
+      {({ removeElem }) => (
+        <div
+          className={
+            "flex w-96 shadow-lg rounded-lg" + (index === 0 && " my-4")
+          }
+        >
+          {AlertIcon(toast)}
+          <div className="px-4 py-6 bg-white rounded-r-lg flex justify-between items-center w-full border border-l-transparent border-gray-200">
+            <div>
+              <div>{toast.message}</div>
+            </div>
+            <button className="self-start" onClick={removeElem}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="fill-current text-gray-700"
+                viewBox="0 0 16 16"
+                width="20"
+                height="20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M3.72 3.72a.75.75 0 011.06 0L8 6.94l3.22-3.22a.75.75 0 111.06 1.06L9.06 8l3.22 3.22a.75.75 0 11-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 01-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 010-1.06z"
+                ></path>
+              </svg>
+            </button>
+          </div>
         </div>
-        <button className="self-start" onClick={startRemoveToastProcess}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="fill-current text-gray-700"
-            viewBox="0 0 16 16"
-            width="20"
-            height="20"
-          >
-            <path
-              fillRule="evenodd"
-              d="M3.72 3.72a.75.75 0 011.06 0L8 6.94l3.22-3.22a.75.75 0 111.06 1.06L9.06 8l3.22 3.22a.75.75 0 11-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 01-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 010-1.06z"
-            ></path>
-          </svg>
-        </button>
-      </div>
-    </div>
+      )}
+    </SlideAnimation>
   );
 };
 

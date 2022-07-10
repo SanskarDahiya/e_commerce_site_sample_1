@@ -6,10 +6,9 @@ function CartToggleButton() {
     toogleCart: s.toogleCart,
     cartItem: s.cartItem,
   }));
-  const totalItems = cartItem?.items?.length;
+  const totalItems = cartItem?.items?.length || 0;
   return (
     <Fragment>
-      {/* <Link href={"/cart"} passHref> */}
       <div
         className="pl-3 inline-block no-underline hover:text-black relative"
         onClick={() => {
@@ -33,7 +32,6 @@ function CartToggleButton() {
           <circle cx="17.5" cy="18.5" r="1.5" />
         </svg>
       </div>
-      {/* </Link> */}
     </Fragment>
   );
 }

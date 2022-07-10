@@ -6,7 +6,6 @@ import type {
 } from "next";
 import Carousal from "@Components/CarousalSection/Carousal";
 import ItemList from "@Components/ItemSection/ItemList";
-import SideMenuCart from "@Components/SideCartSection/SideCart";
 import { ItemInterface } from "@Constants/Types";
 import { getAccessTokenSSR } from "@Auth/cookie";
 import { useEffect } from "react";
@@ -34,7 +33,6 @@ const Home: NextPage<MyProps> = ({ items, access_token }) => {
     <div className="relative">
       <Carousal />
       <ItemList items={items} />
-      <SideMenuCart />
     </div>
   );
 };
