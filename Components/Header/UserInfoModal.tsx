@@ -9,9 +9,7 @@ import { useToastStore } from "@Store/toast_store";
 import { useShoppingCart } from "@Store/shoppingCart";
 
 function UserInfoModal() {
-  const { setInfo } = useToastStore((state) => ({
-    setInfo: state.setInfo,
-  }));
+  const setInfo = useToastStore((state) => state.setInfo);
   const [isOpen, setIsOpen] = useState(false);
   const { user, setRefreshToken, setAccessToken, setUser } = useAuthStore();
   const emptyCart = useShoppingCart((s) => s.emptyCart);
@@ -27,6 +25,7 @@ function UserInfoModal() {
       setIsOpen(status);
     }
   };
+
   const handleLogout = () => {
     handleProfileClick(false);
     setRefreshToken(null);
@@ -71,8 +70,8 @@ function UserInfoModal() {
         <button
           type="button"
           onClick={() => {
-            Router.push("/user");
             handleProfileClick(null);
+            !user && Router.push("/user");
           }}
           className="flex items-center justify-between w-full rounded-md px-2 py-1 dark:text-gray-50 hover:bg-gray-50 dark:hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-gray-500"
           id="options-menu"
