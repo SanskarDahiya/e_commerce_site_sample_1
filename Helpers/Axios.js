@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useAuthStore } from "@Store/auth";
 
 const axios = defaultAxios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: process.env.SERVER_URL || "http://localhost:3000",
 });
 // axios.defaults.baseURL = 'https://jsonplaceholder.typicode.com';
 // axios.defaults.headers.common['Authorization'] = 'AUTH TOKEN';
