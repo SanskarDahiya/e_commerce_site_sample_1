@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 
 interface SlideAnimationProps {
-  children?: React.ReactNode | (({ removeElem }: any) => React.ReactNode);
+  children?: React.ReactNode | (({ closeModal }: any) => React.ReactNode);
   onRemove?: (value?: any) => void;
   className?: string;
   timeout?: number;
@@ -56,7 +56,7 @@ function SlideAnimation(props: SlideAnimationProps) {
 
   const ChildComponet =
     typeof props.children === "function"
-      ? props.children({ removeElem: startRemoveTransitionProcess })
+      ? props.children({ closeModal: startRemoveTransitionProcess })
       : props.children;
 
   return (

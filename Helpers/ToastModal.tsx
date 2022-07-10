@@ -94,7 +94,7 @@ const SingleToastModal = ({ toast, index }: SingleToastModalProps) => {
         removeToast(toast._id);
       }}
     >
-      {({ removeElem }) => (
+      {({ closeModal }) => (
         <div
           className={
             "flex w-96 shadow-lg rounded-lg" + (index === 0 && " my-4")
@@ -105,7 +105,7 @@ const SingleToastModal = ({ toast, index }: SingleToastModalProps) => {
             <div>
               <div>{toast.message}</div>
             </div>
-            <button className="self-start" onClick={removeElem}>
+            <button className="self-start" onClick={closeModal}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="fill-current text-gray-700"
