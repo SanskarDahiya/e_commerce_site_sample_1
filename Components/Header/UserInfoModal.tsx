@@ -60,9 +60,11 @@ function UserInfoModal() {
   return (
     <div
       className="relative inline-block text-left"
-      onMouseEnter={(e: any) => {
-        e.preventDefault();
+      onMouseEnter={() => {
         // handleProfileClick(true);
+      }}
+      onMouseLeave={() => {
+        handleProfileClick(false);
       }}
     >
       <div>
@@ -89,17 +91,22 @@ function UserInfoModal() {
         </button>
       </div>
 
-      {isOpen && (
-        <div
-          className="origin-top-right absolute right-0 mt-2 w-56 rounded-md bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 z-10"
-          onMouseEnter={(e: any) => {
-            e.preventDefault();
-            handleProfileClick(true);
-          }}
-          onMouseLeave={() => {
-            handleProfileClick(false);
-          }}
-        >
+      <div
+        className={
+          "transition-all duration-200 ease-linear origin-top-right absolute right-0 py-2 w-56 rounded-md " +
+          (isOpen
+            ? "bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 z-[1] overflow-hidden "
+            : "") +
+          (isOpen ? "h-28" : "h-0")
+        }
+        onMouseEnter={() => {
+          // handleProfileClick(true);
+        }}
+        onMouseLeave={() => {
+          handleProfileClick(false);
+        }}
+      >
+        {isOpen && (
           <div
             className="py-1 divide-y divide-gray-100"
             role="menu"
@@ -136,8 +143,8 @@ function UserInfoModal() {
               </button>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
