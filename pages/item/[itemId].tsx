@@ -1,8 +1,13 @@
+import { ItemInterface } from "@Constants/Types";
 import { fetchitems } from "@Functions/fetchItems";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import React from "react";
 
-function SingleItem({ data }) {
+interface SingleItemProps {
+  data: ItemInterface;
+}
+
+function SingleItem({ data }: SingleItemProps) {
   return (
     <div>
       SingleItem
