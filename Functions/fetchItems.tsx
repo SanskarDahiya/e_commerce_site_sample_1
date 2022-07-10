@@ -1,8 +1,11 @@
 import Loading from "@Components/Loading";
+import { ItemInterface } from "@Constants/Types";
 import axios from "@Helpers/Axios";
 import { useItemStore } from "@Store/itemlist";
 import { useRef, useState } from "react";
 import useInfiniteScrollHook from "react-infinite-scroll-hook";
+
+const ItemCache = [] as ItemInterface[];
 
 interface DBParams {
   limit?: number;
@@ -20,12 +23,17 @@ const DEFAULT_LIMIT = 5;
 export const fetchitems = async (params?: DBParams): Promise<DBResponse> => {
   try {
     const { limit = DEFAULT_LIMIT, offset = 0 } = params || {};
+    const cacheItems = ItemCache.slice(offset, limit);
+    if (cacheItems && cacheItems.length === limit) {
+      return { data: cacheItems, hasNext: true };
+    }
     const { data } = await axios({
       url: "/api/items/",
       method: "POST",
       data: { limit, offset },
     });
     const items = data?.result || [];
+    // ItemCache.splice(offset, 0, ...items);
     return { data: items, hasNext: items.length === limit };
   } catch (err) {
     return { data: [], error: true };
@@ -38,11 +46,19 @@ export const useFetchItems = (initialLength?: number) => {
     addItems: state.addItems,
   }));
   const [loading, setLoading] = useState(false);
-  const scrollerRef = useRef({ hasNext: true, disabled: false });
+  const scrollerRef = useRef({
+    hasNext: true,
+    disabled: false,
+    loading: false,
+  });
 
   const onLoadMore = async () => {
     setLoading(true);
     try {
+      if (scrollerRef.current.loading) {
+        return;
+      }
+      scrollerRef.current.loading = true;
       const {
         data: newItems,
         hasNext,
@@ -52,6 +68,7 @@ export const useFetchItems = (initialLength?: number) => {
       });
       scrollerRef.current.hasNext = !!hasNext;
       scrollerRef.current.disabled = !!error;
+      scrollerRef.current.loading = false;
       addItems(newItems);
     } catch (err) {}
     setLoading(false);
@@ -62,7 +79,7 @@ export const useFetchItems = (initialLength?: number) => {
     hasNextPage: scrollerRef.current.hasNext,
     disabled: scrollerRef.current.disabled,
     onLoadMore: onLoadMore,
-    rootMargin: "0px 0px 400px 0px",
+    rootMargin: "0px 0px 600px 0px",
   });
 
   if (loading || scrollerRef.current.hasNext) {

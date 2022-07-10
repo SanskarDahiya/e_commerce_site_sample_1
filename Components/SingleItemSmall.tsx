@@ -70,19 +70,16 @@ function SingleItemSmall({ item, index }: MyProps) {
     favCss.push("text-red-600 hover:text-red-400");
   }
   return (
-    <div className="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
+    <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-6 flex flex-col hover:flex-grow hover:shadow-lg">
       <Link href={"/items/" + resourceId} passHref>
         <a>
-          <div className="hover:flex-grow hover:shadow-lg">
-            <Image
-              src={imageUrl}
-              alt="Image-Section"
-              quality={80}
-              height={400}
-              width={400}
-            />
-          </div>
-
+          <Image
+            src={imageUrl}
+            alt="Image-Section"
+            quality={80}
+            height={400}
+            width={400}
+          />
           <div className="pt-3 flex items-center justify-between">
             <p>{title}</p>
             {currentItemQuantity === 0 ? (
