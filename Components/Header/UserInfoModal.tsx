@@ -8,7 +8,7 @@ import { faSignOutAlt, faUser } from "@fortawesome/free-solid-svg-icons";
 import { useToastStore } from "@Store/toast_store";
 import { useShoppingCart } from "@Store/shoppingCart";
 
-function UserHeaderSection() {
+function UserInfoModal() {
   const { setInfo } = useToastStore((state) => ({
     setInfo: state.setInfo,
   }));
@@ -141,4 +141,4 @@ function UserHeaderSection() {
     </div>
   );
 }
-export default memo(UserHeaderSection);
+export default memo(UserInfoModal);

@@ -1,7 +1,7 @@
 import React, { Fragment, memo } from "react";
 import { useShoppingCart } from "@Store/shoppingCart";
 
-function CartHeaderSection() {
+function CartToggleButton() {
   const { cartItem, toogleCart } = useShoppingCart((s) => ({
     toogleCart: s.toogleCart,
     cartItem: s.cartItem,
@@ -37,4 +37,4 @@ function CartHeaderSection() {
     </Fragment>
   );
 }
-export default memo(CartHeaderSection);
+export default memo(CartToggleButton);

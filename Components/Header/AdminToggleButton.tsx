@@ -1,7 +1,7 @@
 import React from "react";
 import { useAuthStore } from "@Store/auth";
 
-function AdminHeaderSection() {
+function AdminToggleButton() {
   const { user, isEditEnable, toogleEdit } = useAuthStore((state) => ({
     user: state.user,
     isEditEnable: state.isEditEnable,
@@ -18,4 +18,4 @@ function AdminHeaderSection() {
   );
 }
 
-export default AdminHeaderSection;
+export default AdminToggleButton;

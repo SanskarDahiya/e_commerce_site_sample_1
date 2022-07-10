@@ -1,6 +1,6 @@
 import React from "react";
 import { useShoppingCart } from "@Store/shoppingCart";
-import SingleCartitem from "./SingleCartitem";
+import SingleCartitem from "./CartItemView";
 import { useToastStore } from "@Store/toast_store";
 
 function SideMenuCart() {

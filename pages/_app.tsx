@@ -12,7 +12,7 @@ import {
   ResponseInterface,
   UserInterface,
 } from "@Constants/Types";
-import ToastModal from "@Components/ToastModal";
+import ToastModal from "@Helpers/ToastModal";
 
 interface ResultInterface extends ResponseInterface {
   user?: UserInterface;

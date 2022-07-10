@@ -1,6 +1,6 @@
 import React, { memo } from "react";
-import StoreSection from "./StoreSection";
-import SingleItemSmall from "./SingleItemSmall";
+import StoreSection from "@Components/StoreSection";
+import ItemView from "@Components/ItemSection/ItemView";
 import { useItemStore } from "@Store/itemlist";
 import { ItemInterface } from "@Constants/Types";
 import { useFetchItems } from "@Functions/fetchItems";
@@ -28,7 +28,7 @@ function ItemList({ items: initialItems }: { items: ItemInterface[] }) {
       <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12">
         <StoreSection />
         {items.map((data, index) => (
-          <SingleItemSmall key={data._id} item={data} index={index} />
+          <ItemView key={data._id} item={data} index={index} />
         ))}
       </div>
       {LoadMoreElement}

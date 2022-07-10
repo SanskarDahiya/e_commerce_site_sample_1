@@ -1,4 +1,4 @@
-import Loading from "@Components/Loading";
+import Loading from "@Helpers/Loading";
 import { ItemInterface } from "@Constants/Types";
 import axios from "@Helpers/Axios";
 import { useItemStore } from "@Store/itemlist";

@@ -1,10 +1,10 @@
 import React, { memo } from "react";
 import Link from "next/link";
-import UserHeaderSection from "@Helpers/UserHeaderSection";
-import CartHeaderSection from "@Helpers/CartHeaderSection";
-import AdminHeaderSection from "@Helpers/AdminHeaderSection";
+import UserInfoModal from "@Components/Header/UserInfoModal";
+import CartToggleButton from "@Components/Header/CartToggleButton";
+import AdminToggleButton from "@Components/Header/AdminToggleButton";
 import { useAuthStore } from "@Store/auth";
-import Loading from "./Loading";
+import Loading from "@Helpers/Loading";
 
 const HEADER_DATA = {
   header: {
@@ -80,9 +80,9 @@ function Header() {
           id="nav-content"
         >
           {loading && <Loading />}
-          <AdminHeaderSection />
-          <UserHeaderSection />
-          <CartHeaderSection />
+          <AdminToggleButton />
+          <UserInfoModal />
+          <CartToggleButton />
         </div>
       </div>
     </nav>

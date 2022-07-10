@@ -4,8 +4,8 @@ import type {
   NextApiRequest,
   NextPage,
 } from "next";
-import Carousal from "@Components/Carousal";
-import ItemList from "@Components/ItemList";
+import Carousal from "@Components/CarousalSection/Carousal";
+import ItemList from "@Components/ItemSection/ItemList";
 import SideMenuCart from "@Components/SideCartSection/SideCart";
 import { ItemInterface } from "@Constants/Types";
 import { getAccessTokenSSR } from "@Auth/cookie";

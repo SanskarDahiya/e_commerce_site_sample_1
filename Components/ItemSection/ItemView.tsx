@@ -11,7 +11,7 @@ interface MyProps {
   index: number;
   item: ItemInterface;
 }
-function SingleItemSmall({ item, index }: MyProps) {
+function ItemView({ item, index }: MyProps) {
   const {
     _id: resourceId,
     imageUrl,
@@ -154,4 +154,4 @@ function SingleItemSmall({ item, index }: MyProps) {
   );
 }
 
-export default memo(SingleItemSmall);
+export default memo(ItemView);
