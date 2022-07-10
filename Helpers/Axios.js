@@ -1,11 +1,14 @@
-import axios from "axios";
+import defaultAxios from "axios";
 import { configure } from "axios-hooks";
 import { useEffect, useState } from "react";
 import { useAuthStore } from "@Store/auth";
 
-// const axios = defaultAxios.create({
-//   baseURL: process.env.SERVER_URL || "http://localhost:3000",
-// });
+const axiosConfig = {};
+
+if (process.env.SERVER_URL) {
+  axiosConfig.baseURL = process.env.SERVER_URL;
+}
+const axios = defaultAxios.create(axiosConfig);
 // axios.defaults.baseURL = 'https://jsonplaceholder.typicode.com';
 // axios.defaults.headers.common['Authorization'] = 'AUTH TOKEN';
 // axios.defaults.headers.post['Content-Type'] = 'application/json';

@@ -10,6 +10,9 @@ const ItemCache = [] as ItemInterface[];
 interface DBParams {
   limit?: number;
   offset?: number;
+  filter?: {
+    [key: string]: any;
+  };
 }
 
 interface DBResponse {
@@ -22,7 +25,7 @@ const DEFAULT_LIMIT = 5;
 
 export const fetchitems = async (params?: DBParams): Promise<DBResponse> => {
   try {
-    const { limit = DEFAULT_LIMIT, offset = 0 } = params || {};
+    const { limit = DEFAULT_LIMIT, offset = 0, filter } = params || {};
     const cacheItems = ItemCache.slice(offset, limit);
     if (cacheItems && cacheItems.length === limit) {
       return { data: cacheItems, hasNext: true };
@@ -30,7 +33,7 @@ export const fetchitems = async (params?: DBParams): Promise<DBResponse> => {
     const { data } = await axios({
       url: "/api/items/",
       method: "POST",
-      data: { limit, offset },
+      data: { limit, offset, filter },
     });
     const items = data?.result || [];
     // ItemCache.splice(offset, 0, ...items);

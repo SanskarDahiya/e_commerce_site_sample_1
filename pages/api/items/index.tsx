@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { ResponseInterface } from "@Constants/Types";
 import mongo from "@Database/mongo";
 import PostRequest, { handleErrorCode } from "@Server/PostRequest";
+import { ObjectId } from "mongodb";
 
 export default async function handler(
   req: NextApiRequest,
@@ -10,12 +11,20 @@ export default async function handler(
 ) {
   try {
     await PostRequest(req, res);
-    const { limit = 10, offset = 0 } = req.body;
+    const { limit = 10, offset = 0, filter } = req.body;
     const itemDB = await mongo().getItemsDB();
     if (!itemDB) {
       throw new Error();
     }
-    const itemsResult = await itemDB.find().skip(offset).limit(limit).toArray();
+    if (filter?._id && typeof filter._id === "string") {
+      filter._id = new ObjectId(filter._id);
+    }
+
+    const itemsResult = await itemDB
+      .find(filter)
+      .skip(offset)
+      .limit(limit)
+      .toArray();
     const items = itemsResult.map((data) => {
       // @ts-ignore
       data._id = data._id.toString();

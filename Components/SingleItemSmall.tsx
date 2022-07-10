@@ -71,7 +71,7 @@ function SingleItemSmall({ item, index }: MyProps) {
   }
   return (
     <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-6 flex flex-col hover:flex-grow hover:shadow-lg">
-      <Link href={"/items/" + resourceId} passHref>
+      <Link href={"/item/" + resourceId} passHref>
         <a>
           <Image
             src={imageUrl}
