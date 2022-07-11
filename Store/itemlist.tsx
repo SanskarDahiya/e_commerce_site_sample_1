@@ -4,25 +4,34 @@ import { ItemInterface } from "@Constants/Types";
 type IAuth = {
   items: ItemInterface[];
   replaceAll: (list: ItemInterface[]) => void;
-  getItem: (resourceId: string) => ItemInterface;
+  getItem: (resourceId: string, defaultValue?: ItemInterface) => ItemInterface;
   addItems: (value: ItemInterface[]) => void;
   addItem: (value: ItemInterface, index?: number) => void;
   removeItem: (value: ItemInterface, index?: number) => void;
-  replaceItem: (value: ItemInterface, index: number) => void;
+  replaceItem: (value: ItemInterface, index?: number | string) => void;
 };
 
 const itemStore = (set: SetState<IAuth>, get: GetState<IAuth>): IAuth => ({
   items: [],
-  getItem: (resourceId) => {
+  getItem: (resourceId, defaultValue) => {
     let itemValue = get().items.filter(({ _id }) => _id === resourceId);
-    return itemValue[0];
+    return itemValue[0] || defaultValue;
   },
   replaceAll: (list) => {
     set(() => ({ items: [...list] }));
   },
   replaceItem: (value, index) => {
     set(({ items }) => {
-      items[index] = { ...items[index], ...value };
+      if (typeof index === "number") {
+        items[index] = { ...items[index], ...value };
+      } else {
+        items = items.map((item) => {
+          if (item._id === index) {
+            item = { ...item, ...value };
+          }
+          return item;
+        });
+      }
       return { items };
     });
   },
