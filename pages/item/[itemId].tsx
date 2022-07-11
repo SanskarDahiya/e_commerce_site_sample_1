@@ -70,8 +70,8 @@ function SingleItem({ item }: SingleItemProps) {
   }
 
   return (
-    <div className="w-full p-6 flex ">
-      <div className="w-1/2">
+    <div className="w-full flex flex-col md:flex-row">
+      <div className="h-full w-full md:w-1/2 p-6 flex justify-center">
         <Image
           src={imageUrl}
           alt="Image-Section"
@@ -80,11 +80,11 @@ function SingleItem({ item }: SingleItemProps) {
           width={400}
         />
       </div>
-      <div className="w-1/2 flex flex-col">
+      <div className="w-full md:w-1/2 p-6 flex flex-col justify-center">
         <p className="font-bold	text-xl	">{title}</p>
         <div className="py-3">
           <span className="font-bold">Description</span>
-          <p>description</p>
+          <p>{description}</p>
         </div>
         <div className="pt-3 w-full flex flex-row">
           <p className="pt-1 w-1/2 text-gray-900">{price}</p>
