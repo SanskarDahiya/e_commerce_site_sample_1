@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useShoppingCart } from "@Store/shoppingCart";
 import { useItemStore } from "@Store/itemlist";
 import Image from "next/image";
+import { ItemInterface } from "@Constants/Types";
+import Loading from "@Helpers/Loading";
+import { fetchitems } from "@Functions/fetchItems";
 
 interface MyProps {
   data: any;
@@ -10,19 +13,33 @@ interface MyProps {
 function SingleCartitem({ data }: MyProps) {
   const getItem = useItemStore((state) => state.getItem);
 
-  const {
-    getItemQuantity,
-    increaseCartQuantity,
-    decreaseCartQuantity,
-    removeFromCart,
-  } = useShoppingCart();
+  const { increaseCartQuantity, decreaseCartQuantity, removeFromCart } =
+    useShoppingCart();
   const { _id: resourceId, price: bookedPrice, qty } = data || {};
-  const fetchItemDetails = () => {
-    const ItemData = getItem(resourceId);
-    // ItemData.actualPrice += 1;
-    return ItemData;
-  };
-  const { title, actualPrice, imageUrl } = fetchItemDetails();
+  const [itemInfo, setItemInfo] = useState<ItemInterface>();
+  useEffect(() => {
+    let mounted = { current: true };
+    const fetchItemDetails = async () => {
+      const cacheItemInfo = getItem(resourceId);
+      if (cacheItemInfo) {
+        setItemInfo(cacheItemInfo);
+        return;
+      }
+      const itemResult = await fetchitems({ filter: { _id: resourceId } });
+      const itemData = itemResult.data[0];
+      if (!itemData) {
+        removeFromCart(resourceId);
+      } else if (mounted.current) {
+        setItemInfo(itemResult.data[0]);
+      }
+    };
+    fetchItemDetails();
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
+
+  const { title, actualPrice, imageUrl } = itemInfo || {};
 
   const addQuantity = (e: any) => {
     e.preventDefault();
@@ -37,8 +54,15 @@ function SingleCartitem({ data }: MyProps) {
     removeFromCart(data._id);
   };
 
+  if (!itemInfo) {
+    return (
+      <div className="py-6 my-4 relative">
+        <Loading text="Fetching Item" className="h-10" />
+      </div>
+    );
+  }
   return (
-    <div className="py-6 flex">
+    <div className="py-6 flex relative">
       <div className="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden">
         <Image
           src={imageUrl}

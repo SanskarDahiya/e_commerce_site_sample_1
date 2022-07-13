@@ -96,7 +96,7 @@ function UserInfoModal() {
           (isOpen
             ? "bg-white ring-1 ring-black ring-opacity-5 z-[1] overflow-hidden "
             : "") +
-          (isOpen ? "h-28" : "h-0")
+          (isOpen ? "h-[6.5rem]" : "h-0")
         }
         onMouseEnter={() => {
           // handleProfileClick(true);
