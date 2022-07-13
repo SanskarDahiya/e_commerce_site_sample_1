@@ -73,7 +73,7 @@ function UserInfoModal() {
             handleProfileClick(null);
             !user && Router.push("/user");
           }}
-          className="flex items-center justify-between w-full rounded-md px-2 py-1 dark:text-gray-50 hover:bg-gray-50 dark:hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-gray-500"
+          className="flex items-center justify-between w-full rounded-md px-2 py-1 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-gray-500"
           id="options-menu"
         >
           {user.name}
@@ -94,7 +94,7 @@ function UserInfoModal() {
         className={
           "transition-all duration-200 ease-linear origin-top-right absolute right-0 py-2 w-56 rounded-md " +
           (isOpen
-            ? "bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 z-[1] overflow-hidden "
+            ? "bg-white ring-1 ring-black ring-opacity-5 z-[1] overflow-hidden "
             : "") +
           (isOpen ? "h-28" : "h-0")
         }
@@ -114,7 +114,7 @@ function UserInfoModal() {
           >
             <div className="cursor-pointer">
               <Link href="/profile">
-                <div className="flex items-center px-4 py-2  text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white dark:hover:bg-gray-600">
+                <div className="flex items-center px-4 py-2  text-gray-700 hover:bg-gray-100 hover:text-gray-900">
                   <FontAwesomeIcon
                     icon={faUser}
                     style={{ marginRight: "10px" }}
@@ -129,7 +129,7 @@ function UserInfoModal() {
 
             <div className="cursor-pointer">
               <button onClick={handleLogout} className="w-full">
-                <div className="flex items-center px-4 py-2  text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white dark:hover:bg-gray-600">
+                <div className="flex items-center px-4 py-2  text-gray-700 hover:bg-gray-100 hover:text-gray-900">
                   <FontAwesomeIcon
                     icon={faSignOutAlt}
                     style={{ marginRight: "10px" }}
