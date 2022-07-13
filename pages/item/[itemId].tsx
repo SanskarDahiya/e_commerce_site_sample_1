@@ -6,7 +6,7 @@ import { useItemStore } from "@Store/itemlist";
 import { useShoppingCart } from "@Store/shoppingCart";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import Image from "next/image";
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useCallback, useEffect, useState } from "react";
 
 const updateDb = async (id: string, changes: any) => {
   await axios({
@@ -19,42 +19,79 @@ const updateDb = async (id: string, changes: any) => {
   });
 };
 
+interface EditCompoentProps {
+  title: string;
+  field: string;
+  value: string | number;
+  isNumber?: boolean;
+}
 interface SingleItemProps {
   item: ItemInterface;
 }
 
-function SingleItem({ item }: SingleItemProps) {
-  const { _id: resourceId } = item;
+function SingleItem({ item: defaultItem }: SingleItemProps) {
+  const { _id: resourceId } = defaultItem;
+  const [item, setItem] = useState(defaultItem);
   const [isEditMode, setEditMode] = useState(false);
 
   const { user, isAdmin } = useAuthStore((s) => ({
     user: s.user,
     isAdmin: s.isEditEnable || true,
   }));
+
   const userId = user?._id?.toString() || "";
   const { replaceItem, getItem } = useItemStore((state) => ({
     replaceItem: state.replaceItem,
     getItem: state.getItem,
   }));
-  const { imageUrl, price, actualPrice, title, favourates, description } =
-    getItem(resourceId, item);
+
+  useEffect(() => {
+    const itemdata = getItem(resourceId);
+    if (itemdata) {
+      setItem(itemdata);
+    }
+  }, []);
+
+  const { imageUrl, price, title, description } = item;
 
   const toggleEdit = () => isAdmin && setEditMode((e) => !e);
 
   const updateInfo = (field: string, value: any) => {
-    const itemInfo = getItem(resourceId, item);
     // @ts-ignore
-    const currValue = itemInfo[field];
+    const currValue = item[field];
     if (value !== currValue) {
       const changes = {
         [field]: value,
       } as ItemInterface;
       replaceItem(changes, resourceId);
+      setItem({ ...item, ...changes });
       updateDb(resourceId, {
         $set: changes,
       });
     }
   };
+
+  const EditComponent = useCallback(
+    ({ title, value, field, isNumber }: EditCompoentProps) => {
+      return (
+        <div className="flex w-full justify-center items-center">
+          <div className="pr-2 py-2 w-28 self-center">{title}</div>
+          <input
+            defaultValue={value}
+            onBlur={(e) => {
+              let newValue = e.target.value as string | number;
+              if (isNumber) {
+                newValue = +newValue;
+              }
+              updateInfo(field, newValue);
+            }}
+            className="flex-grow w-full border-b-2 border-black bg-transparent m-0 p-0"
+          />
+        </div>
+      );
+    },
+    [resourceId]
+  );
 
   return (
     <div className="w-full flex flex-col md:flex-row relative">
@@ -78,7 +115,13 @@ function SingleItem({ item }: SingleItemProps) {
         />
       </div>
       <div className="w-full md:w-1/2 p-6 flex flex-col justify-center">
-        <p className="font-bold	text-xl	">{title}</p>
+        <div className="font-bold	text-xl	">
+          {isEditMode ? (
+            <EditComponent title="Title:" value={title} field={"title"} />
+          ) : (
+            title
+          )}
+        </div>
         <div className="py-3">
           <span className="font-bold">Description</span>
           <p>
@@ -97,12 +140,34 @@ function SingleItem({ item }: SingleItemProps) {
             )}
           </p>
         </div>
-        <BottomSection
-          price={price}
-          userId={userId}
-          item={item}
-          replaceItem={replaceItem}
-        />
+        {isEditMode ? (
+          <div className="flex flex-col ">
+            <EditComponent
+              title="Price To Display:"
+              value={price}
+              field={"price"}
+            />
+            <EditComponent
+              title="Actual Price:"
+              value={item.actualPrice}
+              field={"actualPrice"}
+              isNumber
+            />
+            <EditComponent
+              title="Quantity:"
+              value={item.quantity}
+              field={"quantity"}
+              isNumber
+            />
+          </div>
+        ) : (
+          <BottomSection
+            price={price}
+            userId={userId}
+            item={item}
+            replaceItem={replaceItem}
+          />
+        )}
       </div>
     </div>
   );
