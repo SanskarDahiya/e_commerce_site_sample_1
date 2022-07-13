@@ -46,7 +46,7 @@ export const generateAccessToken = (user: UserInterface) => {
 };
 
 export const generateRefreshToken = (user: UserInterface) => {
-  const options = { expiresIn: "5m" };
+  const options = { expiresIn: "10d" };
   const accessTokenPayload: RefreshTokenInterface = {
     _id: user._id.toString(),
     isAdmin: user.isAdmin,

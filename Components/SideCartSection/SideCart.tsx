@@ -66,9 +66,9 @@ function SideMenuCart() {
         }}
       >
         <div className="absolute inset-0 overflow-hidden">
-          <div className="fixed inset-y-0 right-0 pl-10 max-w-full flex">
+          <div className="fixed inset-y-0 right-0 pl-10 w-full xs:w-auto xs:max-w-full flex">
             <SlideAnimation
-              className="flex"
+              className="flex w-full"
               inTransition="translate-x-[100%]"
               outTransition="translate-x-[0]"
               onRemove={() => {
@@ -79,7 +79,7 @@ function SideMenuCart() {
                 transitionRef.current.closeModal = closeModal;
                 return (
                   <div
-                    className="w-screen max-w-md"
+                    className="max-w-md w-full xs:w-screen"
                     // Prevent Closing Modal on cliking on black space
                     onClick={(e) => e.stopPropagation()}
                   >
