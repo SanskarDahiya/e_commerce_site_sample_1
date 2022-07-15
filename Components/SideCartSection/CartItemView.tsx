@@ -39,7 +39,7 @@ function SingleCartitem({ data }: MyProps) {
     };
   }, []);
 
-  const { title, actualPrice, imageUrl } = itemInfo || {};
+  const { title, actualPrice, image } = itemInfo || {};
 
   const addQuantity = (e: any) => {
     e.preventDefault();
@@ -64,19 +64,21 @@ function SingleCartitem({ data }: MyProps) {
   return (
     <div className="py-6 flex relative">
       <div className="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden">
-        <Image
-          src={imageUrl}
-          quality={80}
-          height={400}
-          width={400}
-          alt="Product Image"
-          style={{
-            height: "100%",
-            width: "100%",
-            objectFit: "cover",
-            objectPosition: "center",
-          }}
-        />
+        {image?.url && (
+          <Image
+            src={image.url}
+            quality={80}
+            height={400}
+            width={400}
+            alt="Product Image"
+            style={{
+              height: "100%",
+              width: "100%",
+              objectFit: "cover",
+              objectPosition: "center",
+            }}
+          />
+        )}
       </div>
       <div className="ml-4 flex-1 flex flex-col">
         <div className="flex justify-between text-base font-medium text-gray-900">

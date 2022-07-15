@@ -37,14 +37,20 @@ export interface UserInterface extends MandatoryFields {
   password: string;
   isAdmin: boolean;
 }
-
+interface ImageInfo {
+  url: string;
+  alt?: string;
+  height?: number;
+  width?: number;
+}
 export interface ItemInterface extends MandatoryFields {
   title: string;
-  imageUrl: string;
+  image: ImageInfo;
   price: string;
   actualPrice: number;
   quantity: number;
   description: string;
+  extraImages?: ImageInfo[];
   favourates?: string[];
 }
 

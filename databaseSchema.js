@@ -12,7 +12,10 @@ const UserSchema = new Schema({
 
 const PostSchema = new Schema({
   title: String,
-  imageUrl: String,
+  image: {
+    alt: String,
+    url: String,
+  },
   price: String,
   actualPrice: Number,
   quantity: Number,

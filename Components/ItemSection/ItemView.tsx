@@ -14,7 +14,7 @@ interface MyProps {
 function ItemView({ item, index }: MyProps) {
   const {
     _id: resourceId,
-    imageUrl,
+    image,
     price,
     actualPrice,
     title,
@@ -74,7 +74,7 @@ function ItemView({ item, index }: MyProps) {
       <Link href={"/item/" + resourceId} passHref>
         <a>
           <Image
-            src={imageUrl}
+            src={image.url}
             alt="Image-Section"
             quality={80}
             height={400}

@@ -46,13 +46,23 @@ function SingleItem({ item: defaultItem }: SingleItemProps) {
   }));
 
   useEffect(() => {
-    const itemdata = getItem(resourceId);
+    const itemdata = getItem(resourceId, defaultItem);
     if (itemdata) {
-      setItem(itemdata);
+      itemdata.extraImages = [
+        { url: itemdata.image.url + "#230" },
+        { url: itemdata.image.url + "#221" },
+        { url: itemdata.image.url + "#212" },
+        { url: itemdata.image.url + "#203" },
+        { url: itemdata.image.url + "#194" },
+        { url: itemdata.image.url + "#185" },
+        { url: itemdata.image.url + "#176" },
+        { url: itemdata.image.url + "#237" },
+      ];
+      setItem({ ...itemdata });
     }
-  }, []);
+  }, [defaultItem]);
 
-  const { imageUrl, price, title, description } = item;
+  const { image, price, title, description } = item;
 
   const toggleEdit = () => isAdmin && setEditMode((e) => !e);
 
@@ -100,14 +110,14 @@ function SingleItem({ item: defaultItem }: SingleItemProps) {
           {isEditMode ? "Done" : "Edit"}
         </div>
       )}
-      <div className="h-full w-full md:w-1/2 p-6 flex justify-center">
+      <div className="h-full w-full md:w-1/2 p-6 flex justify-center transition-all duration-100 ease-in">
         <Image
           onClick={() => {
             if (!isEditMode) return;
             // we will change the image
             console.log("Change Image");
           }}
-          src={imageUrl}
+          src={image.url}
           alt="Image-Section"
           quality={80}
           height={400}
@@ -166,6 +176,7 @@ function SingleItem({ item: defaultItem }: SingleItemProps) {
             userId={userId}
             item={item}
             replaceItem={replaceItem}
+            setItem={setItem}
           />
         )}
       </div>
@@ -180,14 +191,21 @@ interface BottomSectionProps {
   userId: string;
   item: ItemInterface;
   replaceItem: (value: ItemInterface, index?: number | string) => void;
+  setItem: (value: ItemInterface) => void;
 }
 const BottomSection = ({
   price,
   userId,
   item,
   replaceItem,
+  setItem,
 }: BottomSectionProps) => {
-  const { _id: resourceId, favourates = [], actualPrice } = item || {};
+  const {
+    _id: resourceId,
+    favourates = [],
+    actualPrice,
+    extraImages = [],
+  } = item || {};
   const {
     getItemQuantity,
     increaseCartQuantity,
@@ -306,6 +324,37 @@ const BottomSection = ({
           </>
         )}
       </div>
+      <div className="pt-3 w-full flex flex-wrap">
+        {extraImages.map((image, index) => {
+          const { url, alt = `Image-${index}` } = image;
+          const isActive = item?.image?.url === url;
+
+          return (
+            <div
+              key={index}
+              className={
+                "transition-all duration-100 ease-in p-2 border-gray-200 w-24 h-24 " +
+                (isActive ? "border-t-2 shadow-xl" : "border-0 shadow-none")
+              }
+              onClick={() => {
+                try {
+                  item.image = image;
+                  setItem({ ...item });
+                } catch (err) {}
+              }}
+            >
+              <Image
+                src={url}
+                alt={alt}
+                width="100%"
+                height="100%"
+                layout="responsive"
+                objectFit="contain"
+              />
+            </div>
+          );
+        })}
+      </div>
     </Fragment>
   );
 };
@@ -317,7 +366,7 @@ export async function getServerSideProps(
     const { query } = context;
     const itemResult = await fetchitems({ filter: { _id: query.itemId } });
     return {
-      props: { item: itemResult.data[0] },
+      props: { item: itemResult.data[0] || { _id: query.itemId } },
     };
   } catch (err) {
     return { notFound: true };
