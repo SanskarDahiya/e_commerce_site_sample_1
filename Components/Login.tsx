@@ -59,7 +59,7 @@ const Login = () => {
     } catch (er) {}
   };
 
-  const onForgetPasswordSubmit = (cb) => {
+  const onForgetPasswordSubmit = (cb: () => void) => {
     return async (e: FormEvent<HTMLFormElement>) => {
       try {
         e.preventDefault();
