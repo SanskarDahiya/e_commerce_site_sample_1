@@ -39,6 +39,9 @@ const authStore = (set: SetState<IAuth>, get: GetState<IAuth>): IAuth => ({
   setAccessToken: (token) => {
     if (token == null) {
       localStorage.removeItem("access-token");
+      Cookies.set("token", "", {
+        expires: new Date(0),
+      });
     } else {
       localStorage.setItem("access-token", token);
       const { result, error } = verifyToken(token) as any;
