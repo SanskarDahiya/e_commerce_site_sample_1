@@ -1,5 +1,5 @@
 import React from "react";
-import { version } from "package.json";
+const version = process.env.version || new Date().getTime();
 function Footer() {
   return (
     <footer className="relative container mx-auto bg-white py-8 border-t border-gray-400">

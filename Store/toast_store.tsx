@@ -55,10 +55,10 @@ const toastStore = (set: SetState<IToast>, get: GetState<IToast>): IToast => ({
   },
   removeToast: (toastId) => {
     set(({ toasts }) => {
-      // toasts = toasts.filter(
-      //   ({ timeout, _createdOn }) =>
-      //     _createdOn.getTime() + timeout > new Date().getTime()
-      // );
+      toasts = toasts.filter(
+        ({ timeout, _createdOn }) =>
+          _createdOn.getTime() + timeout > new Date().getTime()
+      );
       if (toastId) {
         toasts = toasts.filter((toast) => toast._id !== toastId);
       }
