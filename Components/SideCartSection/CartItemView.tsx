@@ -43,7 +43,7 @@ function SingleCartitem({ data }: MyProps) {
 
   const addQuantity = (e: any) => {
     e.preventDefault();
-    increaseCartQuantity(resourceId, actualPrice);
+    actualPrice && increaseCartQuantity(resourceId, actualPrice);
   };
   const removeQuantity = (e: any) => {
     e.preventDefault();
