@@ -36,6 +36,8 @@ export interface UserInterface extends MandatoryFields {
   email: string;
   password: string;
   isAdmin: boolean;
+  otpHash?: string;
+  verification_pending?: boolean;
 }
 export interface ImageInfo {
   url: string;

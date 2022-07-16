@@ -144,3 +144,12 @@ a {
 .rotate_y_180 {
   transform: rotateY(180deg);
 }
+
+.back-visible {
+  -webkit-backface-visibility: visible;
+  backface-visibility: visible;
+}
+.back-invisible {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}

@@ -31,6 +31,10 @@ export default async function handler(
       throw new Error("[Login] Invalid Credentials");
     }
 
+    if (user.verification_pending) {
+      throw new Error("[Login] Please Verify Your Account. Check Your Mail");
+    }
+
     /* Check and compare password */
     const isMatch = await bcrypt.compare(password, user.password);
 

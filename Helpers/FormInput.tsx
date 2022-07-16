@@ -6,10 +6,10 @@ import {
 
 interface IProps {
   styles?: string;
-  type: string;
+  type?: string;
   placeholder: string;
-  value: string;
-  handleChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  value?: string;
+  handleChange?: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
 const FormInput = ({
