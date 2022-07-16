@@ -11,7 +11,13 @@ import { useShoppingCart } from "@Store/shoppingCart";
 function UserInfoModal() {
   const setInfo = useToastStore((state) => state.setInfo);
   const [isOpen, setIsOpen] = useState(false);
-  const { user, setRefreshToken, setAccessToken, setUser } = useAuthStore();
+  const {
+    user,
+    setRefreshToken,
+    setAccessToken,
+    setUser,
+    isEditEnable: isAdmin,
+  } = useAuthStore((s) => s);
   const emptyCart = useShoppingCart((s) => s.emptyCart);
 
   const handleProfileClick = (status: boolean | null) => {
@@ -95,8 +101,7 @@ function UserInfoModal() {
           "transition-all duration-200 ease-linear origin-top-right absolute right-0 py-2 w-56 rounded-md " +
           (isOpen
             ? "bg-white ring-1 ring-black ring-opacity-5 z-[1] overflow-hidden "
-            : "") +
-          (isOpen ? "h-[6.5rem]" : "h-0")
+            : "")
         }
         onMouseEnter={() => {
           // handleProfileClick(true);
@@ -107,7 +112,7 @@ function UserInfoModal() {
       >
         {isOpen && (
           <div
-            className="py-1 divide-y divide-gray-100"
+            className=""
             role="menu"
             aria-orientation="vertical"
             aria-labelledby="options-menu"
@@ -126,7 +131,23 @@ function UserInfoModal() {
                 </div>
               </Link>
             </div>
-
+            {isAdmin && (
+              <>
+                <div className="cursor-pointer">
+                  <Link href="/item/new-item">
+                    <div className="flex items-center px-4 py-2  text-gray-700 hover:bg-gray-100 hover:text-gray-900">
+                      <FontAwesomeIcon
+                        icon={faUser}
+                        style={{ marginRight: "10px" }}
+                      />
+                      <span className="flex flex-col">
+                        <span>Add New Item</span>
+                      </span>
+                    </div>
+                  </Link>
+                </div>
+              </>
+            )}
             <div className="cursor-pointer">
               <button onClick={handleLogout} className="w-full">
                 <div className="flex items-center px-4 py-2  text-gray-700 hover:bg-gray-100 hover:text-gray-900">

@@ -45,6 +45,14 @@ export default async function handler(
     }
 
     const db = await mongo().getDatabase();
+    const findItem = await db
+      ?.collection(tableName)
+      .findOne({ _id: new ObjectId(id) });
+    if (!findItem?._createdOn) {
+      changes["$set"] = { ...changes["$set"], _createdOn: new Date() };
+    }
+    changes["$set"] = { ...changes["$set"], _updatedOn: new Date() };
+
     await db
       ?.collection(tableName)
       .findOneAndUpdate({ _id: new ObjectId(id) }, changes, {

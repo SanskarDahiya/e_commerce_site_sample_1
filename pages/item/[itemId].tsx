@@ -4,6 +4,7 @@ import axios from "@Helpers/Axios";
 import { useAuthStore } from "@Store/auth";
 import { useItemStore } from "@Store/itemlist";
 import { useShoppingCart } from "@Store/shoppingCart";
+import { ObjectId } from "mongodb";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import Image from "next/image";
 import React, {
@@ -34,6 +35,7 @@ interface EditCompoentProps {
 }
 interface SingleItemProps {
   item: ItemInterface;
+  isNewItem?: boolean;
 }
 
 interface AdminImageDisplayProps {
@@ -43,6 +45,8 @@ interface AdminImageDisplayProps {
   item: ItemInterface;
   setItem: (item: ItemInterface) => any;
 }
+const emptyImage = {} as ImageInfo;
+
 const AdminImageDisplay = (props: AdminImageDisplayProps) => {
   const { index, image, item, setItem, addNewImage } = props;
   const uploadImageRef = useRef<HTMLInputElement>(null);
@@ -56,6 +60,10 @@ const AdminImageDisplay = (props: AdminImageDisplayProps) => {
     if (changeImageRef.current?.validity?.valid) {
       const newUrl = changeImageRef.current.value.trim();
       if (addNewImage) {
+        if (!image?.url) {
+          image.url = newUrl;
+          item.image = image;
+        }
         extraImages.push({ url: newUrl });
       } else {
         extraImages[index].url = newUrl;
@@ -65,6 +73,7 @@ const AdminImageDisplay = (props: AdminImageDisplayProps) => {
           item.image = image;
         }
       }
+
       setItem({ ...item });
       updateDb(resourceId, { $set: { extraImages, image } });
       changeToInput(false);
@@ -90,6 +99,10 @@ const AdminImageDisplay = (props: AdminImageDisplayProps) => {
                 const newUrl = res.data.result.path;
 
                 if (addNewImage) {
+                  if (!image?.url) {
+                    image.url = newUrl;
+                    item.image = image;
+                  }
                   extraImages.push({ url: newUrl });
                 } else {
                   extraImages[index].url = newUrl;
@@ -100,7 +113,7 @@ const AdminImageDisplay = (props: AdminImageDisplayProps) => {
                   }
                 }
                 setItem({ ...item });
-                // updateDb(resourceId, { $set: { extraImages, image } });
+                updateDb(resourceId, { $set: { extraImages, image } });
                 changeToInput(false);
                 setChangeModal(false);
 
@@ -235,10 +248,10 @@ const AdminImageDisplay = (props: AdminImageDisplayProps) => {
     </div>
   );
 };
-function SingleItem({ item: defaultItem }: SingleItemProps) {
+function SingleItem({ item: defaultItem, isNewItem }: SingleItemProps) {
   const { _id: resourceId } = defaultItem;
   const [item, setItem] = useState(defaultItem);
-  const [isEditMode, setEditMode] = useState(false);
+  const [isEditMode, setEditMode] = useState(!!isNewItem);
 
   const { user, isAdmin } = useAuthStore((s) => ({
     user: s.user,
@@ -252,20 +265,29 @@ function SingleItem({ item: defaultItem }: SingleItemProps) {
   }));
 
   useEffect(() => {
+    if (isNewItem) {
+      return;
+    }
     const itemdata = getItem(resourceId, defaultItem);
     if (itemdata) {
       if (itemdata.extraImages?.length) {
-        if (itemdata.image.url !== itemdata.extraImages[0].url) {
+        if (itemdata.image?.url !== itemdata.extraImages[0]?.url) {
           itemdata.extraImages.unshift(itemdata.image);
         }
-      } else {
+      } else if (itemdata.image) {
         itemdata.extraImages = [itemdata.image];
       }
       setItem({ ...itemdata });
     }
-  }, [defaultItem]);
+  }, [defaultItem, isNewItem]);
 
-  const { image, price, title, description, extraImages = [] } = item;
+  const {
+    image = emptyImage,
+    price,
+    title,
+    description,
+    extraImages = [],
+  } = item;
 
   const toggleEdit = () => isAdmin && setEditMode((e) => !e);
 
@@ -337,7 +359,7 @@ function SingleItem({ item: defaultItem }: SingleItemProps) {
         </div>
       ) : (
         <div className="h-full w-full md:w-1/2 p-6 flex transition-all duration-100 ease-in">
-          {image?.url && (
+          {image?.url ? (
             // PRIMARY IMAGE
             <Image
               src={image.url}
@@ -346,6 +368,8 @@ function SingleItem({ item: defaultItem }: SingleItemProps) {
               height={400}
               width={400}
             />
+          ) : (
+            <>No Image Present</>
           )}
         </div>
       )}
@@ -376,7 +400,7 @@ function SingleItem({ item: defaultItem }: SingleItemProps) {
                 rows={5}
               />
             ) : (
-              description
+              description || "No Description Available !!"
             )}
           </p>
         </div>
@@ -474,7 +498,9 @@ const BottomSection = ({
   return (
     <Fragment>
       <div className="pt-3 w-full flex flex-row">
-        <p className="pt-1 w-1/2 text-gray-900">{price}</p>
+        <p className="pt-1 w-1/2 text-gray-900">
+          {price || "No Price Present"}
+        </p>
         <div>
           <svg
             onClick={(e) => {
@@ -523,7 +549,7 @@ const BottomSection = ({
         ) : (
           <>
             <div className="w-1/2 flex">
-              <div className="flex justify-center align-middle bg-transparent text-blue-700 font-semibold py-2 px-4 border border-grey-500 hover:rounded transition-all duration-100 ease-in">
+              <div className="cursor-pointer flex justify-center align-middle bg-transparent text-blue-700 font-semibold py-2 px-4 border border-grey-500 hover:rounded transition-all duration-100 ease-in">
                 <svg
                   onClick={removeQuantity}
                   className="fill-current text-gray-600 w-3"
@@ -535,7 +561,7 @@ const BottomSection = ({
               <div className="mx-2 text-center w-5 flex justify-center align-middle font-semibold py-2 px-4 ">
                 {currentItemQuantity}
               </div>
-              <div className="flex justify-center align-middle bg-transparent text-blue-700 font-semibold py-2 px-4 border border-grey-500 hover:rounded transition-all duration-100 ease-in">
+              <div className="cursor-pointer flex justify-center align-middle bg-transparent text-blue-700 font-semibold py-2 px-4 border border-grey-500 hover:rounded transition-all duration-100 ease-in">
                 <svg
                   onClick={addQuantity}
                   className="fill-current text-gray-600 w-3"
@@ -547,7 +573,7 @@ const BottomSection = ({
             </div>
             <div
               onClick={removeItem}
-              className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+              className="cursor-pointer bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
             >
               Delete
             </div>
@@ -594,6 +620,17 @@ export async function getServerSideProps(
 ): Promise<GetServerSidePropsResult<any>> {
   try {
     const { query } = context;
+    if (query.itemId === "new-item") {
+      const _id = new ObjectId();
+      return {
+        props: {
+          item: {
+            _id: _id.toString(),
+          },
+          isNewItem: true,
+        },
+      };
+    }
     const itemResult = await fetchitems({ filter: { _id: query.itemId } });
     return {
       props: { item: itemResult.data[0] || { _id: query.itemId } },

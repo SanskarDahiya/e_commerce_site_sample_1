@@ -73,13 +73,17 @@ function ItemView({ item, index }: MyProps) {
     <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-6 flex flex-col hover:flex-grow hover:shadow-lg">
       <Link href={"/item/" + resourceId} passHref>
         <a>
-          <Image
-            src={image.url}
-            alt="Image-Section"
-            quality={80}
-            height={400}
-            width={400}
-          />
+          {image?.url ? (
+            <Image
+              src={image.url}
+              alt="Image-Section"
+              quality={80}
+              height={400}
+              width={400}
+            />
+          ) : (
+            "No Image Found"
+          )}
           <div className="pt-3 flex items-center justify-between">
             <p>{title}</p>
             {currentItemQuantity === 0 ? (
