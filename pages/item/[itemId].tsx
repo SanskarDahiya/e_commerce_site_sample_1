@@ -78,8 +78,37 @@ const AdminImageDisplay = (props: AdminImageDisplayProps) => {
           ref={uploadImageRef}
           type="file"
           className="hidden"
-          onChange={() => {
-            console.log("File Change");
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            const file = e.target.files && e.target.files[0];
+            console.log("File Change", file);
+            if (!file) return;
+            const formdata = new FormData();
+            formdata.append("file", file);
+            axios
+              .post("/api/upload", formdata, {})
+              .then((res) => {
+                const newUrl = res.data.result.path;
+
+                if (addNewImage) {
+                  extraImages.push({ url: newUrl });
+                } else {
+                  extraImages[index].url = newUrl;
+                  item.extraImages = extraImages;
+                  if (index === 0) {
+                    image.url = newUrl;
+                    item.image = image;
+                  }
+                }
+                setItem({ ...item });
+                // updateDb(resourceId, { $set: { extraImages, image } });
+                changeToInput(false);
+                setChangeModal(false);
+
+                console.info(newUrl);
+              })
+              .catch((err) => {
+                console.warn(err);
+              });
           }}
         />
         <button
@@ -309,6 +338,7 @@ function SingleItem({ item: defaultItem }: SingleItemProps) {
       ) : (
         <div className="h-full w-full md:w-1/2 p-6 flex transition-all duration-100 ease-in">
           {image?.url && (
+            // PRIMARY IMAGE
             <Image
               src={image.url}
               alt="Image-Section"

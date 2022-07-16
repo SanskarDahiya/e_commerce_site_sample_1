@@ -99,7 +99,9 @@ const Login = () => {
                   minLength={5}
                 />
                 {isLoading ? (
-                  <div id="loading" className="self-center mb-3" />
+                  <div className="cursor-disabled w-full flex justify-center">
+                    <div id="loading" className="w-full self-center mb-3" />
+                  </div>
                 ) : (
                   <button
                     className="font-bold rounded-md px-3 py-2 text-base cursor-pointer  focus:outline-none bg-gray-800 text-white w-full mb-3"
@@ -145,7 +147,9 @@ const Login = () => {
                 />
 
                 {isLoading ? (
-                  <div id="loading" className="self-center mb-3" />
+                  <div className="cursor-disabled w-full flex justify-center">
+                    <div id="loading" className="w-full self-center mb-3" />
+                  </div>
                 ) : (
                   <button
                     className="font-bold rounded-md px-3 py-2 text-base cursor-pointer  focus:outline-none bg-gray-800 text-white w-full mb-3"
