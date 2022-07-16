@@ -5,6 +5,7 @@ import Router from "next/router";
 import FormInput from "@Helpers/FormInput";
 import { useAuthStore } from "@Store/auth";
 import { useToastStore } from "@Store/toast_store";
+import FlipAnimation from "@Helpers/FlipAnimation";
 
 const Login = () => {
   const { setSuccess, setError } = useToastStore((state) => ({
@@ -58,57 +59,124 @@ const Login = () => {
     } catch (er) {}
   };
 
+  const onForgetPasswordSubmit = (cb) => {
+    return async (e: FormEvent<HTMLFormElement>) => {
+      try {
+        e.preventDefault();
+        // await refetch({ data: { ...data, resendotp: true } });
+        cb();
+      } catch (er) {}
+    };
+  };
+
   return (
     <div className="container mx-auto px-4">
-      <form
-        className="bg-white rounded-lg overflow-hidden shadow-2xl p-5  my-16 md:w-1/2 lg:w-1/3 mx-auto flex flex-col"
-        onSubmit={onSubmit}
-      >
+      <div className="bg-white rounded-lg overflow-hidden shadow-2xl p-5  my-16 md:w-1/2 lg:w-1/3 mx-auto flex flex-col">
         <h2 className="font-bold text-3xl text-center mb-5 text-gray-800">
           Login
         </h2>
-        <FormInput
-          className={email && "bg-white"}
-          placeholder="Email"
-          value={email}
-          handleChange={handleChange("email")}
-          type="email"
-          disabled={isLoading}
-          required={true}
-        />
-        <FormInput
-          styles={password && "bg-white"}
-          placeholder="Password"
-          value={password}
-          handleChange={handleChange("password")}
-          type="password"
-          disabled={isLoading}
-          required={true}
-          minLength={5}
-        />
-        {isLoading ? (
-          <div id="loading" className="self-center mb-3" />
-        ) : (
-          <button
-            className="font-bold rounded-md px-3 py-2 text-base cursor-pointer  focus:outline-none bg-gray-800 text-white w-full mb-3"
-            type="submit"
-          >
-            Sign In
-          </button>
-        )}
+        <FlipAnimation>
+          {({ flipToIndex }) => {
+            return [
+              <form key="Front-Modal" onSubmit={onSubmit}>
+                <FormInput
+                  className={email && "bg-white"}
+                  placeholder="Email"
+                  value={email}
+                  handleChange={handleChange("email")}
+                  type="email"
+                  disabled={isLoading}
+                  required={true}
+                />
+                <FormInput
+                  styles={password && "bg-white"}
+                  placeholder="Password"
+                  value={password}
+                  handleChange={handleChange("password")}
+                  type="password"
+                  disabled={isLoading}
+                  required={true}
+                  minLength={5}
+                />
+                {isLoading ? (
+                  <div id="loading" className="self-center mb-3" />
+                ) : (
+                  <button
+                    className="font-bold rounded-md px-3 py-2 text-base cursor-pointer  focus:outline-none bg-gray-800 text-white w-full mb-3"
+                    type="submit"
+                  >
+                    Sign In
+                  </button>
+                )}
 
-        {/* {error?.response?.data && (
-          <div>{JSON.stringify(error?.response?.data)}</div>
-        )} */}
+                <div className="flex justify-end w-full">
+                  <Link href={"/register"} passHref>
+                    <a className="font-bold rounded-md px-3 py-2 text-base cursor-pointer focus:outline-none text-gray-800">
+                      Do you need a new account?
+                    </a>
+                  </Link>
+                </div>
+                <div
+                  className="flex justify-end w-full"
+                  onClick={() => {
+                    flipToIndex(1);
+                  }}
+                >
+                  <div className="font-bold rounded-md px-3 text-base cursor-pointer focus:outline-none text-gray-800">
+                    Forget Password
+                  </div>
+                </div>
+              </form>,
+              <form
+                key="Back-Modal"
+                className="flex flex-col justify-around h-full"
+                onSubmit={onForgetPasswordSubmit(() => {
+                  flipToIndex(3);
+                })}
+              >
+                <FormInput
+                  className={email && "bg-white"}
+                  placeholder="Email"
+                  value={email}
+                  handleChange={handleChange("email")}
+                  type="email"
+                  disabled={isLoading}
+                  required={true}
+                />
 
-        <div className="flex justify-end w-full">
-          <Link href={"/register"} passHref>
-            <a className="font-bold rounded-md px-3 py-2 text-base cursor-pointer focus:outline-none text-gray-800">
-              Do you need a new account?
-            </a>
-          </Link>
-        </div>
-      </form>
+                {isLoading ? (
+                  <div id="loading" className="self-center mb-3" />
+                ) : (
+                  <button
+                    className="font-bold rounded-md px-3 py-2 text-base cursor-pointer  focus:outline-none bg-gray-800 text-white w-full mb-3"
+                    type="submit"
+                  >
+                    Sign In
+                  </button>
+                )}
+
+                <div className="flex justify-end w-full">
+                  <Link href={"/register"} passHref>
+                    <a className="font-bold rounded-md px-3 py-2 text-base cursor-pointer focus:outline-none text-gray-800">
+                      Do you need a new account?
+                    </a>
+                  </Link>
+                </div>
+                <div
+                  className="flex justify-end w-full"
+                  onClick={() => {
+                    flipToIndex(0);
+                  }}
+                >
+                  <div className="font-bold rounded-md px-3 text-base cursor-pointer focus:outline-none text-gray-800">
+                    Login Again
+                  </div>
+                </div>
+              </form>,
+            ];
+          }}
+        </FlipAnimation>
+      </div>
     </div>
   );
 };

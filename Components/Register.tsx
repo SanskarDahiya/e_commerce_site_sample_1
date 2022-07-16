@@ -160,7 +160,7 @@ const Register = () => {
                         className="font-bold rounded-md px-3 py-2 text-base cursor-pointer  focus:outline-none bg-gray-800 text-white w-full mb-3"
                         type="submit"
                       >
-                        Send OTP
+                        Submit OTP
                       </button>
                     )}
                   </div>

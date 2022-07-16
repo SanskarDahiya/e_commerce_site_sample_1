@@ -1,10 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
 const allTr = "transition-all duration-200 ease-in-out ";
 
+interface ChildParams {
+  flipToIndex: (index: number) => void;
+}
 interface FlipAnimationProps {
   primaryCardIndex?: number;
   largestSizeIndex?: number;
-  children: (value: any) => React.ReactElement[];
+  children: ({ flipToIndex }: ChildParams) => React.ReactElement[];
 }
 function FlipAnimation(props: FlipAnimationProps) {
   const { largestSizeIndex = 0, primaryCardIndex = 0, children } = props;
