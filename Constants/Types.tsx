@@ -37,7 +37,7 @@ export interface UserInterface extends MandatoryFields {
   password: string;
   isAdmin: boolean;
 }
-interface ImageInfo {
+export interface ImageInfo {
   url: string;
   alt?: string;
   height?: number;

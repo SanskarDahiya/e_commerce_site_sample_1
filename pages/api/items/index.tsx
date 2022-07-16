@@ -28,7 +28,7 @@ export default async function handler(
     const items = itemsResult.map((data) => {
       // @ts-ignore
       data._id = data._id.toString();
-      if (typeof data?.imageUrl === "string") {
+      if (!data.image && typeof data.imageUrl === "string") {
         data.image = { url: data.imageUrl };
       }
       return data;

@@ -1,4 +1,4 @@
-import { ItemInterface } from "@Constants/Types";
+import { ImageInfo, ItemInterface } from "@Constants/Types";
 import { fetchitems } from "@Functions/fetchItems";
 import axios from "@Helpers/Axios";
 import { useAuthStore } from "@Store/auth";
@@ -6,7 +6,14 @@ import { useItemStore } from "@Store/itemlist";
 import { useShoppingCart } from "@Store/shoppingCart";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import Image from "next/image";
-import React, { Fragment, useCallback, useEffect, useState } from "react";
+import React, {
+  Fragment,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { useMemo } from "react";
 
 const updateDb = async (id: string, changes: any) => {
   await axios({
@@ -29,6 +36,176 @@ interface SingleItemProps {
   item: ItemInterface;
 }
 
+interface AdminImageDisplayProps {
+  addNewImage?: boolean;
+  image: ImageInfo;
+  index: number;
+  item: ItemInterface;
+  setItem: (item: ItemInterface) => any;
+}
+const AdminImageDisplay = (props: AdminImageDisplayProps) => {
+  const { index, image, item, setItem, addNewImage } = props;
+  const uploadImageRef = useRef<HTMLInputElement>(null);
+  const changeImageRef = useRef<HTMLInputElement>(null);
+  const { _id: resourceId, extraImages = [] } = item;
+  const [changeModal, setChangeModal] = useState(false);
+  const [toInput, changeToInput] = useState(false);
+  const { url, alt = `Image-${index}` } = image;
+  const isActive = index === 0;
+  const handleChangeUrl = () => {
+    if (changeImageRef.current?.validity?.valid) {
+      const newUrl = changeImageRef.current.value.trim();
+      if (addNewImage) {
+        extraImages.push({ url: newUrl });
+      } else {
+        extraImages[index].url = newUrl;
+        item.extraImages = extraImages;
+        if (index === 0) {
+          image.url = newUrl;
+          item.image = image;
+        }
+      }
+      setItem({ ...item });
+      updateDb(resourceId, { $set: { extraImages, image } });
+      changeToInput(false);
+      setChangeModal(false);
+    }
+  };
+  const UpdateImageSection = useMemo(() => {
+    return (
+      <>
+        <input
+          ref={uploadImageRef}
+          type="file"
+          className="hidden"
+          onChange={() => {
+            console.log("File Change");
+          }}
+        />
+        <button
+          className="bg-white w-3/4 hover:bg-gray-100 text-gray-800 font-semibold py-1 px-2 border border-gray-400 rounded shadow"
+          onClick={() => {
+            uploadImageRef.current?.click();
+          }}
+        >
+          Upload
+        </button>
+        {toInput ? (
+          <input
+            ref={changeImageRef}
+            type="url"
+            pattern="http.*"
+            required
+            className="invalid:text-red-500 invalid:border-red-500 w-full bg-white hover:bg-gray-100 text-gray-800 py-1 px-2 border border-gray-400 rounded shadow"
+            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+              switch (e?.code?.toLowerCase()) {
+                case "enter":
+                case "escape":
+                  changeImageRef.current?.blur();
+                  break;
+                default:
+                  break;
+              }
+            }}
+            onBlur={handleChangeUrl}
+          />
+        ) : (
+          <button
+            onClick={() => {
+              changeToInput(true);
+            }}
+            className="bg-white w-3/4 hover:bg-gray-100 text-gray-800 font-semibold py-1 px-2 border border-gray-400 rounded shadow"
+          >
+            Add Url
+          </button>
+        )}
+      </>
+    );
+  }, [toInput]);
+
+  return (
+    <div
+      key={index}
+      className={
+        "relative transition-all duration-200 ease-in m-1 p-2  border-gray-200 w-36 h-36 " +
+        (isActive ? "border-t-2 shadow-xl" : "border-0 shadow-none") +
+        (changeModal ? " rotate_y_180	" : "rotate-0")
+      }
+    >
+      {addNewImage ? (
+        <div className="w-full h-full text-black absolute inset-0 p-2 flex flex-col justify-around items-center">
+          {UpdateImageSection}
+        </div>
+      ) : (
+        <>
+          <div
+            className={
+              "w-full h-full transition-all duration-100 ease-in rotate_y_180 text-black absolute inset-0 p-2 flex flex-col justify-around items-center " +
+              (changeModal ? "visible" : "invisible")
+            }
+          >
+            {UpdateImageSection}
+            <button
+              className="bg-white w-3/4 hover:bg-gray-100 text-gray-800 font-semibold py-1 px-2 border border-gray-400 rounded shadow"
+              onClick={() => {
+                setChangeModal(false);
+              }}
+            >
+              back
+            </button>
+          </div>
+          <div
+            className={
+              "transition-all duration-100 ease-in " +
+              (changeModal ? "invisible" : "visible")
+            }
+          >
+            <Image
+              src={url}
+              alt={alt}
+              width="100%"
+              height="100%"
+              layout="responsive"
+              objectFit="contain"
+            />
+            <div
+              className={
+                "transition-all duration-100 ease-in absolute h-1/4 inset-x-2 bottom-0 flex justify-around items-end bg-gradient-to-t from-gray-700 to-transparent text-white " +
+                (changeModal && "hidden")
+              }
+            >
+              {index !== 0 && (
+                <div
+                  className="transition-all duration-100 ease-in hover:py-2 cursor-pointer"
+                  onClick={() => {
+                    extraImages.splice(index - 1, 1);
+                    item.extraImages = extraImages;
+                    setItem({ ...item });
+                    updateDb(resourceId, {
+                      $set: {
+                        extraImages,
+                      },
+                    });
+                  }}
+                >
+                  Delete
+                </div>
+              )}
+              <div
+                className="transition-all duration-400 ease-in hover:py-2 cursor-pointer"
+                onClick={() => {
+                  setChangeModal(true);
+                }}
+              >
+                Change
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
 function SingleItem({ item: defaultItem }: SingleItemProps) {
   const { _id: resourceId } = defaultItem;
   const [item, setItem] = useState(defaultItem);
@@ -36,7 +213,7 @@ function SingleItem({ item: defaultItem }: SingleItemProps) {
 
   const { user, isAdmin } = useAuthStore((s) => ({
     user: s.user,
-    isAdmin: s.isEditEnable || true,
+    isAdmin: s.isEditEnable,
   }));
 
   const userId = user?._id?.toString() || "";
@@ -48,21 +225,18 @@ function SingleItem({ item: defaultItem }: SingleItemProps) {
   useEffect(() => {
     const itemdata = getItem(resourceId, defaultItem);
     if (itemdata) {
-      itemdata.extraImages = [
-        { url: itemdata.image.url + "#230" },
-        { url: itemdata.image.url + "#221" },
-        { url: itemdata.image.url + "#212" },
-        { url: itemdata.image.url + "#203" },
-        { url: itemdata.image.url + "#194" },
-        { url: itemdata.image.url + "#185" },
-        { url: itemdata.image.url + "#176" },
-        { url: itemdata.image.url + "#237" },
-      ];
+      if (itemdata.extraImages?.length) {
+        if (itemdata.image.url !== itemdata.extraImages[0].url) {
+          itemdata.extraImages.unshift(itemdata.image);
+        }
+      } else {
+        itemdata.extraImages = [itemdata.image];
+      }
       setItem({ ...itemdata });
     }
   }, [defaultItem]);
 
-  const { image, price, title, description } = item;
+  const { image, price, title, description, extraImages = [] } = item;
 
   const toggleEdit = () => isAdmin && setEditMode((e) => !e);
 
@@ -106,25 +280,51 @@ function SingleItem({ item: defaultItem }: SingleItemProps) {
   return (
     <div className="w-full flex flex-col md:flex-row relative">
       {isAdmin && (
-        <div className="absolute top-0 right-0 px-4 py-2" onClick={toggleEdit}>
+        <div
+          className="absolute top-0 right-0 px-4 py-2 cursor-pointer"
+          onClick={toggleEdit}
+        >
           {isEditMode ? "Done" : "Edit"}
         </div>
       )}
-      <div className="h-full w-full md:w-1/2 p-6 flex justify-center transition-all duration-100 ease-in">
-        <Image
-          onClick={() => {
-            if (!isEditMode) return;
-            // we will change the image
-            console.log("Change Image");
-          }}
-          src={image.url}
-          alt="Image-Section"
-          quality={80}
-          height={400}
-          width={400}
-        />
-      </div>
-      <div className="w-full md:w-1/2 p-6 flex flex-col justify-center">
+      {isEditMode ? (
+        <div className="pt-3 flex flex-wrap w-full md:w-1/2 p-6 transition-all duration-100 ease-in">
+          {extraImages.map((image, index) => (
+            <AdminImageDisplay
+              key={index}
+              image={image}
+              index={index}
+              setItem={setItem}
+              item={item}
+            />
+          ))}
+          <AdminImageDisplay
+            addNewImage
+            image={image}
+            index={-1}
+            setItem={setItem}
+            item={item}
+          />
+        </div>
+      ) : (
+        <div className="h-full w-full md:w-1/2 p-6 flex transition-all duration-100 ease-in">
+          {image?.url && (
+            <Image
+              src={image.url}
+              alt="Image-Section"
+              quality={80}
+              height={400}
+              width={400}
+            />
+          )}
+        </div>
+      )}
+      <div
+        className={
+          "w-full md:w-1/2 p-6 flex flex-col " +
+          (isEditMode ? "" : "justify-center")
+        }
+      >
         <div className="font-bold	text-xl	">
           {isEditMode ? (
             <EditComponent title="Title:" value={title} field={"title"} />

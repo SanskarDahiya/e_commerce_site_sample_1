@@ -140,3 +140,7 @@ a {
   );
   background-size: 300px 100px;
 }
+
+.rotate_y_180 {
+  transform: rotateY(180deg);
+}
