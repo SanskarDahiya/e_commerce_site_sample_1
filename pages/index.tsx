@@ -5,7 +5,7 @@ import type {
   NextPage,
 } from "next";
 import Carousal from "@Components/CarousalSection/Carousal";
-import ItemList from "@Components/ItemSection/ItemList";
+import ItemList from "@Components/HomeItemSection/ItemList";
 import { ItemInterface } from "@Constants/Types";
 import { getAccessTokenSSR } from "@Auth/cookie";
 import { useEffect } from "react";

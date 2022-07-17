@@ -3,9 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useShoppingCart } from "@Store/shoppingCart";
 import { useAuthStore } from "@Store/auth";
-import axios from "@Helpers/Axios";
 import { useItemStore } from "@Store/itemlist";
 import { ItemInterface } from "@Constants/Types";
+import { updateItemInfo } from "@Functions/updateInfo";
 
 interface MyProps {
   index: number;
@@ -42,16 +42,6 @@ function ItemView({ item, index }: MyProps) {
   const currentItemQuantity = getItemQuantity(resourceId);
   const isFavoriteMark = userId ? favourates?.includes(userId) : false;
 
-  const updateDb = async (id: string, changes: any) => {
-    await axios({
-      url: "/api/database",
-      method: "POST",
-      headers: {
-        ["x-custom-table"]: "items",
-      },
-      data: { id, changes },
-    });
-  };
   const addQuantity = (e: any) => {
     e.preventDefault();
     increaseCartQuantity(resourceId, actualPrice);
@@ -101,14 +91,14 @@ function ItemView({ item, index }: MyProps) {
                     item.favourates = item.favourates.filter(
                       (id) => id !== userId
                     );
-                    updateDb(resourceId, {
+                    updateItemInfo(resourceId, {
                       $pull: {
                         favourates: userId,
                       },
                     });
                   } else {
                     item.favourates.push(userId);
-                    updateDb(resourceId, {
+                    updateItemInfo(resourceId, {
                       $addToSet: {
                         favourates: userId,
                       },

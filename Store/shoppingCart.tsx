@@ -1,25 +1,7 @@
 import axios from "@Helpers/Axios";
 import create, { SetState, GetState } from "zustand";
 import { CartInterface } from "@Constants/Types";
-
-const updateDb_cart = async (id: string, changes: any) => {
-  if (!id || !changes) {
-    return;
-  }
-  await axios({
-    url: "/api/database",
-    method: "POST",
-    headers: {
-      ["x-custom-table"]: "user_carts",
-    },
-    data: { id, changes },
-  });
-};
-
-type CartItem = {
-  id: number;
-  quantity: number;
-};
+import { updateCartInfo } from "@Functions/updateInfo";
 
 type IAuth = {
   userId: string;
@@ -53,13 +35,13 @@ const shoppingCart = (set: SetState<IAuth>, get: GetState<IAuth>): IAuth => ({
     set(({ cartItem }) => {
       const userId = get().userId;
       if (cartItem[resourceId]) {
-        updateDb_cart(userId, {
+        updateCartInfo(userId, {
           $inc: { [`${resourceId}.qty`]: 1 },
           $set: { [`${resourceId}._updatedOn`]: new Date() },
         });
         cartItem[resourceId].qty += 1;
       } else {
-        updateDb_cart(userId, {
+        updateCartInfo(userId, {
           $set: {
             [resourceId]: {
               price,
@@ -86,7 +68,7 @@ const shoppingCart = (set: SetState<IAuth>, get: GetState<IAuth>): IAuth => ({
         cartItem.items = cartItem.items.filter(
           (id: string) => id !== resourceId
         );
-        updateDb_cart(userId, {
+        updateCartInfo(userId, {
           $pull: { items: resourceId },
           $unset: { [resourceId]: 1 },
         });
@@ -95,7 +77,7 @@ const shoppingCart = (set: SetState<IAuth>, get: GetState<IAuth>): IAuth => ({
           ...cartItem[resourceId],
           qty: cartItem[resourceId].qty - 1,
         };
-        updateDb_cart(userId, {
+        updateCartInfo(userId, {
           $inc: { [`${resourceId}.qty`]: -1 },
           $set: { [`${resourceId}._updatedOn`]: new Date() },
         });
@@ -105,7 +87,7 @@ const shoppingCart = (set: SetState<IAuth>, get: GetState<IAuth>): IAuth => ({
   removeFromCart: (resourceId) =>
     set(({ cartItem }) => {
       const userId = get().userId;
-      updateDb_cart(userId, {
+      updateCartInfo(userId, {
         $pull: { items: resourceId },
         $unset: { [resourceId]: 1 },
       });

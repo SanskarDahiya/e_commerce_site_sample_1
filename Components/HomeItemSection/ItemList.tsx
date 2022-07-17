@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 import StoreSection from "@Components/StoreSection";
-import ItemView from "@Components/ItemSection/ItemView";
+import ItemView from "@Components/HomeItemSection/ItemView";
 import { useItemStore } from "@Store/itemlist";
 import { ItemInterface } from "@Constants/Types";
 import { useFetchItems } from "@Functions/fetchItems";
