@@ -80,15 +80,78 @@ const AdminImageDisplay = (props: AdminImageDisplayProps) => {
     uploadImageProgress.current = false;
   };
 
-  const handleChangeUrl = async () => {
-    if (changeImageRef.current?.validity?.valid) {
-      const newUrl = changeImageRef.current.value.trim();
-      await updateUrlForItem(newUrl);
-    }
+  const handleChangeUrl = async (cb: () => void) => {
+    try {
+      if (changeImageRef.current?.validity?.valid) {
+        const newUrl = changeImageRef.current.value.trim();
+        await updateUrlForItem(newUrl);
+      }
+    } catch (err) {}
+    cb();
   };
 
+  const BackCardComponent = (flipToIndex: (index: number) => void) => (
+    <div className="w-full h-full text-black p-2 flex flex-col justify-around items-center">
+      <>
+        <button
+          className={
+            "bg-white w-3/4 hover:bg-gray-100 text-gray-800 font-semibold py-1 px-2 border border-gray-400 rounded shadow disabled:cursor-not-allowed"
+          }
+          disabled={isItemUploadDisable}
+          onClick={() => {
+            uploadImageRef.current?.click();
+          }}
+        >
+          Upload
+        </button>
+        {isShowInputModal ? (
+          <input
+            ref={changeImageRef}
+            required
+            className="invalid:text-red-500 invalid:border-red-500 w-full bg-white hover:bg-gray-100 text-gray-800 py-1 px-2 border border-gray-400 rounded shadow"
+            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+              switch (e?.code?.toLowerCase()) {
+                case "enter":
+                case "escape":
+                  changeImageRef.current?.blur();
+                  break;
+                default:
+                  break;
+              }
+            }}
+            onBlur={() => handleChangeUrl(() => flipToIndex(0))}
+          />
+        ) : (
+          <button
+            onClick={() => {
+              showInputModal(true);
+            }}
+            className="bg-white w-3/4 hover:bg-gray-100 text-gray-800 font-semibold py-1 px-2 border border-gray-400 rounded shadow"
+          >
+            Add Url
+          </button>
+        )}
+      </>
+
+      {!addNewImage && (
+        <button
+          className="bg-white w-3/4 hover:bg-gray-100 text-gray-800 font-semibold py-1 px-2 border border-gray-400 rounded shadow"
+          onClick={() => flipToIndex(0)}
+        >
+          back
+        </button>
+      )}
+    </div>
+  );
   return (
     <Fragment>
+      <input
+        ref={uploadImageRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={handleUploadClick}
+      />
       <div
         className={
           "relative transition-all duration-200 ease-in m-1 p-2  border-gray-200 w-36 h-36 " +
@@ -96,106 +159,53 @@ const AdminImageDisplay = (props: AdminImageDisplayProps) => {
           (changeModal ? " rotate_y_180	" : "rotate-0")
         }
       >
-        <input
-          ref={uploadImageRef}
-          type="file"
-          accept="image/*"
-          onChange={handleUploadClick}
-        />
-        <FlipAnimation>
-          {({ flipToIndex }) => {
-            return [
-              <Fragment key="front-side">
-                <Image
-                  src={url}
-                  alt={alt}
-                  width="100%"
-                  height="100%"
-                  layout="responsive"
-                  objectFit="contain"
-                />
-                <div
-                  className={
-                    "absolute h-1/2 inset-x-0 bottom-0 flex justify-around items-end bg-gradient-to-t from-gray-700 to-transparent text-white "
-                  }
-                >
-                  {index !== 0 && (
-                    <div
-                      className="transition-all duration-100 ease-in hover:py-2 cursor-pointer"
-                      onClick={() => {
-                        extraImages.splice(index - 1, 1);
-                        setItem({ ...item, extraImages });
-                        updateItemInfo(resourceId, { $set: { extraImages } });
-                      }}
-                    >
-                      Delete
-                    </div>
-                  )}
+        {addNewImage ? (
+          BackCardComponent(() => {})
+        ) : (
+          <FlipAnimation>
+            {({ flipToIndex }) => {
+              return [
+                <Fragment key="front-side">
+                  <Image
+                    src={url}
+                    alt={alt}
+                    width="100%"
+                    height="100%"
+                    layout="responsive"
+                    objectFit="contain"
+                  />
                   <div
-                    className="transition-all duration-400 ease-in hover:py-2 cursor-pointer"
-                    onClick={() => flipToIndex(1)}
+                    className={
+                      "absolute h-1/2 inset-x-0 bottom-0 flex justify-around items-end bg-gradient-to-t from-gray-700 to-transparent text-white "
+                    }
                   >
-                    Change
-                  </div>
-                </div>
-              </Fragment>,
-              <Fragment key="back-side">
-                <div className="w-full h-full text-black p-2 flex flex-col justify-around items-center">
-                  <>
-                    <button
-                      className={
-                        "bg-white w-3/4 hover:bg-gray-100 text-gray-800 font-semibold py-1 px-2 border border-gray-400 rounded shadow disabled:cursor-not-allowed"
-                      }
-                      disabled={isItemUploadDisable}
-                      onClick={() => {
-                        uploadImageRef.current?.click();
-                      }}
-                    >
-                      Upload
-                    </button>
-                    {isShowInputModal ? (
-                      <input
-                        ref={changeImageRef}
-                        type="url"
-                        required
-                        className="invalid:text-red-500 invalid:border-red-500 w-full bg-white hover:bg-gray-100 text-gray-800 py-1 px-2 border border-gray-400 rounded shadow"
-                        onKeyDown={(
-                          e: React.KeyboardEvent<HTMLInputElement>
-                        ) => {
-                          switch (e?.code?.toLowerCase()) {
-                            case "enter":
-                            case "escape":
-                              changeImageRef.current?.blur();
-                              break;
-                            default:
-                              break;
-                          }
-                        }}
-                        onBlur={handleChangeUrl}
-                      />
-                    ) : (
-                      <button
+                    {index !== 0 && (
+                      <div
+                        className="transition-all duration-100 ease-in hover:py-2 cursor-pointer"
                         onClick={() => {
-                          showInputModal(true);
+                          extraImages.splice(index, 1);
+                          setItem({ ...item, extraImages });
+                          updateItemInfo(resourceId, { $set: { extraImages } });
                         }}
-                        className="bg-white w-3/4 hover:bg-gray-100 text-gray-800 font-semibold py-1 px-2 border border-gray-400 rounded shadow"
                       >
-                        Add Url
-                      </button>
+                        Delete
+                      </div>
                     )}
-                  </>
-
-                  <button
-                    className="bg-white w-3/4 hover:bg-gray-100 text-gray-800 font-semibold py-1 px-2 border border-gray-400 rounded shadow"
-                    onClick={() => flipToIndex(0)}
-                  >
-                    back
-                  </button>
-                </div>
-              </Fragment>,
-            ];
-          }}
-        </FlipAnimation>
+                    <div
+                      className="transition-all duration-400 ease-in hover:py-2 cursor-pointer"
+                      onClick={() => flipToIndex(1)}
+                    >
+                      Change
+                    </div>
+                  </div>
+                </Fragment>,
+                <Fragment key="back-side">
+                  {BackCardComponent(flipToIndex)}
+                </Fragment>,
+              ];
+            }}
+          </FlipAnimation>
+        )}
       </div>
     </Fragment>
   );
