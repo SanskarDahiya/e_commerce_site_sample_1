@@ -21,13 +21,13 @@ interface AdminImageDisplayProps {
 }
 const AdminImageDisplay = (props: AdminImageDisplayProps) => {
   const { index, image, item, setItem, addNewImage } = props;
+  const primaryImage = image || {};
   const uploadImageRef = useRef<HTMLInputElement>(null);
   const uploadImageProgress = useRef(false);
   const changeImageRef = useRef<HTMLInputElement>(null);
   const { _id: resourceId, extraImages = [] } = item;
   const [changeModal, setChangeModal] = useState(false);
   const [isShowInputModal, showInputModal] = useState(false);
-  const { url, alt = `Image-${index}` } = image;
   const isActive = index === 0;
 
   const updateUrlForItem = async (newUrl: string) => {
@@ -35,21 +35,23 @@ const AdminImageDisplay = (props: AdminImageDisplayProps) => {
     if (!newUrl) return;
 
     if (addNewImage) {
-      if (!image?.url) {
-        image.url = newUrl;
-        item.image = image;
+      if (!primaryImage?.url) {
+        primaryImage.url = newUrl;
+        item.image = primaryImage;
       }
       extraImages.push({ url: newUrl });
     } else {
       extraImages[index].url = newUrl;
       item.extraImages = extraImages;
       if (index === 0) {
-        image.url = newUrl;
-        item.image = image;
+        primaryImage.url = newUrl;
+        item.image = primaryImage;
       }
     }
     setItem({ ...item });
-    updateItemInfo(resourceId, { $set: { extraImages, image } });
+    updateItemInfo(resourceId, {
+      $set: { extraImages, image: primaryImage },
+    });
     showInputModal(false);
     setChangeModal(false);
   };
@@ -87,6 +89,8 @@ const AdminImageDisplay = (props: AdminImageDisplayProps) => {
         await updateUrlForItem(newUrl);
       }
     } catch (err) {}
+    showInputModal(false);
+    setChangeModal(false);
     cb();
   };
 
@@ -108,6 +112,7 @@ const AdminImageDisplay = (props: AdminImageDisplayProps) => {
           <input
             ref={changeImageRef}
             required
+            autoFocus
             className="invalid:text-red-500 invalid:border-red-500 w-full bg-white hover:bg-gray-100 text-gray-800 py-1 px-2 border border-gray-400 rounded shadow"
             onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
               switch (e?.code?.toLowerCase()) {
@@ -154,8 +159,8 @@ const AdminImageDisplay = (props: AdminImageDisplayProps) => {
       />
       <div
         className={
-          "relative transition-all duration-200 ease-in m-1 p-2  border-gray-200 w-36 h-36 " +
-          (isActive ? "border-t-2 shadow-xl" : "border-0 shadow-none") +
+          "relative transition-all duration-200 ease-in border-gray-200 m-1 w-36 h-36 " +
+          (isActive || true ? "border-t-2 shadow-xl" : "border-0 shadow-none") +
           (changeModal ? " rotate_y_180	" : "rotate-0")
         }
       >
@@ -165,10 +170,10 @@ const AdminImageDisplay = (props: AdminImageDisplayProps) => {
           <FlipAnimation>
             {({ flipToIndex }) => {
               return [
-                <Fragment key="front-side">
+                <div key="front-side" className="h-full w-full">
                   <Image
-                    src={url}
-                    alt={alt}
+                    src={primaryImage?.url}
+                    alt={primaryImage?.alt || `Image->${index}`}
                     width="100%"
                     height="100%"
                     layout="responsive"
@@ -198,7 +203,7 @@ const AdminImageDisplay = (props: AdminImageDisplayProps) => {
                       Change
                     </div>
                   </div>
-                </Fragment>,
+                </div>,
                 <Fragment key="back-side">
                   {BackCardComponent(flipToIndex)}
                 </Fragment>,
@@ -217,10 +222,10 @@ function ItemImageSection(props: ItemImageSectionProps) {
   return (
     <>
       {isEditMode === true ? (
-        <div className="pt-3 flex flex-wrap w-full md:w-1/2 p-6 transition-all duration-100 ease-in">
+        <div className="pt-3 flex flex-wrap w-full md:w-1/2 p-2 transition-all duration-100 ease-in">
           {extraImages.map((image, index) => (
             <AdminImageDisplay
-              key={index}
+              key={`${image?.url}-${index}`}
               image={image}
               index={index}
               setItem={setItem}
