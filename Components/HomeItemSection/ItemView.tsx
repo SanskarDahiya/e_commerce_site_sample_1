@@ -60,20 +60,24 @@ function ItemView({ item, index }: MyProps) {
     favCss.push("text-red-600 hover:text-red-400");
   }
   return (
-    <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-6 flex flex-col hover:flex-grow hover:shadow-lg">
+    <div className="group w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-6 flex flex-col hover:shadow-lg duration-100 ease-in ">
       <Link href={"/item/" + resourceId} passHref>
         <a>
-          {image?.url ? (
-            <Image
-              src={image.url}
-              alt="Image-Section"
-              quality={80}
-              height={400}
-              width={400}
-            />
-          ) : (
-            "No Image Found"
-          )}
+          <div className="group-hover:shadow-md duration-150 ease-in ">
+            {image?.url ? (
+              <Image
+                src={image.url}
+                alt="Image-Section"
+                quality={80}
+                width="100%"
+                height="100%"
+                layout="responsive"
+                objectFit="contain"
+              />
+            ) : (
+              "No Image Found"
+            )}
+          </div>
           <div className="pt-3 flex items-center justify-between">
             <p>{title}</p>
             {currentItemQuantity === 0 ? (

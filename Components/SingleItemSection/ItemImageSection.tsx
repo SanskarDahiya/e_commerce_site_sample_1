@@ -171,14 +171,18 @@ const AdminImageDisplay = (props: AdminImageDisplayProps) => {
             {({ flipToIndex }) => {
               return [
                 <div key="front-side" className="h-full w-full">
-                  <Image
-                    src={primaryImage?.url}
-                    alt={primaryImage?.alt || `Image->${index}`}
-                    width="100%"
-                    height="100%"
-                    layout="responsive"
-                    objectFit="contain"
-                  />
+                  {primaryImage?.url ? (
+                    <Image
+                      src={primaryImage?.url}
+                      alt={primaryImage?.alt || `Image->${index}`}
+                      width="100%"
+                      height="100%"
+                      layout="responsive"
+                      objectFit="contain"
+                    />
+                  ) : (
+                    "No Image Present"
+                  )}
                   <div
                     className={
                       "absolute h-1/2 inset-x-0 bottom-0 flex justify-around items-end bg-gradient-to-t from-gray-700 to-transparent text-white "
@@ -241,7 +245,7 @@ function ItemImageSection(props: ItemImageSectionProps) {
           />
         </div>
       ) : (
-        <div className="h-full w-full md:w-1/2 p-6 flex transition-all duration-100 ease-in">
+        <div className="h-full w-full md:w-1/2 p-6 flex">
           {primaryImage?.url ? (
             // PRIMARY IMAGE
             <Image
@@ -250,9 +254,10 @@ function ItemImageSection(props: ItemImageSectionProps) {
               quality={80}
               height={400}
               width={400}
+              objectFit="contain"
             />
           ) : (
-            <>No Image Present</>
+            "No Image Present"
           )}
         </div>
       )}
