@@ -9,6 +9,7 @@ interface IProps {
   type?: string;
   placeholder: string;
   value?: string;
+  handleBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
   handleChange?: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -18,19 +19,21 @@ const FormInput = ({
   placeholder,
   value,
   handleChange,
+  handleBlur,
   ...rest
 }: IProps & InputHTMLAttributes<HTMLInputTypeAttribute>) => {
   return (
     <input
       // {...rest}
       className={
-        "focus:outline-none focus:bg-white appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-400 rounded py-3 px-4 mb-3 leading-tight " +
+        "focus:outline-none focus:bg-white appearance-none block w-full text-gray-700 border border-gray-400 rounded py-3 px-4 mb-3 leading-tight bg-gray-200 " +
         newStyles
       }
       type={type}
       placeholder={placeholder}
       onChange={handleChange}
-      value={value}
+      onBlur={handleBlur}
+      defaultValue={value}
     />
   );
 };
