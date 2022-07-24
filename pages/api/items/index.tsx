@@ -11,17 +11,34 @@ export default async function handler(
 ) {
   try {
     await PostRequest(req, res);
-    const { limit = 10, offset = 0, filter } = req.body;
+    let { limit = 10, offset = 0, filter, sort } = req.body;
     const itemDB = await mongo().getItemsDB();
     if (!itemDB) {
       throw new Error();
+    }
+    try {
+      filter = JSON.parse(JSON.stringify(filter));
+    } catch (err) {
+      filter = null;
     }
     if (filter?._id && typeof filter._id === "string") {
       filter._id = new ObjectId(filter._id);
     }
 
+    try {
+      sort = JSON.parse(JSON.stringify(sort));
+    } catch (err) {
+      sort = null;
+    }
+
+    if (!sort || typeof sort !== "object" || !Object.keys(sort).length) {
+      sort = null;
+    }
+    filter = filter || {};
+    sort = sort || { _id: 1 };
     const itemsResult = await itemDB
       .find(filter)
+      .sort(sort)
       .skip(offset)
       .limit(limit)
       .toArray();
@@ -36,6 +53,7 @@ export default async function handler(
 
     res.status(200).json({ success: true, result: items });
   } catch (err: any) {
+    console.log("🚀 ~ file: index.tsx ~ line 55 ~ err", err);
     handleErrorCode(err, res);
   }
 }

@@ -2,14 +2,18 @@ import Loading from "@Helpers/Loading";
 import { ItemInterface } from "@Constants/Types";
 import axios from "@Helpers/Axios";
 import { useItemStore } from "@Store/itemlist";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useInfiniteScrollHook from "react-infinite-scroll-hook";
+import { useFilterStore } from "@Store/filter_store";
 
 const ItemCache = [] as ItemInterface[];
 
 interface DBParams {
   limit?: number;
   offset?: number;
+  sort?: {
+    [key: string]: 1 | -1;
+  };
   filter?: {
     [key: string]: any;
   };
@@ -25,7 +29,7 @@ const DEFAULT_LIMIT = 5;
 
 export const fetchitems = async (params?: DBParams): Promise<DBResponse> => {
   try {
-    const { limit = DEFAULT_LIMIT, offset = 0, filter } = params || {};
+    const { limit = DEFAULT_LIMIT, offset = 0, filter, sort } = params || {};
     const cacheItems = ItemCache.slice(offset, limit);
     if (cacheItems && cacheItems.length === limit) {
       return { data: cacheItems, hasNext: true, error: false };
@@ -33,7 +37,7 @@ export const fetchitems = async (params?: DBParams): Promise<DBResponse> => {
     const { data } = await axios({
       url: "/api/items/",
       method: "POST",
-      data: { limit, offset, filter },
+      data: { limit, offset, filter, sort },
     });
     const items = data?.result || [];
     // ItemCache.splice(offset, 0, ...items);
@@ -44,16 +48,26 @@ export const fetchitems = async (params?: DBParams): Promise<DBResponse> => {
 };
 
 export const useFetchItems = (initialLength?: number) => {
+  const { filterCount, activeFilter } = useFilterStore((state) => ({
+    filterCount: state.filterCount,
+    activeFilter: state.activeFilter,
+  }));
+
   const { items, addItems } = useItemStore((state) => ({
     items: state.items,
     addItems: state.addItems,
   }));
+
   const [loading, setLoading] = useState(false);
   const scrollerRef = useRef({
     hasNext: true,
     disabled: false,
     loading: false,
   });
+
+  useEffect(() => {
+    scrollerRef.current.hasNext = true;
+  }, [filterCount]);
 
   const onLoadMore = async () => {
     setLoading(true);
@@ -68,6 +82,8 @@ export const useFetchItems = (initialLength?: number) => {
         error,
       } = await fetchitems({
         offset: items.length || initialLength || 0,
+        sort: activeFilter.sort,
+        filter: activeFilter.filter,
       });
       scrollerRef.current.hasNext = !!hasNext;
       scrollerRef.current.disabled = !!error;
