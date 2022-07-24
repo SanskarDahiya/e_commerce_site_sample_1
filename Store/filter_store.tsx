@@ -32,7 +32,7 @@ const defaultFilters = [
   {
     _id: 2,
     title: "Update 1",
-    // active: true,
+    active: false,
     sort: {
       _updatedOn: 1,
       _id: 1,
