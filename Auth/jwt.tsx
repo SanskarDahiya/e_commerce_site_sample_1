@@ -37,7 +37,7 @@ export const generateAccessToken = (user: UserInterface) => {
   const options = { expiresIn: "1d" };
   const accessTokenPayload: AccessTokenInterface = {
     _id: user._id.toString(),
-    isAdmin: user.isAdmin,
+    isAdmin: !!user.isAdmin,
     email: user.email,
     _createdOn: new Date(),
     _updatedOn: user._updatedOn,

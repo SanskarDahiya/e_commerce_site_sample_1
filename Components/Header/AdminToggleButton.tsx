@@ -7,7 +7,7 @@ function AdminToggleButton() {
     isEditEnable: state.isEditEnable,
     toogleEdit: state.toogleEdit,
   }));
-  const isAdmin = user?.isAdmin ? true : false;
+  const isAdmin = !!user?.isAdmin;
 
   return isAdmin ? (
     <div className="cursor-pointer px-4" onClick={() => toogleEdit()}>

@@ -1,7 +1,13 @@
+import { getAccessTokenSSR } from "@Auth/cookie";
+import { verifyToken } from "@Auth/jwt";
 import SingleItemSection from "@Components/SingleItemSection";
-import { fetchitems } from "@Functions/fetchItems";
+import mongo from "@Database/mongo";
 import { ObjectId } from "mongodb";
-import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
+import {
+  GetServerSidePropsContext,
+  GetServerSidePropsResult,
+  NextApiRequest,
+} from "next";
 
 export default SingleItemSection;
 
@@ -10,20 +16,49 @@ export async function getServerSideProps(
 ): Promise<GetServerSidePropsResult<any>> {
   try {
     const { query } = context;
-    if (query.itemId === "new-item") {
-      const _id = new ObjectId();
-      return {
-        props: {
-          item: {
-            _id: _id.toString(),
-          },
-          isNewItem: true,
-        },
-      };
+
+    if (!query.itemId) {
+      throw new Error("Item Id Missing");
     }
-    const itemResult = await fetchitems({ filter: { _id: query.itemId } });
+    const itemId = query.itemId as string;
+    if (itemId === "new-item") {
+      try {
+        const { req } = context;
+        const token = getAccessTokenSSR(req as NextApiRequest);
+        const { result: { isAdmin } = {} } = verifyToken(token);
+        if (!isAdmin) {
+          throw new Error("Non-Admin User Found");
+        }
+        return {
+          props: {
+            item: { _id: new ObjectId().toString() },
+            isNewItem: true,
+          },
+        };
+      } catch (err) {
+        return {
+          redirect: {
+            destination: "/",
+            permanent: true,
+          },
+        };
+      }
+    }
+    const cartDB = await mongo().getItemsDB();
+    if (!cartDB) {
+      throw new Error("No ItemsDB found");
+    }
+
+    const itemResult = await cartDB.findOne({
+      _id: new ObjectId(itemId),
+    });
+
+    if (!itemResult) {
+      throw new Error("No Items found");
+    }
+
     return {
-      props: { item: itemResult.data[0] || { _id: query.itemId } },
+      props: { item: itemResult },
     };
   } catch (err) {
     return { notFound: true };

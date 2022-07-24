@@ -21,6 +21,12 @@ function SingleItemSection({ item: defaultItem, isNewItem }: SingleItemProps) {
   const [isEditMode, setEditMode] = useState(!!isNewItem); // Edit mode is enabled to add new item
   const toggleItemEditMode = () => isAdmin && setEditMode((mode) => !mode);
 
+  useEffect(() => {
+    if (!isAdmin && isEditMode) {
+      setEditMode(false);
+    }
+  }, [isAdmin, isEditMode]);
+
   const { replaceItem, getItem } = useItemStore((state) => ({
     replaceItem: state.replaceItem,
     getItem: state.getItem,
