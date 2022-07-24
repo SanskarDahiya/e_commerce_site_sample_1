@@ -16,8 +16,8 @@ interface DBParams {
 }
 
 interface DBResponse {
-  data?: any;
-  error?: any;
+  data: any[];
+  error: boolean;
   hasNext?: boolean;
 }
 
@@ -28,7 +28,7 @@ export const fetchitems = async (params?: DBParams): Promise<DBResponse> => {
     const { limit = DEFAULT_LIMIT, offset = 0, filter } = params || {};
     const cacheItems = ItemCache.slice(offset, limit);
     if (cacheItems && cacheItems.length === limit) {
-      return { data: cacheItems, hasNext: true };
+      return { data: cacheItems, hasNext: true, error: false };
     }
     const { data } = await axios({
       url: "/api/items/",
@@ -37,7 +37,7 @@ export const fetchitems = async (params?: DBParams): Promise<DBResponse> => {
     });
     const items = data?.result || [];
     // ItemCache.splice(offset, 0, ...items);
-    return { data: items, hasNext: items.length === limit };
+    return { data: items, hasNext: items.length === limit, error: false };
   } catch (err) {
     return { data: [], error: true };
   }

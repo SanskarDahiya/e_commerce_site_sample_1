@@ -1,7 +1,7 @@
 import { getAccessTokenSSR } from "@Auth/cookie";
 import { verifyToken } from "@Auth/jwt";
 import SingleItemSection from "@Components/SingleItemSection";
-import mongo from "@Database/mongo";
+import { fetchitems } from "@Functions/fetchItems";
 import { ObjectId } from "mongodb";
 import {
   GetServerSidePropsContext,
@@ -44,21 +44,14 @@ export async function getServerSideProps(
         };
       }
     }
-    const cartDB = await mongo().getItemsDB();
-    if (!cartDB) {
-      throw new Error("No ItemsDB found");
-    }
+    const itemResult = await fetchitems({ filter: { _id: itemId } });
 
-    const itemResult = await cartDB.findOne({
-      _id: new ObjectId(itemId),
-    });
-
-    if (!itemResult) {
+    if (!itemResult.data.length) {
       throw new Error("No Items found");
     }
 
     return {
-      props: { item: itemResult },
+      props: { item: itemResult.data[0] },
     };
   } catch (err) {
     return { notFound: true };
